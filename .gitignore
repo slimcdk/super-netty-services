@@ -1,0 +1,14 @@
+*
+
+!.gitignore
+!.gitattributes
+!.gitmodules
+
+!README.md 
+!docker-compose-base.yml 
+!docker-compose.yml 
+!update-system.sh
+!.env
+
+#!services/
+#!services/*

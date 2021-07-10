@@ -1,0 +1,7 @@
+[submodule "secrets"]
+	path = secrets
+        url = https://github.com/slimcdk/sn-secrets.git
+#	url = git@github.com:slimcdk/sn-secrets.git
+[submodule "services/esphome/appdata/custom_components"]
+	path = services/esphome/appdata/custom_components
+	url = https://github.com/ssieb/custom_components

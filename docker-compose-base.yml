@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  base-setting:
+    environment:
+      - TZ=${TZ}
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - UMASK_SET=022
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+#    logging:
+#      driver: "json-file"
+#        options:
+#          max-size: "100m"
+#          max-file: "5"
+    restart: unless-stopped
