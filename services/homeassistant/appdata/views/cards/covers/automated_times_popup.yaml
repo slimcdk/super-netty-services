@@ -1,0 +1,53 @@
+type: vertical-stack
+cards:
+  - type: entities
+    entities:
+
+      - type: custom:multiple-entity-row
+        entity: automation.aben_kontorgardiner_om_morgnen
+        secondary_info:
+          entity: sun.sun
+          attribute: next_rising
+          format: time
+          name: Står op kl.
+        name: Åben automatisk
+        toggle: true
+        entities:
+          - entity: input_boolean.open_office_cover_with_sun
+            name: med solen
+            toggle: true
+
+      - type: custom:time-picker-card
+        name: Manuel tid
+        entity: input_datetime.automated_open_office_cover
+        link_values: true
+        layout:
+          name: inside
+          align_controls: right
+          embedded: true
+
+
+      - type: section
+
+      - type: custom:multiple-entity-row
+        entity: automation.luk_kontorgardiner_for_natten
+        secondary_info:
+          entity: sun.sun
+          attribute: next_setting
+          format: time
+          name: Går ned kl.
+        name: Luk automatisk
+        toggle: true
+        entities:
+          - entity: input_boolean.close_office_cover_with_sun
+            name: med solen
+            toggle: true
+        
+      - type: custom:time-picker-card
+        name: Manuel tid
+        entity: input_datetime.automated_close_office_cover
+        link_values: true
+        layout:
+          name: inside
+          align_controls: right
+          embedded: true

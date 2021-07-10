@@ -1,0 +1,8 @@
+hacs:
+  token: !secret HACS_GITHUB_TOKEN
+  sidepanel_title: HACS
+  sidepanel_icon: mdi:alpha-c-box
+  appdaemon: true
+  netdaemon: true
+  options:
+    country: DK

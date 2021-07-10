@@ -1,0 +1,19 @@
+type: horizontal-stack
+title: Kontor
+cards:
+  - type: custom:mini-graph-card
+    name: Luftfugtighed
+    entities:
+      - sensor.office_environment_dht_humidity
+    line_width: 2
+    hours_to_show: 48
+    points_per_hour: 10
+
+  - type: custom:mini-graph-card
+    name: Temperatur
+    entities:
+      - sensor.office_environment_temperature
+    unit: °C
+    line_width: 2
+    hours_to_show: 48
+    points_per_hour: 10

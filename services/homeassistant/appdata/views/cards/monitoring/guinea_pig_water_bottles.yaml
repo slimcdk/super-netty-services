@@ -1,0 +1,67 @@
+type: entities
+title: De små
+show_header_toggle: false
+
+entities:
+  - name: Burlys
+    entity: light.guinea_pig_empire
+
+  - type: custom:multiple-entity-row
+    entity: light.guinea_pig_empire_top_bottle
+    name: Watson & Feodor
+    show_state: false
+    entities:
+      - name: Har flaske
+        entity: binary_sensor.guinea_pig_empire_top_bottle_seated
+      - name: Vand
+        entity: sensor.guinea_pig_empire_top_bottle
+      - name: Flaskelys
+        entity: light.guinea_pig_empire_top_bottle
+        toggle: true
+    secondary_info:
+      name: Sidst skiftet
+      entity: binary_sensor.guinea_pig_empire_top_bottle_seated
+      attribute: last-changed
+      format: relative
+
+  - type: custom:multiple-entity-row
+    entity: light.guinea_pig_empire_bottom_bottle
+    name: Bastian & Bondi
+    show_state: false
+    entities:
+      - name: Har flaske
+        entity: binary_sensor.guinea_pig_empire_bottom_bottle_seated
+      - name: Vand
+        entity: sensor.guinea_pig_empire_bottom_bottle
+      - name: Flaskelys
+        entity: light.guinea_pig_empire_bottom_bottle
+        toggle: true
+    secondary_info:
+      name: Sidst skiftet
+      entity: binary_sensor.guinea_pig_empire_bottom_bottle_seated
+      attribute: last-changed
+      format: relative
+    
+  - camera.guinea_pig_empire_camera
+
+
+footer:
+  type: custom:mini-graph-card
+  name: Vandflasker
+  icon: mdi:cup-water
+  show:
+    name: false
+    icon: false
+    state: false
+    points: false
+    labels: false
+    legend: false
+  entities:
+    - sensor.guinea_pig_empire_top_bottle
+    - sensor.guinea_pig_empire_bottom_bottle
+  unit: "ml"
+  hours_to_show: 72
+  points_per_hour: 72
+  height: 50
+  line_width: 2
+  line_color: blue

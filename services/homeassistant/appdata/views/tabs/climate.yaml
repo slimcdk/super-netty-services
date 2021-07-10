@@ -1,0 +1,15 @@
+title: Klima
+path: climate
+icon: mdi:thermostat
+cards:
+  - type: thermostat
+    name: Kontor-radiator
+    entity: climate.office_trv
+  
+  - type: thermostat
+    name: Stue-radiator
+    entity: climate.living_trv
+
+  - type: thermostat
+    name: Soveværelses-radiator
+    entity: climate.bedroom_trv

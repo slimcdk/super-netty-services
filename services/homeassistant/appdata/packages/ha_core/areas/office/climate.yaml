@@ -1,0 +1,13 @@
+homeassistant:
+  customize:
+    sensor.office_trv_temperature:
+      device_class: temperature
+    sensor.office_trv_humidity:
+      device_class: humidity
+
+    sensor.office_environment_temperature:
+      device_class: temperature
+    sensor.office_environment_dht_humidity:
+      device_class: humidity
+
+      

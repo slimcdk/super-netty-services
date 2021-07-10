@@ -1,0 +1,68 @@
+type: entities
+title: Internet
+entities:
+  - type: custom:multiple-entity-row
+    entity: sensor.ifconfig_co_data
+    show_state: true
+    name: ifconfig
+    entities:
+      - entity: sensor.ifconfig_co_data
+        attribute: country_iso
+        name: Land
+      - entity: sensor.ifconfig_co_data
+        attribute: city
+        name: By
+       
+  
+  - type: custom:multiple-entity-row
+    entity: sensor.speedtest_download
+    show_state: false
+    name: SpeedTest
+    entities:
+      - entity: sensor.speedtest_ping
+        name: Ping
+      - entity: sensor.speedtest_upload
+        name: Upload
+      - entity: sensor.speedtest_download
+        name: Download
+  - type: custom:multiple-entity-row
+    entity: sensor.fast_com_download
+    show_state: false
+    name: Fast.com
+    entities:
+      - entity: sensor.fast_com_download
+        name: Download
+
+  - type: custom:multiple-entity-row
+    entity: sensor.google_dns_ping
+    show_state: false
+    name: Pings
+    entities:
+      - entity: sensor.google_dns_ping
+        name: Google DNS
+      - entity: sensor.cloudflare_dns_ping
+        name: CloudFlare DNS
+      - entity: sensor.speedtest_ping
+        name: SpeedTest
+
+
+footer:
+  type: custom:mini-graph-card
+  entities:
+    - sensor.speedtest_download
+    - sensor.speedtest_upload
+    - sensor.fast_com_download
+  show:
+    name: false
+    icon: false
+    state: false
+    legend: false
+    average: true
+    extrema: true
+  
+  line_width: 2
+  aggregate_func: avg
+  height: 50
+  hours_to_show: 24
+  hour24: true
+  points_per_hour: 5

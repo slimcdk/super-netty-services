@@ -1,0 +1,4 @@
+type: custom:slider-entity-row
+entity: light.living_windowsill
+name: Vindueskarm
+toggle: true

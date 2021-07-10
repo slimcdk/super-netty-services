@@ -1,0 +1,16 @@
+
+scene:
+  - name: Natlys
+    id: night_light
+    entities:
+      light.shelly_shdm_1_f3cb42: 'off'
+      light.kitchen_tabletop: 'off'
+      light.orange_lamp: 'off'
+      light.shelly_shdm_1_f3ebb9: 'off'
+      light.printer_closet: 'off'
+      light.windowsill:
+        state: 'on'
+        brightness: 10
+      light.office_long_desk:
+        state: 'on'
+        brightness: 10

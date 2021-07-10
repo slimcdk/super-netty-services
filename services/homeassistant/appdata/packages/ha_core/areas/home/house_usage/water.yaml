@@ -1,0 +1,25 @@
+
+
+automation:
+  - id: 'water_meter_camera_snapshot'
+    alias: Water Meter Camera Snapshots
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.water_meter_cam_status
+        to: 'on'
+    action:
+      - service: light.turn_on
+        data:
+          entity_id: light.water_meter_cam_flash
+      - delay: 1s
+      - service: camera.snapshot
+        data:
+          entity_id: camera.water_meter_cam
+          filename: '/config/www/tmp/water_usage_meter.jpg'
+      - delay: 5s
+      - service: light.turn_off
+        data:
+          entity_id: light.water_meter_cam_flash
+      - service: switch.turn_on
+        data:
+          entity_id: switch.water_meter_cam_enter_deepsleep

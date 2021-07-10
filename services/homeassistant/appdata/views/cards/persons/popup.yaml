@@ -1,0 +1,61 @@
+type: vertical-stack
+cards:
+  - type: map
+    aspect_ratio: 16:9
+    default_zoom: 12
+    hours_to_show: 72
+    entities:
+      - person.maiken
+      - person.christian
+      - zone.home
+
+#  - type: entities
+#    entities:
+#      - type: section
+#        label: Christian
+#      - entity: sensor.christian_location_geocoded
+#        name: Adresse
+#      - entity: sensor.christian_travel_time_to_home
+#        name: Hjemme om
+#      - type: custom:multiple-entity-row
+#        name: Batteri
+#        entity: sensor.sm_g973f_battery_level
+#        entities:
+#          - name: false
+#            entity: sensor.sm_g973f_battery_state
+#      - type: custom:mini-graph-card
+#        entities: 
+#          - sensor.sm_g973f_battery_level
+#        show:
+#          name: false
+#          icon: false
+#          state: false
+#        line_width: 2
+#        height: 30
+#        hours_to_show: 12
+#        points_per_hour: 10
+#
+#
+#      - type: section
+#        label: Maiken
+#      - entity: sensor.maiken_location_geocoded
+#        name: Adresse 
+#      - entity: sensor.maiken_travel_time_to_home
+#        name: Hjemme om
+#      - type: custom:multiple-entity-row
+#        name: Batteri
+#        entity: sensor.sm_a505fn_battery_level
+#        entities:
+#          - name: false
+#            entity: sensor.sm_a505fn_battery_state
+#      - type: custom:mini-graph-card
+#        entities: 
+#          - sensor.sm_a505fn_battery_level
+#        show:
+#          name: false
+#          icon: false
+#          state: false
+#        line_width: 2
+#        height: 30
+#        hours_to_show: 12
+#        points_per_hour: 10

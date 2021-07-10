@@ -1,0 +1,3 @@
+type: custom:toggle-lock-entity-row
+entity: switch.prusa_mk3s_power
+name: Strøm

@@ -1,0 +1,46 @@
+type: entities
+title: Lys
+show_header_toggle: true
+entities:
+  - type: section
+    label: Stue
+  - !include ../../entities/lights/floorlamp.yaml
+  - !include ../../entities/lights/living_windowsill.yaml
+  - !include ../../entities/lights/sputnik.yaml
+  - !include ../../entities/lights/green_lamp.yaml
+  - !include ../../entities/lights/halo_clock.yaml
+
+  ## Office ## 
+  - type: section
+    label: Kontor
+  - !include ../../entities/lights/office_desk_lights.yaml
+
+  ## Bedroom ##
+  - type: section
+    label: Soveværelse
+  - !include ../../entities/lights/bedroom_ceiling.yaml
+
+
+  ## Kitchen ##
+  - type: section
+    label: Køkken
+  - !include ../../entities/lights/kitchen_tabletop.yaml
+  - !include ../../entities/lights/coffee_soda_light.yaml
+
+#  ## Bathrooom ##
+#  - type: section
+#    label: Badværelse
+#
+#  ## Entrance ##
+#  - type: section
+#    label: Entré / mellemgang
+#
+#  ## Balcony ##
+#  - type: section
+#    label: Altan
+
+  ## MISC ##
+#  - type: section
+#    label: Marsvin
+#  - !include ../../entities/lights/guinea_pig_empire_slider.yaml
+#  - !include ../../entities/lights/guinea_pig_empire_rgb.yaml

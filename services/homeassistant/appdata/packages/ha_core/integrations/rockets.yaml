@@ -1,0 +1,2 @@
+sensor:
+  - platform: next_rocket_launch

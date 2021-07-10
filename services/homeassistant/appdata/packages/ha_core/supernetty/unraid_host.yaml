@@ -1,0 +1,72 @@
+
+monitor_docker:
+  - name: Home Server Docker
+    url: unix://var/run/docker.sock
+    scan_interval: 10
+
+
+shell_command:
+  update_containers: ssh -l root  192.168.1.10 'cd /mnt/user/containers && ./update-system.sh'
+
+
+panel_iframe:
+  unraid:
+    title: Unraid
+    url: http://192.168.1.10:703
+    icon: mdi:server
+    require_admin: true
+
+
+device_tracker:
+  - platform: nmap_tracker
+    hosts: 192.168.1.0/24
+    home_interval: 10
+    consider_home: 180
+    scan_options: " --privileged -sn "
+    exclude:
+      - 192.168.1.1
+      - 192.168.1.10
+
+sensor:
+  - platform: netdata
+    host: 192.168.1.10
+    port: 19999
+    name: home-server
+    resources:
+      system_load:
+        data_group: system.load
+        element: load15
+      core0_freq:
+        data_group: cpu.cpufreq
+        element: cpu0
+        icon: mdi:chip
+
+  - platform: rest
+    name: SuperNetty_CPU_Temp_Tctl
+    resource: http://192.168.1.10:19999/api/v1/allmetrics?format=json
+    value_template: "{{ value_json['sensors.k10temp-pci-00c3_temperature']['dimensions']['k10temp-pci-00c3_temp1']['value'] }}"
+    unit_of_measurement: °C
+    device_class: temperature
+    scan_interval: 10
+    force_update: true
+
+
+automation:
+  - alias: Update Docker Attributes
+    id: update_docker_attributes
+    trigger:
+      - platform: time_pattern
+        seconds: '/10'
+      - platform: state
+        entity_id: 
+          - sensor.home_server_docker_1cpu
+          - sensor.home_server_docker_cpu
+          - sensor.home_server_docker_memory
+          - sensor.home_server_docker_version
+          - sensor.home_server_docker_images
+          - sensor.home_server_docker_containers_total
+          - sensor.home_server_docker_containers_running
+          - sensor.home_server_docker_containers_paused
+          - sensor.home_server_docker_containers_stopped
+    action:
+      - service: python_script.monitor_docker_switch_attributes

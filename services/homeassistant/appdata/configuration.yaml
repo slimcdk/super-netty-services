@@ -1,0 +1,69 @@
+homeassistant:
+  name: SuperNetty
+  latitude: !secret ZONE_00_LATITUDE
+  longitude: !secret ZONE_00_LONGITUDE
+  elevation: !secret ZONE_00_ELEVATION
+  time_zone: Europe/Copenhagen
+  unit_system: metric
+  temperature_unit: C
+  packages: !include_dir_named packages/
+
+
+http:
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - 172.18.0.0/24
+    - 192.168.1.0/24
+
+
+lovelace:
+  mode: yaml
+  resources: !include www/resources.yaml
+
+frontend:
+  themes: !include_dir_merge_named themes
+
+recorder:
+  db_url: !secret HA_DB_URI
+  purge_keep_days: 30
+
+downloader:
+  download_dir: '/config/www/downloads/'
+
+mqtt:
+  broker: 192.168.1.10
+  port: 1883
+  discovery: true
+  discovery_prefix: homeassistant
+
+
+system_log:
+logger:
+#  default: warning
+#  logs:
+#    homeassistant.components.python_script: debug
+
+
+
+config:
+default_config:
+discovery:
+history:
+logbook:
+map:
+mobile_app:
+shopping_list:
+ssdp:
+sun:
+system_health:
+ffmpeg:
+stream:
+updater:
+zeroconf:
+wake_on_lan:
+python_script:
+local_ip:
+browser:
+browser_mod:
+media_extractor:
+  default_query: best

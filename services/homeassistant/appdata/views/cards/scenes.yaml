@@ -1,0 +1,9 @@
+type: glance
+title: Scener
+show_state: false
+entities:
+- !include ./../entities/scenes/night_time.yaml
+- !include ./../entities/scenes/movie_time.yaml
+- !include ./../entities/scenes/max_light.yaml
+- !include ./../entities/scenes/turn_off_everything.yaml
+- !include ./../entities/scenes/noone_home.yaml

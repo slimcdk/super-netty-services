@@ -1,0 +1,10 @@
+type: entities
+title: Brænstof priser
+show_header_toggle: false
+entities:
+  - sensor.ok_diesel
+  - sensor.ok_blyfri_95 
+  - sensor.circle_k_diesel
+  - sensor.circle_k_blyfri_95
+  - sensor.f24_goeasy_diesel
+  - sensor.f24_goeasy_blyfri_95

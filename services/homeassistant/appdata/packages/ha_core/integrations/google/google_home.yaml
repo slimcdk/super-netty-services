@@ -1,0 +1,84 @@
+
+input_text:
+  announce_google:
+    name: "Hvad skal jeg sige?"
+    initial: "Indtast tekst.."
+
+input_select:
+  announce_google_player:
+    name: Annoncer på enhed(er)
+    options:
+      - Alle
+      - Alle i stuen
+      - Alle i soveværelset
+      - Alle på kontoret
+      - Sprutte
+      - Andie
+      - Stue TV
+      - Soveværelse TV
+
+automation:
+  - alias: Announce Input Over Google Homes
+    id: broadcast_announcement
+    trigger:
+      - platform: state
+        entity_id: input_text.announce_google
+    action:
+      - service: tts.google_cloud_say
+        data_template:
+          entity_id: media_player.sprutte
+#            entity_id: "{{ states('announce_google_device_mapping') }}"
+          message: "{{ states.input_text.announce_google.state }}"
+
+  - alias: Start HA Cast on Nest Hub (Sprutte)
+    id: cast_on_sprutte
+    trigger:
+      - platform: time_pattern
+        minutes: "/30"
+    action:
+      - service: cast.show_lovelace_view
+        data:
+          entity_id: media_player.sprutte
+          dashboard_path: lovelace
+          view_path: sprutte
+
+
+
+sensor:
+  - platform: template
+    sensors:
+      announce_google_device_mapping:
+        value_template: >- 
+          {% set o = states('input_select.announce_google_player') %}
+          {% set s = ''%}
+          {% if o in ['Alle','Alle i stuen', 'Sprutte']%}{% set s = s+'media_player.sprutte,'%}{% endif %}
+          {% if o in ['Alle','Alle i stuen', 'Stue TV']%}{% set s = s+'media_player.stue_tv,'%}{% endif %}
+          {% if o in ['Alle','Alle i stuen', 'Stue TV']%}{% set s = s+'media_player.lg_stue_tv,'%}{% endif %}
+          {% if o in ['Alle','Alle i soveværelset', 'Stue TV']%}{% set s = s+'media_player.andie,'%}{% endif %}
+          {% if o in ['Alle','Alle i soveværelset', 'Stue TV']%}{% set s = s+'media_player.sovevaerelse,'%}{% endif %}
+          {{ (s|trim(','))  }}
+
+group:
+  all_players:
+    name: Alle afspillere
+    entities:
+      - group.all_google_homes
+      - group.all_smart_screens
+      - group.all_chromecasts
+      
+  all_smart_screens:
+    name: Alle smartskærme
+    entities:
+      - media_player.lg_stue_tv
+
+  all_chromecasts:
+    name: Alle Chromecasts
+    entities:
+      - media_player.sovevaerelse
+      - media_player.stue_tv
+
+  all_google_homes:
+    name: Alle Google Home
+    entities:
+      - media_player.sprutte
+      - media_player.andie

@@ -1,0 +1,11 @@
+custom_header:
+  compact_mode: true
+
+title: SuperNetty
+
+views:
+  - !include views/tabs/interactions.yaml
+  - !include views/tabs/monitoring.yaml
+  - !include views/tabs/movies.yaml
+  - !include views/tabs/system.yaml
+  - !include views/tabs/climate.yaml

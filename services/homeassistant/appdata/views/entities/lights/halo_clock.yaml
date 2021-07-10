@@ -1,0 +1,65 @@
+type: custom:fold-entity-row
+head: 
+  name: Væglys
+  entity: light.halo_clock
+#  type: custom:rgb-light-card
+#  entity: light.halo_clock_outer_ring, light.halo_clock_inner_ring
+#  justify: around
+#  show_header_toggle: true
+#  colors:
+#    - icon_color: 'linear-gradient(15deg, #0250c5, #d43f8d)'
+#      effect: Rainbow
+#      brightness: 255
+#
+##    - rgb_color: [255, 255, 255]
+##      brightness: 255
+##      transition: 1
+##      effect: None
+##
+##    - rgb_color: [255,0,0]
+##      brightness: 255
+##      transition: 1
+##      effect: None
+##
+##    - rgb_color: [0, 255, 0]
+##      brightness: 255
+##      transition: 1
+##      effect: None
+##
+##    - rgb_color: [0,0,255]
+##      brightness: 255
+##      transition: 1
+##      effect: None
+##
+##    - rgb_color: [255,127,0]
+##      brightness: 255
+##      transition: 1
+##      effect: None
+##
+##    - rgb_color: [255,0,127]
+##      brightness: 255
+##      transition: 1
+##      effect: None
+##
+##    - rgb_color: [191,0,255]
+##      brightness: 255
+##      transition: 1
+##      effect: None
+##
+##    - rgb_color: [0,255,255]
+##      brightness: 255
+##      transition: 1
+##      effect: None
+#
+#
+entities:
+  - name: Ydre ring
+    entity: light.halo_clock_outer_ring
+  - name: Indre ring
+    entity: light.halo_clock_inner_ring
+#
+##type: custom:slider-entity-row
+##entity: light.office_long_desk
+##name: Skrivebordslys
+##toggle: true
+#

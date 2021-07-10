@@ -1,0 +1,140 @@
+type: entities
+title: worker-02
+
+#header:
+#  type: buttons
+#  entities:
+#    - entity: sensor.ipv4_address_eth0
+#      name: IPv4 eth0
+#    - entity: sensor.last_boot
+#      format: relative
+
+entities:
+  - type: custom:multiple-entity-row
+    entity: sensor.last_boot
+    show_state: false
+    name: Data
+    icon: None
+    entities:
+      - name: IPv4 eth0
+        entity: sensor.ipv4_address_eth0
+      - name: Oppetid
+        entity: sensor.last_boot
+        format: relative
+
+
+  - type: section
+    label: Lager (/)
+  - type: custom:multiple-entity-row
+    entity: sensor.disk_use_percent
+    name: Lagerplads
+    entities:
+      - name: Fri plads
+        entity: sensor.disk_free
+      - name: Brugt plads
+        entity: sensor.disk_use
+
+  - type: custom:multiple-entity-row
+    entity: sensor.memory_use_percent
+    name: Hukommelse
+    entities:
+      - name: Fri hukommelse
+        entity: sensor.memory_free
+      - name: Brugt hukommelse
+        entity: sensor.memory_use
+
+  - type: custom:multiple-entity-row
+    entity: sensor.swap_use_percent
+    name: SWAP
+    entities:
+      - entity: sensor.swap_free
+        name: Fri SWAP
+      - entity: sensor.swap_use
+        name: Brugt SWAP
+ 
+
+  - type: section
+    label: Netværk
+  - type: custom:multiple-entity-row
+    entity: sensor.network_in_eth0
+    show_state: false
+    name: Netværksbrug (eth0)
+    entities:
+      - name: Netværksbrug ned
+        entity: sensor.network_in_eth0
+      - name: Netværksbrug op
+        entity: sensor.network_out_eth0
+
+  - type: custom:multiple-entity-row
+    entity: sensor.network_throughput_in_eth0
+    show_state: false
+    name: Netværkshastighed (eth0)
+    entities:
+      - name: Ned
+        entity: sensor.network_throughput_in_eth0
+      - name: Op
+        entity: sensor.network_throughput_out_eth0
+  - type: custom:mini-graph-card
+    entities: 
+      - sensor.network_throughput_in_eth0
+      - sensor.network_throughput_out_eth0
+    show:
+      name: false
+      icon: false
+      state: false
+      legend: false
+    line_width: 2
+    height: 30
+    hours_to_show: 24
+    points_per_hour: 5
+
+
+
+  - type: section
+    label: Processor
+  - entity: sensor.processor_use
+    name: Belastning
+  - type: custom:mini-graph-card
+    entities: 
+      - sensor.processor_use
+    show:
+      name: false
+      icon: false
+      state: false
+    line_width: 2
+    height: 30
+    hours_to_show: 24
+    points_per_hour: 5
+
+  - type: custom:multiple-entity-row
+    entity: sensor.load_1m
+    show_state: false
+    name: Belastninger
+    entities:
+      - name: 24h max (1m)
+        entity: sensor.load_1m_24h
+        attribute: max_value
+      - name: 15m
+        entity: sensor.load_15m
+      - name: 5m
+        entity: sensor.load_5m
+      - name: 1m
+        entity: sensor.load_1m
+        
+  - type: custom:mini-graph-card
+    entities: 
+      - sensor.load_1m
+    show:
+      name: false
+      icon: false
+      state: false
+    color_thresholds:
+      - value: 4.5
+        color: "#ff0000"
+      - value: 3.5
+        color: "#00ff00"
+    line_width: 2
+    aggregate_func: max
+    height: 30
+    hours_to_show: 24
+    points_per_hour: 5

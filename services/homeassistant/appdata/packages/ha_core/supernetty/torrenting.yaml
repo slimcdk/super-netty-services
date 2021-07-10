@@ -1,0 +1,265 @@
+
+homeassistant:
+  customize:
+    input_select.movie_chapters:
+      icon: mdi:bookmark
+    input_select.chromecasts:
+      icon: mdi:google-chrome
+
+
+#TBD: plex_assistant:
+#TBD:   url: http://192.168.1.10:32400
+#TBD:   token: !secret PLEX_XTOKEN
+#TBD:   language: 'en'
+#TBD:   tts_errors: true
+
+
+sensor:
+  - platform: qbittorrent
+    name: qBittorrent (Home Server)
+    url: http://192.168.1.10:8080
+    username: !secret QBIT_USER
+    password: !secret QBIT_PASS
+
+  - platform: radarr
+    api_key: !secret RADARR_API_KEY
+    host: 192.168.1.10
+    port: 7878
+    monitored_conditions:
+      - movies
+      - upcoming
+      - commands
+      - diskspace
+      - status
+
+  - platform: radarr_upcoming_media
+    api_key: !secret RADARR_API_KEY
+    host: 192.168.1.10
+    port: 7878
+    days: 14
+    ssl: false
+    theaters: false
+    max: 10
+
+  - platform: sonarr_upcoming_media
+    api_key: !secret SONARR_API_KEY
+    host: 192.168.1.10
+    port: 8989
+    days: 7
+    ssl: false
+    max: 10
+
+  - platform: tautulli
+    api_key: !secret TAUTULLI_API_KEY
+    host: 192.168.1.10
+
+  - platform: plex_recently_added
+    name: Recently Added Movies
+    token: !secret PLEX_XTOKEN
+    host: 192.168.1.10
+    port: 32400
+    section_types:
+      - movie
+
+  - platform: plex_recently_added
+    name: Recently Added TV
+    token: !secret PLEX_XTOKEN
+    host: 192.168.1.10
+    port: 32400
+    section_types:
+      - show
+
+  - platform: command_line
+    name: rathole_wan_ip
+    command: "docker exec -t rathole curl ifconfig.co"
+
+  - platform: command_line
+    name: qbittorrent_wan_ip
+    command: "docker exec -t qbittorrent curl ifconfig.co"
+
+  - platform: command_line
+    name: jackett_wan_ip
+    command: "docker exec -t jackett curl ifconfig.co"
+
+  - platform: command_line
+    name: radarr_wan_ip
+    command: "docker exec -t radarr curl ifconfig.co"
+
+  - platform: command_line
+    name: sonarr_wan_ip
+    command: "docker exec -t sonarr curl ifconfig.co"
+
+  - platform: command_line
+    name: lidarr_wan_ip
+    command: "docker exec -t lidarr curl ifconfig.co"
+
+  - platform: command_line
+    name: bazarr_wan_ip
+    command: "docker exec -t bazarr curl ifconfig.co"
+
+
+
+input_select:
+  chromecasts:
+    name: "Chromecasts"
+    options:
+      - DUMMY
+
+  chromecasts_entities:
+    name: "Chromecasts entities"
+    options:
+      - DUMMY
+
+
+
+script:
+  update_entertainment_lists:
+    sequence: 
+      - service: python_script.get_entertainment_media
+        data:
+          radarr_host: !secret RADARR_INTERNAL_DOMAIN
+          radarr_api_key: !secret RADARR_API_KEY
+          sonarr_host: !secret SONARR_INTERNAL_DOMAIN
+          sonarr_api_key: !secret SONARR_API_KEY
+
+  play_plex_on_tv:
+    sequence:
+        # Turn on TV
+      - service: switch.turn_on
+        entity_id: switch.wake_lg_c8
+
+        # Wait for it to start up
+      - wait_template: "{{ is_state('media_player.lg_stue_tv', 'on') }}"
+        timeout: '00:00:10'
+
+        # Start Plex app
+      - service: media_player.select_source
+        entity_id: media_player.lg_stue_tv
+        data:
+          source: 'Plex'
+        
+        # Wait for Plex app to be ready
+      - service: plex.scan_for_clients
+      - wait_template: "{{ not is_state('media_player.plex_plex_for_lg_lg_oled55c8pla', 'unavailable') }}"
+        timeout: '00:00:10'
+        continue_on_timeout: false
+
+        # Start media in Plex
+      - service: media_player.play_media
+        data:
+          entity_id: media_player.plex_plex_for_lg_lg_oled55c8pla
+          media_content_id: '{"library_name": "Film", "title": "Crown Vic"}'
+          media_content_type: movie
+
+
+
+scene:
+  - name: Filmtid stue
+    id: livingroom_movie_setting
+    entities:
+      light.windowsill:
+        state: 'on'
+        brightness: 80
+      light.floor_lamp:
+        state: 'on'
+        brightness: 5
+      light.kitchen_tabletop:
+        state: 'off'
+
+        
+automation:
+  - alias: Schedule automatic restart of torrent services
+    id: schedule_restart_media_torrent_services
+    trigger:
+      - platform: time_pattern
+        hours: "/12"
+    action:
+      - service: switch.turn_off
+        entity_id: 
+          - switch.home_server_docker_rathole
+          - switch.home_server_docker_qbittorrent
+          - switch.home_server_docker_jackett
+          - switch.home_server_docker_radarr
+          - switch.home_server_docker_sonarr
+          - switch.home_server_docker_bazarr
+          - switch.home_server_docker_lidarr
+      - wait_template: >
+          {{ 
+            is_state('sensor.home_server_docker_rathole_state', 'exited') and
+            is_state('sensor.home_server_docker_qbittorrent_state', 'exited') and
+            is_state('sensor.home_server_docker_jackett_state', 'exited') and
+            is_state('sensor.home_server_docker_radarr_state', 'exited') and
+            is_state('sensor.home_server_docker_sonarr_state', 'exited') and
+            is_state('sensor.home_server_docker_lidarr_state', 'exited') and
+            is_state('sensor.home_server_docker_bazarr_state', 'exited')
+          }}
+      - service: switch.turn_on
+        entity_id: 
+          - switch.home_server_docker_rathole
+      - wait_template: "{{ is_state('sensor.home_server_docker_rathole_state', 'running') }}"
+      - service: switch.turn_on
+        entity_id: 
+          - switch.home_server_docker_qbittorrent
+          - switch.home_server_docker_jackett
+          - switch.home_server_docker_radarr
+          - switch.home_server_docker_sonarr
+          - switch.home_server_docker_bazarr
+          - switch.home_server_docker_lidarr
+
+  - alias: Opdater underholdningsmedier
+    id: update_entertainment_lists
+    trigger:
+      - platform: homeassistant
+        event: start
+      - platform: time_pattern
+        minutes: '/5'
+    action:
+      - service: script.update_entertainment_lists
+
+  - alias: Overvåg VPN WAN IP
+    id: monitor_vpn_wan_ip
+    trigger:
+      - platform: state
+        entity_id:
+          - sensor.rathole_wan_ip
+          - sensor.qbittorrent_wan_ip
+          - sensor.jackett_wan_ip
+          - sensor.radarr_wan_ip
+          - sensor.sonarr_wan_ip
+          - sensor.lidarr_wan_ip
+          - sensor.bazarr_wan_ip
+    action:
+      - service: automation.turn_off
+        entity_id: automation.schedule_restart_media_torrent_services
+      - service: switch.turn_off
+        entity_id:
+          - switch.home_server_docker_rathole
+          - switch.home_server_docker_qbittorrent
+          - switch.home_server_docker_jackett
+          - switch.home_server_docker_radarr
+          - switch.home_server_docker_sonarr
+          - switch.home_server_docker_bazarr
+          - switch.home_server_docker_lidarr
+      - service: notify.notify
+        data:
+          message: "You know which services has been shut down ;)"
+          title: "VPN WAN IP breach!"
+
+
+panel_iframe:
+  radarr:
+    title: Radarr (Film)
+    url: !secret RADARR_EXTERNAL_DOMAIN
+    icon: mdi:filmstrip-box
+
+  sonarr:
+    title: Sonarr (Serier)
+    url: !secret SONARR_EXTERNAL_DOMAIN
+    icon: mdi:filmstrip-box
+
+  lidarr:
+    title: Lidarr (Musik)
+    url: !secret LIDARR_EXTERNAL_DOMAIN
+    icon: mdi:shopping-music
+
+

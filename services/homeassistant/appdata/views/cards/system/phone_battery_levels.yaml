@@ -1,0 +1,30 @@
+type: custom:mini-graph-card
+name: Battery levels
+icon: mdi:battery
+upper_bound: 100
+lower_bound: 0
+hour24: true
+unit: "%"
+points_per_hour: 3
+
+show:
+  fill: false
+  state: true
+  points: false
+
+
+color_thresholds:
+- value: 15
+  color: "#ff0000"
+- value: 60
+  color: "#ff7f00"
+- value: 100
+  color: "#00ff00"
+
+entities:
+- entity: sensor.sm_a505fn_battery_level
+  name: A50 Battery
+  show_state: true
+- entity: sensor.sm_g973f_battery_level
+  name: GS10 battery
+  show_state: true

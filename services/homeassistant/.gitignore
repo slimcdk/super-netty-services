@@ -1,10 +1,34 @@
+
 # Ignore everything
 *
+
+# Except these files
 !.gitignore
+!.gitkeep
 
+!.HA_VERSION
+!secrets.yaml
+!configuration.yaml
+!ui-lovelace.yaml
+!webostv.conf
 
-# Except these files and directories
-
+!*.yaml
+!*.py
+!SERVICE_ACCOUNT.json
 
 # In any of these directories
 !*/
+#!custom_components/hacs/*
+
+
+# Ignore all of these directories and files
+themes
+custom_components
+deps
+netdaemon
+appdaemon
+
+known_devices.yaml
+google_calendars.yaml
+
+

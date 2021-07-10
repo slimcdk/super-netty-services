@@ -1,0 +1,9 @@
+title: System
+path: system
+icon: mdi:server
+cards:
+  - !include ../cards/system/internet_connectivity_graph.yaml
+  - !include ../cards/system/ha_update_status.yaml
+  #- !include ../cards/system/home_server_system_metrics.yaml
+  - !include ../cards/system/network_devices/network_devices.yaml
+  - !include ../cards/system/container_orchestrator.yaml

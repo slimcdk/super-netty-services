@@ -1,0 +1,11 @@
+
+#panel_iframe:
+#  grocy:
+#    title: 51 Grocy
+#    url: http://192.168.1.10:9283
+#    icon: mdi:cart
+
+#  shoppinglist:
+#    title: 52 Indkøbsliste
+#    url: http://192.168.1.10:9283
+#    icon: mdi:cart

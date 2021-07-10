@@ -1,0 +1,60 @@
+type: custom:rgb-light-card
+entity: light.cozy_lamp_light
+colors:
+- rgb_color:
+  - 255
+  - 255
+  - 255
+  brightness: 200
+  transition: 1
+
+- rgb_color:
+  - 255
+  - 0
+  - 0
+  brightness: 200
+  transition: 1
+ 
+- rgb_color:
+  - 0
+  - 0
+  - 255
+  brightness: 200
+  transition: 1
+
+- rgb_color:
+  - 0
+  - 255
+  - 0
+  brightness: 200
+  transition: 1
+
+- rgb_color:
+  - 85
+  - 215
+  - 12
+  brightness: 200
+  transition: 1
+
+- rgb_color:
+  - 70
+  - 199
+  - 112
+  brightness: 200
+  transition: 1
+
+- rgb_color:
+  - 240
+  - 53
+  - 44
+  brightness: 200
+  transition: 1
+
+- rgb_color:
+  - 58
+  - 195
+  - 240
+  brightness: 200
+  transition: 1
+
+

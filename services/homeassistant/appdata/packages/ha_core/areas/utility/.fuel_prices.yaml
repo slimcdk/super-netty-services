@@ -1,0 +1,110 @@
+
+sensor:
+  ## OK prices
+  - platform: scrape
+    name: OK Blyfri 95
+    resource: https://www.ok.dk/privat/produkter/priser
+    select: ".cell--val"
+    index: 1
+    value_template: "{{ value | replace (' kr.', '') | replace(',', '.') | float }}"
+    unit_of_measurement: 'kr'
+    scan_interval: 3600
+
+  - platform: scrape
+    name: OK Diesel
+    resource: https://www.ok.dk/privat/produkter/priser
+    select: ".cell--val"
+    index: 3
+    value_template: "{{ value | replace (' kr.', '') | replace(',', '.') | float }}"
+    unit_of_measurement: 'kr'
+    scan_interval: 3600
+
+  ## F24 prices ["GoEasy 92"=22553, "GoEasy 95 E10"=22253, "GoEasy 95 Extra E5"=22603, "GoEasy Diesel"=24453, "GoEasy Diesel Extra"=24338]
+  - platform: rest
+    name: F24 GoEasy Diesel
+    resource: https://www.f24.dk/-/api/PriceViewProduct/GetPriceViewProducts
+    method: POST
+    payload: '{"FuelsIdList": [{ "ProductCode": "24453" }]}'
+    value_template: '{{ value_json.Products[0].PriceInclVATInclTax | replace(",", ".") | float}}'
+    unit_of_measurement: 'kr'
+    force_update: true
+    headers:
+      Content-Type: application/json
+
+  - platform: rest
+    name: F24 GoEasy Blyfri 95
+    resource: https://www.f24.dk/-/api/PriceViewProduct/GetPriceViewProducts
+    method: POST
+    payload: '{"FuelsIdList": [{ "ProductCode": "22253" }]}'
+    value_template: '{{ value_json.Products[0].PriceInclVATInclTax | replace(",", ".") | float}}'
+    unit_of_measurement: 'kr'
+    force_update: true
+    headers:
+      Content-Type: application/json
+
+  - platform: rest
+    name: f24_prices
+    resource: https://www.f24.dk/-/api/PriceViewProduct/GetPriceViewProducts
+    method: POST
+    force_update: true
+    payload: '{"FuelsIdList": [{"ProductCode":"22553", "Index":0}, {"ProductCode": "22253", "Index":1}, {"ProductCode":"22603", "Index":2}, {"ProductCode":"24453", "Index":3}, {"ProductCode":"24338", "Index": 4}]}'
+    headers:
+      Content-Type: application/json
+#      value_template: '{{ value_json.Products[0] }}'
+    json_attributes_path:  "$.Products[0]"
+    json_attributes:
+      - Name
+      - PriceInclVATInclTax
+
+
+#      unit_of_measurement: 'kr'
+#    - platform: template
+#      sensors:
+#        diesel: 
+  
+    
+
+
+
+
+
+
+  ## Circle K prices
+#    - platform: scrape
+#      name: Circle K Diesel
+#      resource: https://m.circlek.dk/dk_DK/pg1334074261209/privat/Priser/Priserprivat.html
+#      # js: document.getElementsByClassName("fuelprices")[1].getElementsByTagName("tr")[3].getElementsByTagName("td")[1]; 
+#      select: ".fuelprices:nth-child(2) tr:nth-child(4) td"
+#      index: 1
+#      value_template: "{{ value | replace (' kr.', '') | replace(',', '.') | float }}"
+#      unit_of_measurement: 'kr'
+
+#    - platform: scrape
+#      name: Circle K Blyfri 95
+#      resource: https://m.circlek.dk/dk_DK/pg1334074261209/privat/Priser/Priserprivat.html
+#      select: ".fuelprices th"
+#      index: 3
+#      value_template: "{{ value | replace (' kr.', '') | replace(',', '.') | float }}"
+#      unit_of_measurement: 'kr'
+
+
+
+  ## Shell
+#    - platform: scrape
+#      name: Shell Diesel
+#      resource: https://www.fuelfinder.dk/listprices.php
+#      select: ".numbers" 
+#      index: 8
+#      value_template: "{{ value | float }}"
+#      unit_of_measurement: 'kr'
+
+#    - platform: scrape
+#      name: Shell Blyfri 95
+#      resource: https://www.fuelfinder.dk/listprices.php
+#      select: ".numbers" 
+#      index: 6
+#      value_template: "{{ value | float }}"
+#      unit_of_measurement: 'kr'
+
+
+## https://www.fuelfinder.dk/listprices.php

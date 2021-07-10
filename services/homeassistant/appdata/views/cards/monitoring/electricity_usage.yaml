@@ -1,0 +1,17 @@
+type: custom:mini-graph-card
+name: Gårsdagens elforbrug
+icon: mdi:flash
+
+align_state: center
+unit: "kWh"
+hours_to_show: 48
+points_per_hour: 2
+animate: true
+hour24: true
+
+group_by: hour
+show:
+  graph: bar
+
+entities:
+  - sensor.preceding_day_energy_usage

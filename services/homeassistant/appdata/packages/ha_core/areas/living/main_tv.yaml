@@ -1,0 +1,35 @@
+
+webostv:
+  host: !secret LG_C8_HOST
+  name: LG C8 TV
+  turn_on_action:
+    service: switch.turn_on
+    entity_id: switch.wake_lg_c8
+  customize:
+    sources:
+      - Live TV
+      - DRTV
+      - TV 2 Play
+      - YouTube
+      - Plex
+      - Netflix
+      - HBO Nordic
+      - Viaplay
+
+
+media_player:
+  - platform: webostv
+    name: LG C8
+    host: !secret LG_C8_HOST
+    timeout: 5
+    turn_on_action:
+      service: switch.turn_on
+      entity_id: switch.wake_lg_c8
+
+
+switch:
+  - platform: wake_on_lan
+    name: wake_lg_c8
+    host: !secret LG_C8_HOST
+    mac: !secret LG_C8_MAC_ADDR
+    broadcast_address: 192.168.1.255

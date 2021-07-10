@@ -1,0 +1,44 @@
+type: custom:auto-entities
+card: 
+  type: custom:fold-entity-row
+  head: 
+    type: custom:multiple-entity-row
+    entity: sensor.shelly_version
+    name: Shelly
+    show_state: false
+#    secondary_info:
+#      entity: script.update_esphome_network_metrics
+#      attribute: last_triggered
+#      format: relative
+    entities:
+      - name: Shelly
+        entity: sensor.shelly_version
+        attribute: shelly
+      - name: pyShelly
+        entity: sensor.shelly_version
+        attribute: pyShelly
+
+sort:
+  method: state
+  reverse: true
+filter:
+  include:
+    - entity_id: "light.shelly_*"
+      options:
+        type: custom:multiple-entity-row
+        icon: mdi:chip
+        entity: this.entity_id
+        show_state: false
+        secondary_info:
+          entity_id: "{{ 'this.entity_id_firmware_update' | replace('light', 'switch') }}"
+          attribute: firmware_version
+        entities:
+            entity: "{{ 'this.entity_id_uptime' | replace('light', 'sensor') }}"
+            name: Oppetid
+#          - entity: "{{ 'this.entity_id_uptime' | replace('light', 'sensor') }}"
+#            name: Oppetid
+#          - entity: "{{ 'this.entity_id_rssi' | replace('light', 'sensor') }}"
+#            name: RSSI
+#          - entity: "{{ 'this.entity_id_firmware_update' | replace('light', 'switch') }}"
+#            name: Opdater
+#            toggle: true

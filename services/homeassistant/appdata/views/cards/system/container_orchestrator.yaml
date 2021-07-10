@@ -1,0 +1,68 @@
+type: entities
+title: Home Server Services
+show_header_toggle: false  
+entities:
+  ##
+  - type: custom:auto-entities
+    card:
+      type: custom:fold-entity-row
+      head:
+        type: custom:multiple-entity-row
+        entity: sensor.home_server_docker_cpu
+        name: Docker
+        icon: mdi:docker
+        show_state: false
+        secondary_info:
+          entity: sensor.home_server_docker_version
+          name: v 
+        entities:
+          - name: Hukommelse
+            entity: sensor.home_server_docker_memory_percent
+            unit: '%'
+          - name: CPU
+            entity: sensor.home_server_docker_cpu
+            unit: '%'
+    filter:
+      exclude:
+        - entity_id: sensor.home_server_docker_version
+        - entity_id: sensor.home_server_docker_images
+        - entity_id: "sensor.home_server_docker_containers_*"
+        - entity_id: "sensor.home_server_docker_*cpu"
+        - entity_id: "sensor.home_server_docker_memory*"
+      include:
+        - entity_id: "switch.home_server_docker_*"
+          options:
+            type: custom:multiple-entity-row
+            icon: mdi:docker
+            entity: this.entity_id
+            toggle: true
+            secondary_info:
+              entity:  this.entity_id
+              attribute: status
+              name: false 
+            entities:
+              - name: Hukommelse
+                entity: this.entity_id
+                attribute: memory_percent
+                unit: '%'
+              - name: CPU
+                entity: this.entity_id
+                attribute: cpu
+                unit: '%'
+
+
+footer:
+  type: custom:mini-graph-card
+  entities:
+    - sensor.home_server_docker_cpu
+    - sensor.home_server_docker_memory_percent
+  show:
+    name: false
+    icon: false
+    state: false
+    legend: false
+  line_width: 2
+  height: 50
+  hours_to_show: 24
+  hour24: true
+  points_per_hour: 5

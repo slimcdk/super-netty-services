@@ -1,0 +1,150 @@
+type: entities
+#title: Prusa MK3S
+show_header_toggle: false
+
+
+header:
+  type: picture
+  image: "/local/tmp/prusa_mk3s_opcam_snapshot.jpg"
+  tap_action:
+    action: call-service
+    service: browser_mod.popup
+    service_data:
+      title: Prusa MK3S OctoPi Cam
+      card:
+        camera.prusa_mk3s_octopi_camera
+      deviceID:
+        - this
+
+entities:
+
+  - type: custom:multiple-entity-row
+    name: Printer skab
+    icon: mdi:thermometer
+    entity: light.printer_closet
+    show_state: false
+    entities:
+      - name: Lufttemp
+        entity: sensor.printer_closet_ambient_temp
+      - name: Lys
+        entity: light.printer_closet
+        toggle: true
+
+
+  - type: custom:multiple-entity-row
+    name: Status
+    entity: sensor.prusa_mk3s_current_state
+#    show_state: false
+    secondary_info: last-changed
+    entities:
+      - name: Afbrudt
+        entity: binary_sensor.prusa_mk3s_printing_error
+      - name: Printer
+        entity: binary_sensor.prusa_mk3s_printing
+#      - name: Mode
+#        entity: sensor.prusa_mk3s_current_state
+
+  - type: custom:multiple-entity-row
+    name: ETA
+    icon: mdi:progress-clock
+    entity: sensor.estimated_time_end_of_print
+    show_state: false
+    entities:
+      - name: Progres
+        entity: sensor.prusa_mk3s_job_percentage
+      - name: Tid gået
+        entity: sensor.prusa_mk3s_time_elapsed 
+      - name: Sluttid
+        entity: sensor.estimated_time_end_of_print
+        format: time
+      - name: Sluttid
+        entity: sensor.estimated_time_end_of_print
+        format: relative
+
+  - type: custom:multiple-entity-row
+    name: Temperaturer
+    icon: mdi:thermometer
+    entity: sensor.estimated_time_end_of_print
+    show_state: false
+    entities:
+      - name: Target bed
+        entity: sensor.prusa_mk3s_target_bed_temp
+      - name: Actual bed
+        entity: sensor.prusa_mk3s_actual_bed_temp
+      - name: Target Hotend
+        entity: sensor.prusa_mk3s_target_tool0_temp
+      - name: Actual Hotend
+        entity: sensor.prusa_mk3s_actual_tool0_temp
+
+  - type: custom:mini-graph-card
+    name: Strøm
+    entities:
+      - entity: sensor.prusa_mk3s_actual_tool0_temp
+        name: Current print head
+        show_state: true
+        color: "#ff0000"
+      - entity: sensor.prusa_mk3s_target_tool0_temp
+        name: Target print head
+        show_state: true
+        color: "#850000"
+  
+      - entity: sensor.prusa_mk3s_actual_bed_temp
+        name: Current print bed
+        show_state: true
+        color: "#0000ff"
+      - entity: sensor.prusa_mk3s_target_bed_temp
+        name: Target print bed
+        show_state: true
+        color: "#000085"
+    show:
+      name: false
+      icon: false
+      state: false
+      legend: false
+    line_width: 2
+    height: 50
+    hours_to_show: 24
+    hour24: true
+    points_per_hour: 5
+
+
+  - type: custom:restriction-card
+    restrictions:
+      confirm: true
+    card:
+      type: custom:multiple-entity-row
+      entity: switch.prusa_mk3s_power
+      toggle: true
+      name: Strøm
+      entities:
+        - name: Min (1h)
+          entity: sensor.prusa_mk3s_power_watt_hour
+          attribute: min_value
+          unit: W
+        - name: Avg (1h)
+          entity: sensor.prusa_mk3s_power_watt_hour
+          attribute: mean
+          unit: W
+        - name: Max (1h)
+          entity: sensor.prusa_mk3s_power_watt_hour
+          attribute: max_value
+          unit: W
+        - name: Effekt
+          entity: sensor.prusa_mk3s_power_wattage
+          unit: W          
+
+  - type: custom:mini-graph-card
+    entities:
+      - entity: sensor.prusa_mk3s_power_wattage
+        name: Power usage
+        color: orange
+    show:
+      name: false
+      icon: false
+      state: false
+      legend: false
+    line_width: 2
+    height: 30
+    hours_to_show: 24
+    hour24: true
+    points_per_hour: 5

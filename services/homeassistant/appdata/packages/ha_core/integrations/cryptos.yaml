@@ -1,0 +1,13 @@
+
+sensor:
+  - platform: cryptoinfo
+    cryptocurrency_name: ethereum
+    currency_name: eur
+    update_frequency: 15
+
+  - platform: cryptoinfo
+    cryptocurrency_name: bitcoin
+    currency_name: eur
+    update_frequency: 15
+
+    

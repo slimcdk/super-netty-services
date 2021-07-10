@@ -1,0 +1,237 @@
+
+## GENERAL ##
+
+homeassistant:
+  customize:
+    person.christian:
+      # entity_picture: https://graph.facebook.com/10212163314745642/picture?type=large
+      entity_picture: /local/images/persons/Christian.jpg
+    person.maiken:
+      # entity_picture: https://graph.facebook.com/10219988930505812/picture?type=large
+      entity_picture: /local/images/persons/Maiken.jpg
+
+person:
+  - name: Christian
+    id: christian
+    user_id: 062f37dd3bb04aa083ad65ce499d0126
+    device_trackers:
+      - device_tracker.sm_g973f
+#      - device_tracker.christian_main_phone
+
+  - name: Maiken
+    id: maiken
+    user_id: 99b1d194b2024bb9ae7311e56c848dc4
+    device_trackers:
+      - device_tracker.sm_a505fn
+#      - device_tracker.maiken_main_phone
+
+group:
+  all_persons:
+    name: Alle personer
+    entities:
+      - person.christian
+      - person.maiken
+    icon: mdi:account-group
+
+
+notify:
+  - name: christian_all
+    platform: group
+    services:
+      - service: christian_phone
+      - service: christian_desktop
+      - service: christian_ux430
+
+  - name: christian_ux430
+    platform: group
+    services:
+      - service: supernetty_ux430
+
+  - name: christian_desktop
+    platform: group
+    services:
+      - service: supernetty_desktop
+
+  - name: christian_phone
+    platform: group
+    services:
+      - service: mobile_app_sm_g973f
+
+  - name: maiken_all
+    platform: group
+    services:
+      - service: maiken_phone
+
+  - name: maiken_phone
+    platform: group
+    services:
+      - service: mobile_app_sm_a505fn
+
+
+sensor:
+#  - platform: google_travel_time
+#    name: Christian travel time to home
+#    api_key: !secret GOOGLE_CLOUD_SNHA_API_TOKEN
+#    origin: person.christian
+#    destination: zone.home
+#    options:
+#      language: da
+#      departure_time: now
+#      mode: driving
+#      units: metric
+#
+#  - platform: google_travel_time
+#    name: Maiken travel time to home
+#    api_key: !secret GOOGLE_CLOUD_SNHA_API_TOKEN
+#    origin: person.maiken
+#    destination: zone.home
+#    options:
+#      language: da
+#      departure_time: now
+#      mode: driving
+#      units: metric
+#
+#  - platform: google_geocode
+#    api_key: !secret GOOGLE_CLOUD_SNHA_API_TOKEN
+#    origin: person.christian
+#
+#  - platform: google_geocode
+#    api_key: !secret GOOGLE_CLOUD_SNHA_API_TOKEN
+#    origin: person.maiken
+
+  - platform: template
+    sensors:
+      christian_location_geocoded:
+        # Reformat the location into 'Address Number, Region'
+        friendly_name: Christian geocoded location
+        entity_id: person.christian
+        value_template: >-
+          {% set sensor = 'sensor.sm_g973f_geocoded_location' %}
+          {% set t = state_attr(sensor, 'Thoroughfare') | string %}
+          {% set st = state_attr(sensor, 'Sub Thoroughfare') | string %}
+          {% set l = state_attr(sensor, 'Locality') | string %}
+          ({{ t + " " + st + ",\n" + l}})
+
+      christian_location_zone:
+        # Display current zone or travel time to home
+        friendly_name: christian location state
+        entity_id: person.christian
+        value_template: >-
+          {% set lat = state_attr('person.christian', 'latitude') %}
+          {% set lng = state_attr('person.christian', 'longitude') %}
+          {% set close_zone = closest(lat,lng, states.zone) %} 
+          {% set in_zone = (distance(lat,lng,close_zone)*1000) < close_zone.attributes['radius'] %}
+          {% if in_zone %}
+            {{ close_zone.attributes['friendly_name'] }}
+          {% else %} 
+            {{ 'Hjemme\nom ' + state_attr('sensor.christian_travel_time_to_home','duration_in_traffic') }}
+          {% endif %}
+
+      christian_location_last_updated:
+        # Retrieve the last_updated attribute for person.christian
+        friendly_name: christian last update
+        entity_id: person.christian
+        value_template: '{{ states.person.christian.last_updated }}'
+
+      maiken_location_geocoded:
+        # Reformat the location into 'Address Number, Region'
+        friendly_name: Maiken geocoded location
+        entity_id: person.maiken
+        value_template: >-
+          {% set sensor = 'sensor.sm_a505fn_geocoded_location' %}
+          {% set t = state_attr(sensor, 'Thoroughfare') | string %}
+          {% set st = state_attr(sensor, 'Sub Thoroughfare') | string %}
+          {% set l = state_attr(sensor, 'Locality') | string %}
+          ({{t  + " " + st + ",\n" + l}})
+
+      maiken_location_zone:
+        # Display current zone or travel time to home
+        friendly_name: Maiken location state
+        entity_id: person.maiken
+        value_template: >-
+          {% set lat = state_attr('person.maiken', 'latitude') %}
+          {% set lng = state_attr('person.maiken', 'longitude') %}
+          {% set close_zone = closest(lat,lng, states.zone) %} 
+          {% set in_zone = (distance(lat,lng,close_zone)*1000) < close_zone.attributes['radius'] %}
+          {% if in_zone %}
+            {{ close_zone.attributes['friendly_name'] }}
+          {% else %} 
+            {{ 'Hjemme\nom ' + state_attr('sensor.maiken_travel_time_to_home','duration_in_traffic') }}
+          {% endif %}
+
+      maiken_location_last_updated:
+        # Retrieve the last_updated attribute for person.maiken
+        friendly_name: maiken last updated
+        entity_id: person.maiken
+        value_template: '{{ states.person.maiken.last_updated }}'
+
+
+
+## AUTOMATION ##
+automation:
+  - id: turn_off_all_lights_on_empty_house
+    alias: "Sluk lys m.m. når huset er tomt"
+    description: "Sætter boligen i et droslet stadie, når ingen er hjemme"
+    trigger:
+      - platform: state
+        entity_id: group.all_persons
+        from: 'home'
+        to: 'not_home'
+    action:
+      - service: light.turn_off
+        data:
+          entity_id: all
+      - service: notify.notify
+        data_template:
+          message: "Lyset er nu slukket"
+
+  - alias: Maiken er hjemme om 2 min
+    id: maiken_is_two_min_away
+    trigger:
+      - platform: template
+        value_template: >
+          {{ states('sensor.maiken_travel_time_to_home') | int < 2 }}
+    action:
+      - service: notify.christian_all
+        data_template:
+          title: "Maiken er hjemme om 2 minutter"
+          message: "Sendt kl {{ as_timestamp(now()) | timestamp_local }}"
+
+  - id: force_update_person_entities
+    alias: 'Force update all persons'
+    trigger:
+      - platform: time_pattern
+        minutes: '/5'
+    action:
+      - service: homeassistant.update_entity
+        entity_id: group.all_persons
+
+
+  - id: update_christian_location_sensors
+    alias: 'Opdater Christians lokations sensorer'
+    description: 'Gennemtving en opdatering, når ændring for Christan er sket'
+    trigger:
+      - platform: template
+        value_template: "{{ (states.sensor.time.last_changed - states.person.christian.last_changed).total_seconds() > 10 }}"
+    action:
+      - service: homeassistant.update_entity
+        entity_id: sensor.christian_location_geocoded
+      - service: homeassistant.update_entity
+        entity_id: sensor.christian_location_zone
+      - service: homeassistant.update_entity
+        entity_id: sensor.christian_travel_time_to_home
+
+
+  - id: update_maiken_location_sensors
+    alias: 'Opdater Maikens lokations sensorer'
+    description: 'Gennemtving en opdatering, når ændring for Maiken er sket'
+    trigger:
+      - platform: template
+        value_template: "{{ (states.sensor.time.last_changed - states.person.maiken.last_changed).total_seconds() > 10 }}"
+    action:
+      - service: homeassistant.update_entity
+        entity_id: sensor.maiken_location_geocoded
+      - service: homeassistant.update_entity
+        entity_id: sensor.maiken_location_zone
+      - service: homeassistant.update_entity
+        entity_id: sensor.maiken_travel_time_to_home

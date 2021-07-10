@@ -1,0 +1,7 @@
+entity: scene.max_lys
+icon: mdi:lightbulb-group
+tap_action:
+  action: call-service
+  service: scene.turn_on
+  service_data:
+    entity_id: scene.max_lys

@@ -1,0 +1,5 @@
+
+homeassistant:
+  customize:
+    light.shelly_shdm_1_f3cb42:
+      friendly_name: Gulvlampe

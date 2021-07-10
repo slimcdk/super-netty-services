@@ -1,0 +1,52 @@
+homeassistant:
+  customize:
+    sensor.bedroom_environment_temperature:
+      device_class: temperature
+    sensor.bedroom_envrionment_humidity:
+      device_class: humidity
+
+
+sensor:
+  - platform: template
+    sensors:
+      bedroom_envrionment_temperature:
+        friendly_name: "Bedroom Environment Temperature"
+        unit_of_measurement: '°C'
+        value_template: >-
+          {% set states = [states('sensor.mini_fan1_temperature')|float] %}
+          {% set temps = states | reject('==', 'unavailable') | list %}
+          {{ states|sum / states|count }}
+        
+      bedroom_envrionment_humidity:
+        friendly_name: "Bedroom Environment Humidity"
+        unit_of_measurement: '%'
+        value_template: >-
+          {% set states = [states('sensor.mini_fan1_humidity')|float] %}
+          {% set temps = states | reject('==', 'unavailable') | list %}
+          {{ states|sum / states|count }}
+
+
+automation:
+  - id: bedroom_climate_heating
+    alias: Sovevaerelse start varme
+    trigger:
+      - platform: time
+        at: "06:00:00"
+    action:
+      - service: climate.set_aux_heat
+        target:
+          entity_id: switch.bedroom_trv_open_valve
+        data:
+          aux_heat: true
+
+  - id: bedroom_climate_cooling
+    alias: Sovevaerelse sluk varme
+    trigger:
+      - platform: time
+        at: "18:00:00"
+    action:
+      - service: climate.set_aux_heat
+        target:
+          entity_id: switch.bedroom_trv_open_valve
+        data:
+          aux_heat: false

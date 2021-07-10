@@ -1,0 +1,12 @@
+path: main
+title: Hjem
+icon: mdi:home-assistant
+cards:
+  - !include ../cards/clock.yaml
+  - !include ../cards/monitoring/weather.yaml
+  - !include ../cards/lights/all.yaml
+  - !include ../cards/portable_devices.yaml
+  - !include ../cards/persons/overview.yaml
+  - !include ../cards/monitoring/uv_index.yaml
+  - !include ../cards/birthdays.yaml
+  - !include ../cards/covers/quick_menu.yaml

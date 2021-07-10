@@ -1,0 +1,7 @@
+type: custom:upcoming-media-card
+entity: sensor.wanted_movies
+title: Wanted movies
+
+#type: custom:upcoming-media-card
+#entity: sensor.downloaded_movies
+#title: Wanted movies

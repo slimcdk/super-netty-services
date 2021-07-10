@@ -1,0 +1,22 @@
+type: custom:card-templater
+title: HACS
+
+entities:
+  - sensor.hacs
+  - sensor.latest_hac_release_version
+
+card:
+  type: markdown
+  title: HA / HACS Opdateringer
+  content_template: >
+    Home Assistant Core
+
+    {{ states('sensor.local_running_hac_version') }} -> {{ states('sensor.latest_hac_release_version') }}
+
+    
+    Home Assistant Community Store
+    
+    {% for repo in state_attr('sensor.hacs', 'repositories') %}
+      **{{ repo.display_name }}** _{{ repo["installed_version"] }}_ -> _{{ repo["available_version"] }}_
+    {% endfor %}
+      

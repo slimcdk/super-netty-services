@@ -1,0 +1,132 @@
+
+
+panel_iframe:
+  ha_vscode:
+    title: VS Code Home Assistant
+    url: http://192.168.1.10:4000?workspace=/config/workspace/homeassistant.code-workspace
+    icon: mdi:file-edit
+    require_admin: true
+
+
+
+sensor:
+  - platform: time_date
+    display_options:
+      - time
+      - date
+      - date_time
+      - time_date
+      - time_utc
+      - beat
+
+  - platform: version
+    name: Latest HAC Release Version
+    source: docker
+    image: default
+
+  - platform: version
+    name: Local Running HAC Version
+    source: local
+    image: default
+
+
+binary_sensor:
+  - platform: workday
+    country: DK
+
+    
+input_select:
+  lights_card_mode:
+    name: Lysgruppe
+    options:
+      - Stue
+      - Køkken
+      - Kontor
+      - Soveværelse
+      - Entré
+      - De små
+      - Altan
+      - Andet
+      - Alle
+
+  scene_select_mode:
+    name: Scener
+    options:
+      - Dagslys
+      - Morgenlys
+      - Dæmpet
+      - Kraftigt lys
+      - Alt slukket
+      - Filmtid
+      - Sovelys
+
+
+automation:
+  - alias: Send besked om opdatering fra HACS
+    id: notify_about_hacs_update
+    trigger:
+      - platform: state
+        entity_id: sensor.hacs
+    condition:
+      - condition: template
+        value_template: "{{ states(trigger.entity_id) != 'unknown'}}"
+      - condition: template
+        value_template: "{{ (states(trigger.entity_id) | float) != 0}}"
+    action:
+      - service: persistent_notification.create
+        data_template:
+          title: "Updates pending in HACS"
+          message: >-
+            {% for repo in state_attr(trigger.entity_id, 'repositories') %}
+              **{{ repo.display_name }}** _{{ repo["installed_version"] }}_ -> _{{ repo["available_version"] }}_
+            {% endfor %}
+      - service: notify.christian_all
+        data_template:
+          title: "Updates pending in HACS"
+          message: >-
+            {% for repo in state_attr(trigger.entity_id, 'repositories') %}
+              **{{ repo.display_name }}** _{{ repo["installed_version"] }}_ -> _{{ repo["available_version"] }}_
+            {% endfor %}
+
+
+  - alias: Send besked om ny version af HAC
+    id: notify_about_hac_update
+    trigger:
+      - platform: state
+        entity_id: sensor.latest_hac_release_version
+    condition:
+      - condition: template
+        value_template: "{{ states('sensor.local_running_hac_version') < states('sensor.latest_hac_release_version') }}"
+    action:
+      - service: persistent_notification.create
+        data_template:
+          title: "Opdatering af Home Assistant"
+          message: "{{ states('sensor.local_running_hac_version') }} -->> {{ states('sensor.latest_hac_release_version') }}"
+      - service: notify.christian_all
+        data_template:
+          title: "Opdatering af Home Assistant"
+          message: "{{ states('sensor.local_running_hac_version') }} -->> {{ states('sensor.latest_hac_release_version') }}"
+
+
+#    - alias: Udsend meddelse om genstart
+#      id: broadcast_message_about_restart
+#      trigger:
+#        - platform: homeassistant
+#          event: restart
+#      action:
+#        - service: tts.google_cloud_say
+#          entity_id: media_player.sprutte
+#          data:
+#            message: "Hæng på. Home Assistant genstarter lige."
+
+
+  - alias: Udsend meddelse om gennemført opstart
+    id: broadcast_message_about_ha_is_ready
+    trigger:
+      - platform: homeassistant
+        event: start
+    action:
+      - service: tts.google_cloud_say
+        entity_id: media_player.sprutte
+        data:
+          message: "Så er Home Assistant klar."

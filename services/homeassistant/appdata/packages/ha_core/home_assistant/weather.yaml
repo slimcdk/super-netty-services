@@ -1,0 +1,21 @@
+weather:
+  - platform: darksky
+    name: !secret ZONE_00_NAME
+    api_key: !secret DARKSKY_API_KEY
+    latitude: !secret ZONE_00_LATITUDE
+    longitude: !secret ZONE_00_LONGITUDE
+    mode: daily
+
+  - platform: openweathermap
+    api_key: !secret OPENWEATHER_API_KEY
+
+#  - platform: moon
+
+#  - platform: season
+#    name: Astronomical season
+#    type: astronomical
+
+#  - platform: season
+#    name: Meteorological season
+#    type: meteorological
+

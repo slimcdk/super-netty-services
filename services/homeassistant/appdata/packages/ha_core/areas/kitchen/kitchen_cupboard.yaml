@@ -1,0 +1,40 @@
+
+
+automation:
+  - alias: For høj temperatur i køleskab
+    id: fridge_temperature_too_high
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.kitchen_cupboard_fridge_temp
+        above: 20
+        for:
+          minutes: 1
+    action:
+      - service: notify.notify
+        data_template:
+          title: "Står køleskabet åben?"
+          message: "Temperaturen er nu over {{ states('sensor.kitchen_cupboard_fridge_temp') }} grader"
+      - service: tts.google_cloud_say
+        entity_id: media_player.sprutte
+        data_template:
+          message: "Står køleskabet åben? Temperaturen over {{ states('sensor.kitchen_cupboard_fridge_temp').replace('.',',') }} grader."
+          cache: true
+
+  - alias: For høj temperatur i fryser
+    id: freezer_temperature_too_high
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.kitchen_cupboard_freezer_temp
+        above: -2
+        for:
+          minutes: 1
+    action:
+      - service: notify.notify
+        data_template:
+          title: "Står fryseren åben?"
+          message: "Temperaturen er nu over {{ states('sensor.kitchen_cupboard_freezer_temp') }} grader"
+      - service: tts.google_cloud_say
+        entity_id: media_player.sprutte
+        data_template:
+          message: "Står fryseren åben? Temperaturen er over {{ states('sensor.kitchen_cupboard_freezer_temp').replace('.',',') }} grader."
+          cache: true

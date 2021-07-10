@@ -1,0 +1,43 @@
+input_boolean:
+  open_office_cover_with_sun:
+    name: Åben kontorgardin med solen
+  close_office_cover_with_sun:
+    name: Luk kontorgardin med solen
+
+
+input_datetime:
+  automated_open_office_cover:
+    name: Automated opening of office cover
+    has_date: false
+    has_time: true
+
+  automated_close_office_cover:
+    name: Automated closing of office cover
+    has_date: false
+    has_time: true
+
+
+automation:
+  - alias: Åben kontorgardiner om morgnen
+    id: automated_open_office_cover
+    trigger:
+      - platform: time
+        at: input_datetime.automated_open_office_cover
+    action:
+      - service: cover.set_cover_position
+        target:
+          entity_id: cover.office_window_cover
+        data:
+          position: 60
+
+  - alias: Luk kontorgardiner for natten
+    id: automated_close_office_cover
+    trigger:
+      - platform: time
+        at: input_datetime.automated_close_office_cover
+    action:
+      - service: cover.close_cover
+        entity_id: cover.office_window_cover
+
+
+

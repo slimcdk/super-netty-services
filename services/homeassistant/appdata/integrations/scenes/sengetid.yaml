@@ -1,0 +1,19 @@
+- name: Sengetid
+  entities:
+
+    # living
+    light.floorlamp: off
+    light.windowsill: off
+    light.guinea_pig_empire: off
+    
+
+    # office 
+    light.orange_lamp: off
+    light.office_long_desk: off
+    cover.office_window:
+      state: closed
+      current_position: 0
+
+
+    # bedroom
+    light.bedroom_ceiling: off

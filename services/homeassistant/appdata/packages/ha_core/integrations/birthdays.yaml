@@ -1,0 +1,168 @@
+
+anniversaries:
+  sensors:
+    ## Christians familie
+    - name: Christian fødselsdag
+      date: !secret christian_birthday
+      id_prefix: "birthday_"
+    - name: Sandra fødselsdag
+      date: !secret sandra_birthday
+      id_prefix: "birthday_"
+    - name: Hans fødselsdag
+      date: !secret hans_birthday
+      id_prefix: "birthday_"
+    - name: Lene fødselsdag
+      date: !secret lene_birthday
+      id_prefix: "birthday_"
+    - name: Lisa fødselsdag
+      date: !secret lisa_birthday
+      id_prefix: "birthday_"
+    - name: Anna fødselsdag
+      date: !secret anna_birthday
+      id_prefix: "birthday_"
+    - name: Bente fødselsdag
+      date: !secret bente_birthday
+      id_prefix: "birthday_"
+    - name: Chilli fødselsdag
+      date: "2016-05-03"
+      id_prefix: "birthday_"
+    - name: Bjork fødselsdag
+      date: "2012-05-28"
+      id_prefix: "birthday_"
+
+    ## Maikens familie
+    - name: Maiken fødselsdag
+      date: !secret maiken_birthday
+      id_prefix: "birthday_"
+    - name: Marlene fødselsdag
+      date: !secret marlene_birthday
+      id_prefix: "birthday_"
+    - name: Freddie fødselsdag
+      date: !secret freddie_birthday
+      id_prefix: "birthday_"
+    - name: Joachim fødselsdag
+      date: !secret joachim_birthday
+      id_prefix: "birthday_"
+    - name: Daniel fødselsdag
+      date: !secret daniel_birthday
+      id_prefix: "birthday_"
+#    - name: Helga fødselsdag
+#      date: !secret helga_birthday
+#      id_prefix: "birthday_"
+    - name: Ziggy fødselsdag
+      date: "2011-01-01"
+      id_prefix: "birthday_"
+
+    ## De små
+    - name: Watson fødselsdag
+      date: "2018-08-21"
+      id_prefix: "birthday_"
+    - name: Bondi fødselsdag
+      date: "2018-11-21"
+      id_prefix: "birthday_"
+    # - name: Bastian fødselsdag
+    #   date: "2018-11-21"
+    #   id_prefix: "birthday_"
+    - name: Feodor fødselsdag
+      date: "2019-03-31"
+      id_prefix: "birthday_"
+
+    - name: Årsdag
+      date: "2017-08-31"
+      unit_of_measurement: ""
+
+    - name: Juleaften
+      date: "12-24"
+      id_prefix: "annual_"
+      unit_of_measurement: ""
+    - name: Nytårsaften
+      date: "12-31"
+      id_prefix: "annual_"
+      unit_of_measurement: ""
+
+      
+sensor:
+  - platform: template
+    sensors:
+      next_birthday:
+        # Update once a day
+        entity_id: sensor.date
+        friendly_name_template: >-
+          {% set ns = namespace(entity_id="", prev=1000) -%}
+          {% for birthday in states.group.birthdays.attributes.entity_id -%}
+            {% if states(birthday) | int < ns.prev %}
+              {%- set ns.entity_id = birthday -%}
+              {%- set ns.prev = states(birthday) | int -%}
+            {% endif -%}
+          {% endfor %}
+          {%- if state_attr(ns.entity_id, "friendly_name").endswith('fødselsdag') -%}
+            {{ state_attr(ns.entity_id, "friendly_name")[:-11] -}}
+          {% else %}
+            {{ state_attr(ns.entity_id, "friendly_name") -}}
+          {% endif %}
+        value_template: >-
+          {%- set ns = namespace(entity_id="", prev=1000) -%}
+          {% for birthday in states.group.birthdays.attributes.entity_id -%}
+            {% if states(birthday) | int < ns.prev %}
+              {%- set ns.entity_id = birthday -%}
+              {%- set ns.prev = states(birthday) | int -%}
+            {% endif -%}
+          {% endfor -%}
+          {% if ns.prev > 0 %}
+            {%- if ns.prev > 1 -%}
+              om {{ ns.prev }} dage
+            {% else %}
+              i morgen
+            {% endif -%}
+          {% else %}
+            i dag...!!!
+          {% endif -%}
+        attribute_templates:
+          years_at_next_anniversary: >-
+            {%- set ns = namespace(entity_id="", prev=1000) -%}
+            {% for birthday in states.group.birthdays.attributes.entity_id -%}
+              {% if states(birthday) | int < ns.prev %}
+                {%- set ns.entity_id = birthday -%}
+                {%- set ns.prev = states(birthday) | int -%}
+              {% endif -%}
+            {% endfor %}
+            {% if ns.prev == 0 -%}
+              {{ state_attr(ns.entity_id, "years_at_next_anniversary") - 1 }}
+            {% else %}
+              {{ state_attr(ns.entity_id, "years_at_next_anniversary") }}
+            {% endif %}
+          hide_in_list: "true"
+
+automation:
+  - alias: Birthday Update
+    trigger:
+    - platform: time
+      at: 00:01:00
+    action:
+    - service: homeassistant.update_entity
+      entity_id: sensor.next_birthday
+
+
+group:
+  birthdays:
+    name: Fødselsdage
+    entities:
+      - sensor.birthday_christian_fodselsdag
+      - sensor.birthday_hans_fodselsdag
+      - sensor.birthday_lene_fodselsdag
+      - sensor.birthday_lisa_fodselsdag
+      - sensor.birthday_anna_fodselsdag
+      - sensor.birthday_bente_fodselsdag
+      - sensor.birthday_chilli_fodselsdag
+      - sensor.birthday_bjork_fodselsdag
+      - sensor.birthday_maiken_fodselsdag
+      - sensor.birthday_marlene_fodselsdag
+      - sensor.birthday_freddie_fodselsdag
+      - sensor.birthday_joachim_fodselsdag
+      - sensor.birthday_daniel_fodselsdag
+      - sensor.birthday_helga_fodselsdag
+      - sensor.birthday_ziggy_fodselsdag
+      - sensor.birthday_watson_fodselsdag
+      - sensor.birthday_bondi_fodselsdag
+      - sensor.birthday_bastian_fodselsdag
+      - sensor.birthday_feodor_fodselsdag

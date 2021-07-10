@@ -1,0 +1,13 @@
+tts:
+  - platform: google_translate
+    language: da
+    
+  - platform: google_cloud
+    key_file: ./packages/ha_core/integrations/google/SERVICE_ACCOUNT.json
+    language: da-DK
+    gender: female
+    voice: da-DK-Standard-A
+    encoding: ogg_opus
+    speed: 1
+    pitch: 2.0
+    gain: 0.0

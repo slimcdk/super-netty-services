@@ -1,0 +1,5 @@
+#entity: light.bedroom_ceiling
+type: custom:slider-entity-row
+entity: light.shelly_shdm_1_f3ebb9
+name: Loftlys
+toggle: true

@@ -1,0 +1,16 @@
+type: custom:slider-entity-row
+entity: light.tv_ambilight
+name: TV lys
+toggle: true
+
+
+
+## OLD CONFIG ## 
+#type: custom:fold-entity-row
+#head: light.tv_ambilight
+
+#entities:
+#- type: custom:slider-entity-row
+#  entity: light.tv_sideboard_left
+#  name: Venstre
+#  toggle: true

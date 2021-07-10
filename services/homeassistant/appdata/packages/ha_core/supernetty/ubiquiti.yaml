@@ -1,0 +1,26 @@
+panel_iframe:
+  unifi:
+    title: UniFi Controller
+    icon: mdi:chart-timeline
+    url: http://192.168.1.10:8443
+    require_admin: true
+
+  edgerouter:
+    title: EdgeRouter X
+    icon: mdi:router-wireless
+    url: http://192.168.1.1:80
+    require_admin: true
+
+sensor:
+  - platform: unifigateway
+    host: 192.168.1.10
+    port: 8443
+    username: !secret UNIFI_GATEWAY_HA_USER
+    password: !secret UNIFI_GATEWAY_PASS
+    monitored_conditions:
+      - www
+      - lan
+      - wan
+      - wlan
+      - alerts
+      - firmware

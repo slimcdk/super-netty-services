@@ -1,0 +1,7 @@
+entity: scene.sluk_alt
+icon: mdi:lightbulb-group-off
+tap_action:
+  action: call-service
+  service: scene.turn_on
+  service_data:
+    entity_id: scene.sluk_alt

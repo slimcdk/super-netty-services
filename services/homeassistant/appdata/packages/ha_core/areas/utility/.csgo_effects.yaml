@@ -1,0 +1,161 @@
+
+
+# integration entry
+csgo_gamestate:
+
+scripts:
+  csgo_freezetime:
+    alias: CSGO - Freezetime
+    sequence:
+    - data:
+        entity_id:
+        - script.csgo_flashloop1
+        - script.csgo_flashloop2
+      service: script.turn_off
+    - data:
+        rgb_color:
+        - 83
+        - 52
+        - 235
+        transition: 0.5
+      entity_id: light.office_long_desk
+      service: light.turn_on
+  csgo_begin_end:
+    alias: CSGO - Round start/end
+    sequence:
+    - data:
+        entity_id:
+        - script.csgo_flashloop1
+        - script.csgo_flashloop2
+      service: script.turn_off
+    - data:
+        transition: 1
+        xy_color:
+        - 0.45989990234
+        - 0.41059875488
+      entity_id: light.office_long_desk
+      service: light.turn_on
+  csgo_bomb_planted:
+    alias: CSGO - Bomb planted
+    sequence:
+    - data:
+        rgb_color:
+        - 255
+        - 190
+        - 0
+        transition: 0.5
+      entity_id: light.office_long_desk
+      service: light.turn_on
+    - delay: '1'
+    - service: script.csgo_flashloop1
+  csgo_bomb_defused:
+    alias: CSGO - Bomb defused
+    sequence:
+    - data:
+        entity_id:
+        - script.csgo_flashloop1
+        - script.csgo_flashloop2
+      service: script.turn_off
+    - data:
+        rgb_color:
+        - 0
+        - 255
+        - 0
+        transition: 0.5
+      entity_id: light.office_long_desk
+      service: light.turn_on
+  csgo_bomb_exploded:
+    alias: CSGO - Bomb exploded
+    sequence:
+    - data:
+        entity_id:
+        - script.csgo_flashloop1
+        - script.csgo_flashloop2
+      service: script.turn_off
+    - data:
+        rgb_color:
+        - 255
+        - 0
+        - 0
+        transition: 0.5
+      entity_id: light.office_long_desk
+      service: light.turn_on
+  csgo_flashloop1:
+    alias: CSGO - Flashloop 1
+    sequence:
+    - data: {}
+      entity_id: script.csgo_flashloop2
+      service: script.turn_off
+    - service: script.csgo_flashloop2
+    - data:
+        flash: long
+      entity_id: light.office_long_desk
+      service: light.turn_on
+    - delay: '10'
+  csgo_flashloop2:
+    alias: CSGO - Flashloop 2
+    sequence:
+    - delay: '1'
+    - timeout: 00:00:15
+      wait_template: '{{ states.script.csgo_flashloop1.state == "off" }}'
+    - service: script.csgo_flashloop1
+
+automation:
+  - id: '00000001'
+    alias: CSGO - Freezetime starts
+    description: ''
+    trigger:
+    - event_data: {}
+      event_type: csgo_round_freeze
+      platform: event
+    action:
+    - data: {}
+      entity_id: script.csgo_freezetime
+      service: script.turn_on
+  - id: '00000002'
+    alias: CSGO - Round starts or game ends
+    description: ''
+    trigger:
+    - event_data: {}
+      event_type: csgo_round_started
+      platform: event
+    - event_data: {}
+      event_type: csgo_game_stopped
+      platform: event
+    action:
+    - data: {}
+      entity_id: script.csgo_begin_end
+      service: script.turn_on
+  - id: '00000003'
+    alias: CSGO - Bomb planted
+    description: ''
+    trigger:
+    - event_data: {}
+      event_type: csgo_bomb_planted
+      platform: event
+    action:
+    - data: {}
+      entity_id: script.csgo_bomb_planted
+      service: script.turn_on
+  - id: '00000004'
+    alias: CSGO - Bomb exploded
+    description: ''
+    trigger:
+    - event_data: {}
+      event_type: csgo_bomb_exploded
+      platform: event
+    action:
+    - data: {}
+      entity_id: script.csgo_bomb_exploded
+      service: script.turn_on
+  - id: '00000005'
+    alias: CSGO - Bomb defused
+    description: ''
+    trigger:
+    - event_data: {}
+      event_type: csgo_bomb_defused
+      platform: event
+    action:
+    - data: {}
+      entity_id: script.csgo_bomb_defused
+      service: script.turn_on

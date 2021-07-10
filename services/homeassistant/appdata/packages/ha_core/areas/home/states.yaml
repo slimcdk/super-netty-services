@@ -1,0 +1,25 @@
+
+
+## Night time ##
+automation:
+  - alias: 'Night time'
+    id: 'time_to_go_to_sleep'
+    trigger:
+      - platform: time
+        at: '22:00:00'
+    condition:
+      - condition: time
+        weekday:
+          - sun
+          - mon
+          - tue
+          - wed
+          - thu
+    action:
+      - service: tts.google_cloud_say
+        entity_id: media_player.sprutte
+        data_template:
+          message: "Klokken er nu 10. Det er tid til at gå i seng."
+          cache: true
+      - service: automation.trigger
+        entity_id: automation.turn_off_tv_in_x_time

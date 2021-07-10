@@ -1,0 +1,5 @@
+type: custom:clock-card
+#size: 400
+font_size: 50 
+disable_seconds: false
+#display_date: "DD/MM/YY"

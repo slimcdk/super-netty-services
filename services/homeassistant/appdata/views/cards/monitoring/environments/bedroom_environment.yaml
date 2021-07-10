@@ -1,0 +1,28 @@
+type: horizontal-stack
+title: Soveværelse
+cards:
+  - type: custom:mini-graph-card
+    name: Luftfugtighed
+    entities:
+      - sensor.bedroom_envrionment_humidity
+      - sensor.mini_fan1_humidity
+      - sensor.mini_fan2_humidity
+    line_width: 2
+    hours_to_show: 48
+    points_per_hour: 10
+    show:
+      legend: false
+
+
+  - type: custom:mini-graph-card
+    name: Temperature
+    entities:
+      - sensor.bedroom_envrionment_temperature
+      - sensor.mini_fan1_temperature
+      - sensor.mini_fan2_temperature
+    unit: °C
+    line_width: 2
+    hours_to_show: 48
+    points_per_hour: 10
+    show:
+      legend: false

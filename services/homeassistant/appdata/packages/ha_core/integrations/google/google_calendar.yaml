@@ -1,0 +1,4 @@
+#google:
+#  client_id: !secret GOOGLE_CLOUD_SNHA_CLIENT_ID
+#  client_secret: !secret GOOGLE_CLOUD_SNHA_CLIENT_SECRET
+#  track_new_calendar: true

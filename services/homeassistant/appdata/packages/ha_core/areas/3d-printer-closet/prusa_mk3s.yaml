@@ -1,0 +1,140 @@
+
+octoprint:
+  - host: 192.168.1.139
+    api_key: !secret PRUSA_MK3S_OCTOPRINT_API_KEY
+    name: Prusa MK3S
+    number_of_tools: 1
+    bed: true
+    sensors:
+      monitored_conditions:
+        - Temperatures
+        - Current State
+        - Job Percentage
+        - Time Remaining
+        - Time Elapsed
+
+camera:
+  - platform: mjpeg
+    name: Prusa MK3S OctoPi Camera
+    still_image_url: http://192.168.1.139/webcam/?action=snapshot
+    mjpeg_url: http://192.168.1.139/webcam/?action=stream
+
+  - platform: proxy
+    name: Prusa MK3S OctoPi Camera Header Crop
+    entity_id: camera.prusa_mk3s_octopi_camera
+    mode: crop
+    max_image_height: 160
+    max_stream_height: 160
+    image_top: 64
+    image_quality: 100
+    image_refresh_rate: 1.0
+
+
+binary_sensor:
+  - platform: octoprint
+    monitored_conditions:
+    - Printing
+    - Printing Error
+
+panel_iframe:
+  octoprint:
+    title: 50 OctoPrint
+    url: http://192.168.1.139:80
+    icon: mdi:printer-3d
+
+    
+sensor:
+  - platform: template
+    sensors:
+      estimated_time_end_of_print:
+        entity_id: binary_sensor.prusa_mk3s_printing, sensor.prusa_mk3s_time_remaining
+        value_template: >-
+          {% if states('binary_sensor.prusa_mk3s_printing') == 'on' %}
+            {{ (as_timestamp(now())|int + states('sensor.prusa_mk3s_time_remaining')|int) | timestamp_local }}
+          {% else %}
+            {{ states.binary_sensor.prusa_mk3s_printing.last_changed }}
+          {% endif %}
+#        time_since_print_state_changed:
+#          value_template: >-
+#            {% if states.binary_sensor.prusa_mk3s_printing.state %}
+#              {{ now() }}
+#            {% else %}
+#              {{ states.binary_sensor.prusa_mk3s_printing.last_updated }}
+#            {% endif %}           
+
+  - platform: statistics
+    name: prusa_mk3s_power_watt_hour
+    entity_id: sensor.prusa_mk3s_power_wattage
+    sampling_size: 20
+    max_age:
+      minutes: 60
+
+  - platform: integration
+    source: sensor.prusa_mk3s_power_wattage
+    name: prusa_mk3s_energy_spent
+#      unit_prefix: k
+    round: 2
+    unit: "W"
+
+  - platform: filter
+    name: "filtered realistic power usage"
+    entity_id: sensor.prusa_mk3s_power_wattage
+    filters:
+      - filter: time_simple_moving_average
+        window_size: "01:00"
+
+  
+automation:
+  - alias: Prusa MK3S er nu færdig med at printe
+    id: prusa_mk3s_finished_printing
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.prusa_mk3s_printing
+        from: "on"
+        to: "off"
+    action:
+      - service: notify.christian_all
+        data_template:
+          title: "3D printeren er nu færdig"
+          message: "Skynnnnnd dig"
+#              data:
+#                attachment:
+#                  content-type: jpeg
+#                push:
+#                  badge: 0
+#                  sound: default
+#                  category: camera
+#                entity_id: camera.prusa_mk3s_octopi_camera
+      - service: tts.google_cloud_say
+        entity_id: media_player.sprutte
+        data:
+          message: "Dit 3D print er klar."
+#        - service: camera.play_stream
+#          data:
+#            entity_id: camera.prusa_mk3s_octopi_camera
+#            media_player: media_player.sprutte
+
+
+  - alias: Gem OctoPi kamera billeder under print
+    id: prusa_mk3s_download_opcam_snap_cronjob
+    trigger:
+      - platform: time_pattern
+        minutes: "/1"
+    condition:
+      - condition: state
+        entity_id: binary_sensor.prusa_mk3s_printing
+        state: 'on'
+    action:
+      - service: camera.snapshot
+        data:
+          entity_id: camera.prusa_mk3s_octopi_camera_header_crop
+          filename: "/config/www/tmp/prusa_mk3s_opcam_snapshot.jpg"
+
+  - alias: Tænd for lys, når der printes
+    id: prusa_mk3s_printer_closet_light
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.prusa_mk3s_printing
+    action:
+      - service: light.turn_on
+        entity_id: light.printer_closet

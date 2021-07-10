@@ -1,0 +1,16 @@
+type: entities
+entities:
+#  - input_select.announce_google_player
+
+  - entity: input_text.announce_google
+    type: 'custom:text-input-row'
+
+  - type: call-service
+    name: ' '
+    icon: 'mdi:account-voice'
+    action_name: Afsend
+    service: automation.trigger
+    service_data:
+      entity_id: automation.announce_input_over_google_homes
+
+

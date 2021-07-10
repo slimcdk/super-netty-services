@@ -1,0 +1,7 @@
+entity: scene.sengetid
+icon: mdi:weather-night
+tap_action:
+  action: call-service
+  service: scene.turn_on
+  service_data:
+    entity_id: scene.sengetid

@@ -1,0 +1,10 @@
+type: button
+name: Gardiner
+icon: mdi:blinds
+tap_action:
+  action: fire-dom-event
+  browser_mod:
+    command: popup
+    title: Gardiner
+    #large: true
+    card: !include popup.yaml

@@ -1,0 +1,12 @@
+
+circadian_lighting:
+
+
+switch:
+  - platform: circadian_lighting
+    lights_ct:
+      - light.orange_lamp
+    lights_rgb:
+      - light.living_windowsill
+    lights_brightness:
+      - light.orange_lamp

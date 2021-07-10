@@ -1,0 +1,67 @@
+icon: mdi:blinds
+type: vertical-stack
+cards:
+  - type: entities
+    entities:
+      - type: custom:multiple-entity-row
+        name: Kontorvindue
+        entity: cover.office_window_cover
+        show_state: false
+        secondary_info:
+          entity: binary_sensor.office_window_open_state
+          name: Vindue er
+        entities:
+          - entity: input_datetime.automated_open_office_cover
+            name: Åbner
+            tap_action:
+              action: fire-dom-event
+              browser_mod:
+                command: popup
+                title: Kontorgardiner
+                card: !include automated_times_popup.yaml
+          - entity: input_datetime.automated_close_office_cover
+            name: Lukker
+            tap_action:
+              action: fire-dom-event
+              browser_mod:
+                command: popup
+                title: Tider
+                card: !include automated_times_popup.yaml
+          - entity: switch.office_window_calibrate_position
+            name: Nulstil
+            toggle: true
+      - type: custom:slider-entity-row 
+        entity: cover.office_window_cover
+        hide_state: true
+        full_row: true
+
+
+
+  - type: entities
+    entities:
+      - type: custom:multiple-entity-row
+        name: Alle
+        entity: cover.office_window_cover
+        show_state: false
+        secondary_info: false
+        entities:
+          - icon: mdi:arrow-down-bold
+            tap_action:
+              action: call-service
+              service: cover.close_cover
+              service_data:
+                entity_id: cover.office_window_cover
+
+          - icon: mdi:stop
+            tap_action:
+              action: call-service
+              service: cover.stop_cover
+              service_data:
+                entity_id: cover.office_window_cover
+
+          - icon: mdi:arrow-up-bold
+            tap_action:
+              action: call-service
+              service: cover.open_cover
+              service_data:
+                entity_id: cover.office_window_cover

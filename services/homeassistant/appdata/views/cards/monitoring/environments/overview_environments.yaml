@@ -1,0 +1,34 @@
+type: vertical-stack
+title: Overblik
+cards:
+  - type: custom:mini-graph-card
+    name: Luftfugtigheder
+    entities:
+      - name: Badværelse
+        entity: sensor.bathroom_environment_dht_humidity
+      - name: Soveværelse
+        entity: sensor.bedroom_envrionment_humidity
+      - name: Kontor
+        entity: sensor.office_environment_dht_humidity
+    line_width: 2
+    hours_to_show: 48
+    points_per_hour: 10
+    show:
+      state: false
+
+
+  - type: custom:mini-graph-card
+    name: Temperaturer
+    entities:
+      - name: Badværelse
+        entity: sensor.bathroom_environment_temperature
+      - name: Soveværelse
+        entity: sensor.bedroom_envrionment_temperature
+      - name: Kontor
+        entity: sensor.office_environment_temperature
+    unit: °C
+    line_width: 2
+    hours_to_show: 48
+    points_per_hour: 10
+    show:
+      state: false

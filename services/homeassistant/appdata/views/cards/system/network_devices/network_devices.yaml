@@ -1,0 +1,9 @@
+type: custom:card-templater
+card:
+  type: entities
+  title: Noder på netværket
+  show_header_toggle: false
+  
+  entities:
+    - !include esphome_network.yaml
+    - !include shelly_network.yaml

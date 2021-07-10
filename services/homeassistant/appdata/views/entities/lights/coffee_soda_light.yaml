@@ -1,0 +1,4 @@
+type: custom:slider-entity-row
+entity: light.kitchen_coffee_light
+name: Kaffe-soda lys
+toggle: true

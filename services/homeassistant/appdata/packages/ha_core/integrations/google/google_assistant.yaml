@@ -1,0 +1,200 @@
+google_assistant:
+  project_id: !secret GOOGLE_CLOUD_SNHA_PROJECT_ID
+  service_account: !include ./SERVICE_ACCOUNT.json
+  expose_by_default: false
+  report_state: true
+#  secure_devices_pin: !secret GOOGLE_SECRET_PIN
+  entity_config:
+
+
+    ## Living room ##
+    light.shelly_shdm_1_f3cb42:
+      name: Gulvlampe
+      expose: true
+      room: Stue
+
+    light.living_windowsill:
+      name: Vindueskarm
+      expose: true
+      room: Stue
+  
+    light.halo_clock:
+      name: Væg-ur
+      expose: true
+      room: Stue
+      aliases:
+        - Tiden
+
+
+#    light.tv_sideboard:
+#      name: TV skænk
+#      expose: true
+#      room: Stue
+
+    light.shelly_shdm_1_f3ebb9: #light.bedroom_ceiling:
+      name: Loftlys
+      expose: true
+      room: Soveværelse
+      aliases:
+        - Soveværelse loftlys
+        - Alt loftlys
+
+    media_player.lg_stue_tv:
+      name: Stue-TV
+      expose: true
+      room: Stue
+      aliases:
+        - Stue-fjernsyn
+        - LG TV
+        - LG C8
+
+    climate.living_trv:
+      name: Radiator
+      expose: true
+      room: Stue
+      aliases:
+        - Stue-radiator
+        - Alle radiatorerne
+
+    light.shelly_shdm_1_f3c6f3:
+      name: Sputnik
+      expose: true
+      room: Stue
+      aliases:
+        - Spotlys
+
+    light.green_lamp:
+      name: Grøn lampe
+      expose: true
+      room: Stue
+
+
+    ## Kitchen ##
+    light.kitchen_tabletop:
+      name: Køkkenbordslys
+      expose: true
+      room: Køkken
+      aliases:
+        - Bordlys
+        - Køkkenlys
+
+    light.kitchen_coffee_light:
+      name: Kaffesodalys
+      expose: true
+      room: Køkken
+      aliases:
+        - Kaffebordslys
+       
+
+    ## Bathroom ##
+    sensor.bathroom_environment_temperature:
+      name: Temperatur
+      expose: true
+      room: Badeværelse
+      aliases:
+        - Badeværelses-temperatur
+
+    sensor.bathroom_environment_dht_humidity:
+      name: Luftfugtighed
+      expose: true
+      room: Badeværelse
+      aliases:
+        - Badeværelses-luftfugtighed
+    
+
+
+    ## Bedroom ##
+    fan.bedroom_environment:
+      name: Soveværelse temperatursensor
+      expose: true
+      aliases:
+        - Temperatursensor
+        
+    sensor.bedroom_environment_temperature:
+      name: Soveværelses-temperatur
+      expose: true
+      room: Soveværelse
+
+    sensor.bedroom_environment_humidity:
+      name: Soveværelses-luftfugtighed
+      expose: true
+      room: Soveværelse
+
+
+    climate.bedroom_trv:
+      name: Radiator
+      expose: true
+      room: Soveværelse
+      aliases:
+        - Soveværelse-radiator
+        - Alle radiatorerne
+
+
+    ## Office ##
+    sensor.office_environment_temperature:
+      name: Temperatur
+      expose: true
+      room: Kontor
+      aliases:
+        - Kontor-temperatur
+
+    sensor.office_environment_dht_humidity:
+      name: Luftfugtighed
+      expose: true
+      room: Kontor
+      aliases:
+        - Kontor-luftfugtighed
+    
+    climate.office_trv:
+      name: Radiator
+      expose: true
+      room: Kontor
+      aliases:
+        - Kontor-radiator
+        - Alle radiatorerne
+
+    switch.wake_desktop:
+      name: Stationær
+      expose: true
+      room: Kontor
+    
+    cover.office_window_cover:
+      name: Gardin
+      expose: true
+      room: Kontor
+      aliases:
+        - Rullegardin
+    
+    light.office_long_desk:
+      name: Skrivebordshyggelys
+      expose: true
+      room: Kontor
+      aliases:
+        - Skrivebordslys
+        - Langt skrivebordslys
+
+    light.office_wall_cabinets:
+      name: Overskabslys
+      expose: true
+      room: Kontor
+      aliases:
+        - Skabslys
+        - Loftlys
+
+    ## 3D printer closet ##
+    switch.prusa_mk3s_power:
+      name: 3D-printer
+      expose: true
+      room: 3D Printerskab
+
+
+
+    ## General ##
+    switch.sonoff_s26_plug:
+      name: Varmelampe
+      expose: true
+  
+    light.aurora:
+      name: Fætter Højben
+      expose: true
+      room: Gang

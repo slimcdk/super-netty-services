@@ -1,0 +1,47 @@
+type: entities
+title: Familien
+show_state: false
+show_header_toggle: false
+entities:
+
+    ## Christian ##
+  - type: custom:multiple-entity-row
+    name: Christian
+    entity: person.christian
+    secondary_info: 
+      entity: sensor.christian_location_last_updated
+      format: relative
+    entities:
+      - entity: sensor.christian_location_geocoded
+        name: false
+      - entity: sensor.christian_location_zone
+        name: false
+    show_state: false
+
+
+    ## Maiken ##
+  - type: custom:multiple-entity-row
+    name: Maiken
+    entity: person.maiken
+    secondary_info: 
+      entity: sensor.maiken_location_last_updated
+      format: relative
+    entities:
+      - entity: sensor.maiken_location_geocoded
+        name: false
+      - entity: sensor.maiken_location_zone
+        name: false
+    show_state: false
+
+
+    ## Map ##
+  - type: custom:button-text-card
+    title: Kort
+    icon: mdi:map
+    large: true
+    tap_action:
+      action: fire-dom-event
+      browser_mod:
+        command: popup
+        title: Familien
+        card: !include popup.yaml

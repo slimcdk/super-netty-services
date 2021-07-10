@@ -1,0 +1,5 @@
+#type: picture-entity
+entity: camera.prusa_mk3s_octopi_camera
+camera_view: live
+name: Prusa MK3S Print
+show_state: true

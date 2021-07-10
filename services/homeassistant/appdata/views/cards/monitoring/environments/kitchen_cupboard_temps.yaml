@@ -1,0 +1,32 @@
+type: entities
+title: Køle/fryseskab
+
+entities:
+  - type: custom:multiple-entity-row
+    entity: sensor.kitchen_cupboard_fridge_temp
+    name: Temperaturer
+    show_state: false
+    entities:
+      - entity: sensor.kitchen_cupboard_freezer_temp
+        name: Fryser
+      - entity: sensor.kitchen_cupboard_fridge_temp
+        name: Køleskab
+
+footer:
+  type: custom:mini-graph-card
+  name: Køle/fryse-skab
+  show:
+    name: false
+    icon: false
+    state: false
+    legend: false   
+  entities:
+    - entity: sensor.kitchen_cupboard_fridge_temp
+      color: blue
+    - entity: sensor.kitchen_cupboard_freezer_temp
+      color: blue
+  height: 50
+  unit: "°C"
+  hours_to_show: 24
+  points_per_hour: 10
+  line_width: 2

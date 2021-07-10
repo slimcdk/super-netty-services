@@ -1,0 +1,89 @@
+
+switch:
+  - platform: wake_on_lan
+    mac: !secret DESKTOP_MAC_ADDR
+    name: wake_desktop
+    host: !secret DESKTOP_HOST
+    broadcast_address: 192.168.1.255
+
+  - platform: template
+    switches:
+      desktop_power:
+        entity_id: binary_sensor.desktop_online
+        value_template: "{{ is_state('binary_sensor.desktop_online', 'on') }}"        
+        turn_on:
+          service: switch.turn_on
+          data:
+            entity_id: switch.wake_desktop
+        turn_off:
+          service: switch.turn_off
+          data:
+            entity_id: switch.wake_desktop
+
+
+## sensing
+binary_sensor:
+  - platform: ping
+    name: desktop online
+    host: !secret DESKTOP_HOST
+    scan_interval: 5
+
+#sensor:
+#  - platform: netdata
+#    host: !secret DESKTOP_HOST
+#    port: 19999
+#    name: desktop
+#    resources:
+#      load:
+#        data_group: system.load
+#        element: load15
+
+#glances:
+#  - host: var.desktop_host
+#    port: 61208
+#    name: var.desktop_name
+#    ssl: false
+#    verify_ssl: false
+#    version: 3
+
+
+## messaging
+notify:
+  - platform: html5
+    name: SuperNetty
+    vapid_pub_key: !secret NOTIFY_HTML5_VAPID_PUB_KEY
+    vapid_prv_key: !secret NOTIFY_HTML5_VAPID_PRV_KEY
+    vapid_email: !secret NOTIFY_HTML5_VAPID_EMAIL
+
+
+
+automation:
+  - alias: 30 Tænd for lys når stationær tænder
+    id: desktop_turn_on_cozy_table_light
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.desktop_online
+        to: 'on'
+    condition:
+      - condition: state
+        entity_id: light.office_long_desk
+        state: 'off'
+    action:
+      - service: light.turn_on
+        entity_id: light.office_long_desk
+        data:
+          brightness: 255
+
+  - alias: 30 Sluk for lys når stationær slukker
+    id: desktop_turn_off_cozy_table_light
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.desktop_online
+        to: 'off'
+    condition:
+      - condition: state
+        entity_id: light.office_long_desk
+        state: 'on'
+    action:
+      - service: light.turn_off
+        entity_id: light.office_long_desk

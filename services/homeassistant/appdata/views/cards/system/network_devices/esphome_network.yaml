@@ -1,0 +1,48 @@
+
+type: custom:auto-entities
+card: 
+  type: custom:fold-entity-row
+  head: 
+    type: custom:multiple-entity-row
+    entity: script.update_esphome_network_metrics
+    name: ESPHome devices
+    show_state: false
+    secondary_info:
+      attribute: last_triggered
+      format: relative
+    entities:
+      - name: Opdatér
+        entity: script.update_esphome_network_metrics
+        toggle: true
+      - name: Offline
+        entity: sensor.esphome_nodes
+        attribute: nodes_offline
+      - name: Online
+        entity: sensor.esphome_nodes
+        attribute: nodes_online
+      - name: Total
+        entity: sensor.esphome_nodes
+sort:
+  method: state
+  reverse: true
+filter:
+  include:
+    - entity_id: "switch.*_esphome_node"
+      options:
+        type: custom:multiple-entity-row
+        icon: mdi:chip
+        entity: this.entity_id
+        show_state: false
+        secondary_info:
+          attribute: esphome_version_short
+        entities:
+          - entity: this.entity_id
+            name: Oppetid
+            attribute: uptime
+            unit: s
+          - entity: this.entity_id
+            name: RSSI
+            attribute: wifi_rssi
+          - entity: this.entity_id
+            name: false
+            toggle: true

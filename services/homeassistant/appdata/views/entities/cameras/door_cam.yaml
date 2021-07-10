@@ -1,0 +1,5 @@
+#type: picture-entity
+entity: camera.door_cam
+camera_view: live
+name: Dørspion
+show_state: true

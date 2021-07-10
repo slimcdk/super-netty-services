@@ -1,0 +1,11 @@
+title: Film
+path: movies
+icon: mdi:filmstrip
+cards:
+  - type: custom:stack-in-card
+    cards:
+      - type: entities
+        entities:
+          - input_select.chromecasts
+
+  - !include ../cards/movies/plex_recently_added.yaml

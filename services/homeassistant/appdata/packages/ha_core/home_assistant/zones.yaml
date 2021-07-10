@@ -1,0 +1,48 @@
+
+zone:
+  - name: !secret ZONE_00_NAME
+    latitude: !secret ZONE_00_LATITUDE
+    longitude: !secret ZONE_00_LONGITUDE
+    radius: 100
+    icon: mdi:castle
+
+  - name: !secret ZONE_10_NAME
+    latitude: !secret ZONE_10_LATITUDE
+    longitude: !secret ZONE_10_LONGITUDE
+    radius: 600
+    icon: mdi:worker
+
+  - name: !secret ZONE_20_NAME
+    latitude: !secret ZONE_20_LATITUDE
+    longitude: !secret ZONE_20_LONGITUDE
+    radius: 100
+    icon: mdi:home
+
+  - name: !secret ZONE_30_NAME
+    latitude: !secret ZONE_30_LATITUDE
+    longitude: !secret ZONE_30_LONGITUDE
+    radius: 200
+    icon: mdi:home
+
+  - name: !secret ZONE_40_NAME
+    latitude: !secret ZONE_40_LATITUDE
+    longitude: !secret ZONE_40_LONGITUDE
+    radius: 100
+    icon: mdi:worker
+
+  - name: !secret ZONE_50_NAME
+    latitude: !secret ZONE_50_LATITUDE
+    longitude: !secret ZONE_50_LONGITUDE
+    radius: 100
+    icon: mdi:home
+
+#group:
+#  all_zones:
+#    name: All zones
+#    entities:
+#      - zone.ZONE_00_NAME
+#      - zone.ZONE_10_NAME
+#      - zone.ZONE_20_NAME
+#      - zone.ZONE_30_NAME
+#      - zone.ZONE_40_NAME
+#      - zone.ZONE_50_NAME

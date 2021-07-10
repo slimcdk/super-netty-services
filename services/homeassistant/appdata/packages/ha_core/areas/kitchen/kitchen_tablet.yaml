@@ -1,0 +1,22 @@
+
+
+automation:
+  - alias: Start opladning af tablet i køkkenet
+    id: begin_kitchen_tablet_charging
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.sm_t810_batteriniveau
+        below: 50
+    action:
+      - service: switch.turn_on
+        entity_id: switch.kitchen_tablet_mount_charge_tablet
+
+  - alias: Slut opladning af tablet i køkkenet
+    id: end_kitchen_tablet_charging
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.sm_t810_batteriniveau
+        above: 80
+    action:
+      - service: switch.turn_off
+        entity_id: switch.kitchen_tablet_mount_charge_tablet

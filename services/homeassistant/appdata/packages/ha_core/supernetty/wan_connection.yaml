@@ -1,0 +1,109 @@
+
+panel_iframe:
+  wan_bridge:
+    title: Sagemcom
+    icon: mdi:router-wireless
+    url: http://192.168.100.1
+    require_admin: true
+
+#iperf3:
+#  hosts:
+#    - host: speedtest.hiper.dk
+#      port: 5201
+#      parallel: 20
+#  monitored_conditions:
+#    - upload
+#    - download
+#  scan_interval:
+#    minutes: 7
+
+speedtestdotnet:
+  scan_interval:
+    minutes: 7
+  monitored_conditions:
+    - ping
+    - download
+    - upload
+
+fastdotcom:
+  scan_interval:
+    minutes: 11
+
+
+binary_sensor:
+  - platform: ping
+    name: Cloudflare DNS
+    host: 1.1.1.1
+    count: 5
+    scan_interval: 10
+
+  - platform: ping
+    name: Google DNS
+    host: 8.8.8.8
+    count: 5
+    scan_interval: 5
+
+  - platform: template
+    sensors:
+      has_internet_connectivity:
+        friendly_name: "Has internet connectivity"
+        value_template: >-
+          {%- set google = state_attr('binary_sensor.google_dns', 'round_trip_time_avg') | float -%}
+          {%- set cloudflare = state_attr('binary_sensor.cloudflare_dns', 'round_trip_time_avg') | float -%}
+          {{ False not in [google<100, cloudflare<100] }}
+        attribute_templates:
+          ping: >-
+            {%- set google = state_attr('binary_sensor.google_dns', 'round_trip_time_avg')|float -%}
+            {%- set cloudflare = state_attr('binary_sensor.cloudflare_dns', 'round_trip_time_avg')|float -%}
+            {{ [google, cloudflare] | sum / 2 }}
+          quality: >-
+            {%- set google = state_attr('binary_sensor.google_dns', 'round_trip_time_avg')|float -%}
+            {%- set cloudflare = state_attr('binary_sensor.cloudflare_dns', 'round_trip_time_avg')|float -%}
+            {%- set ping = [google, cloudflare] | sum / 2 -%}
+            {%- if ping < 20 -%}
+              {{ "Good" }}
+            {%- elif ping < 40 -%}
+              {{ "Alright" }}
+            {%- elif ping < 80 -%}
+              {{ "Useable" }}
+            {%- elif ping < 160 -%}
+              {{ "Barely useable" }}
+            {%- elif ping < 320 -%}
+              {{ "Terrible" }}
+            {%- else -%}
+              {{ "No connection" }}
+            {%- endif -%}
+
+
+sensor:
+  - platform: template
+    sensors:
+      cloudflare_dns_ping:
+        friendly_name: 'Cloudflare'
+        entity_id:
+          - binary_sensor.cloudflare_dns
+        value_template: >-
+          {{ state_attr('binary_sensor.cloudflare_dns', 'round_trip_time_avg') | round(2) }}
+        unit_of_measurement: "ms"
+
+      google_dns_ping:
+        friendly_name: 'Google'
+        entity_id:
+          - binary_sensor.google_dns
+        value_template: >-
+          {{ state_attr('binary_sensor.google_dns', 'round_trip_time_avg') | round(2) }}
+        unit_of_measurement: "ms"
+
+        
+  - platform: rest
+    name: ifconfig.co data
+    resource: https://ifconfig.co/json
+    value_template: '{{ value_json.ip }}'
+    json_attributes:
+      - country
+      - country_iso
+      - region_name
+      - zip_code
+      - city
+      - latitude
+      - longitude

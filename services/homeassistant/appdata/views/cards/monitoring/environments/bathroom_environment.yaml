@@ -1,0 +1,30 @@
+type: vertical-stack
+title: Badeværelse
+cards:
+  - type: custom:mini-graph-card
+    name: Luftfugtighed
+    entities:
+      - sensor.bathroom_environment_dht_humidity
+    line_width: 2
+    hours_to_show: 48
+    points_per_hour: 10
+
+  - type: custom:mini-graph-card
+    name: Temperatur
+    entities:
+      - sensor.bathroom_environment_temperature
+    unit: °C
+    line_width: 2
+    hours_to_show: 48
+    points_per_hour: 10
+
+  - type: custom:mini-graph-card
+    name: Luftkvalitet
+    entities:
+      - name: eCO2
+        entity: sensor.bathroom_environment_eco2_value
+      - name: TVOS
+        entity: sensor.bathroom_environment_total_volatile_organic_compound
+    line_width: 2
+    hours_to_show: 48
+    points_per_hour: 10

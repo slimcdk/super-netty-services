@@ -1,0 +1,5 @@
+
+homeassistant:
+  customize:
+    light.shelly_shdm_1_f3c6f3:
+      friendly_name: Sputnik

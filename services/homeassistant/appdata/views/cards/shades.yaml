@@ -1,0 +1,24 @@
+type: entities
+title: Gardiner
+entities:
+  - type: section
+    label: Kontor
+  - cover.office_window
+  - type: custom:slider-entity-row
+    entity: cover.office_window
+    name: false
+  - binary_sensor.office_window_hall_sensor_activated
+
+
+
+#  - type: section
+#    label: Soveværelse
+#  - cover.bedroom_window
+
+#  - type: section
+#    label: Stue
+#  - cover.living_window
+
+#  - type: section
+#    label: Altan
+#  - cover.balcony_door

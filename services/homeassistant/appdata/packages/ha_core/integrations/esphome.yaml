@@ -1,0 +1,61 @@
+
+panel_iframe:
+  esphome:
+    title: ESPHome
+    url: http://192.168.1.10:6052
+    icon: mdi:chip
+    require_admin: true
+
+  esphome_vscode:
+    title: VS Code ESPHome
+    url: http://192.168.1.10:4000/?workspace=/config/workspace/esphome.code-workspace
+    icon: mdi:file-edit
+    require_admin: true
+
+
+automation:
+  - alias: Opdater status af ESPHome netværk
+    id: update_esphome_network_metrics
+    trigger:
+      - platform: homeassistant
+        event: start    
+      - platform: time_pattern
+        minutes: '/5'
+    action:
+      - service: script.update_esphome_network_metrics
+
+
+script:
+  update_esphome_network_metrics:
+    sequence: 
+      - service: python_script.esphome_hosts_online
+        data:
+          restart_sw_suffix: restart
+          status_suffix: status
+          version_suffix: esphome_version
+          uptime_suffix: uptime
+          bssid_suffix: connected_bssid
+          ssid_suffix: connected_ssid
+          ip_addr_suffix: ip_address
+          wifi_rssi_suffix: wifi_rssi
+          hosts:
+            - aurora.local
+            - bathroom_environment.local
+            - bedroom_environment.local
+            - bedroom_trv.local
+            - dishwasher.local
+            - fuga_switch_office.local
+            - halo_clock.local
+            - kitchen_cupboard.local
+            - kitchen_tablet_mount.local
+            - kitchen_tabletop.local
+            - living_windowsill.local
+            - living_trv.local
+            - office_long_desk.local
+            - office_trv.local
+            - office_wall_cabinets.local
+            - office_window.local
+            - orange_lamp.local
+            - prusa_mk3s_power.local
+            - sonoff_s26_plug.local
+            - water_meter_cam.local

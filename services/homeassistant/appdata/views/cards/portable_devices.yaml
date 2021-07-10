@@ -1,0 +1,17 @@
+type: entities
+title: Enheder
+show_header_toggle: true
+entities:
+  - !include ../entities/switches/portable_sonoff_s26_plug.yaml
+  
+  - type: custom:multiple-entity-row
+    entity: fan.bedroom_environment
+    toggle: true
+    name: Soveværelse
+    icon: mdi:thermometer
+    entities:
+      - entity: sensor.bedroom_environment_humidity
+        name: Hum
+      - entity: sensor.bedroom_environment_temperature
+        name: Temp
+  
