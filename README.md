@@ -2,29 +2,29 @@
 
 
 ## Services
-* [Proxy](#proxy)
-* [WatchTower](#watchtower)
-* [UniFi Controller](#unifi-controller)
-* [Duplicati](#duplicati)
+- [Proxy](#proxy)
+- [WatchTower](#watchtower)
+- [UniFi Controller](#unifi-controller)
+- [Duplicati](#duplicati)
 
-* [Home Assistant](#home-assistant)
-* [ESPHome](#esphome)
+- [Home Assistant](#home-assistant)
+- [ESPHome](#esphome)
 
-* [PLEX](#plex)
-* [NordVPN](#media-vpn)
-* [Qbittorrent](#qbittorrent)
-* [Jackett](#jackett)
-* [Radarr](#radarr)
-* [Sonarr](#sonarr)
-* [Lidarr](#lidarr)
-* [Bazarr](#bazarr)
+- [PLEX](#plex)
+- [NordVPN](#media-vpn)
+- [Qbittorrent](#qbittorrent)
+- [Jackett](#jackett)
+- [Radarr](#radarr)
+- [Sonarr](#sonarr)
+- [Lidarr](#lidarr)
+- [Bazarr](#bazarr)
 
-* [Cupsd](#cupsd)
-* [Diskspeed](#diskspeed)
-* [Mosquitto](#mosquitto)
-* [Hammond](#hammond)
-* [UnRAID API](#unraid-api)
-* [Code Server](#code-server)
+- [Cupsd](#cupsd)
+- [Diskspeed](#diskspeed)
+- [Mosquitto](#mosquitto)
+- [Hammond](#hammond)
+- [UnRAID API](#unraid-api)
+- [Code Server](#code-server)
 
 ---
 
