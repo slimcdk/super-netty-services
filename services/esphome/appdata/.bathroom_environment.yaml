@@ -1,0 +1,76 @@
+substitutions:
+  hostid: bathroom_environment
+  hostname: Bathroom Environment
+  comment: Ambient sensor for bathroom
+  node_platform: esp8266
+  node_board: d1_mini
+  
+
+packages:
+  core: !include common/core.yaml
+  basic_sensors: !include common/basic_sensors.yaml
+
+
+i2c:
+  scl: D1
+  sda: D2
+
+
+dallas:
+  - pin: D3
+    update_interval: 30s
+
+
+sensor:
+  - platform: dht
+    pin: D5
+    model: DHT22_TYPE2
+    temperature:
+      name: ${hostname} DHT Temperature
+      id: ${hostid}_dht_temperature
+      filters:
+      - sliding_window_moving_average:
+          window_size: 10
+          send_every: 10
+    humidity:
+      name: ${hostname} DHT Humidity
+      id: ${hostid}_dht_humidity
+      filters:
+      - sliding_window_moving_average:
+          window_size: 10
+          send_every: 10
+    update_interval: 30s
+
+  - platform: dallas
+    address: 0x743C01A816D3D728
+    name: ${hostname} Dallas Temperature
+    id: ${hostid}_dallas_temperature
+    filters:
+    - sliding_window_moving_average:
+        window_size: 10
+        send_every: 2
+
+  - platform: template
+    name:  ${hostname} Temperature
+    id:  ${hostid}_temperature
+    force_update: true
+    lambda: |-
+      float sensor1 = (float)id( ${hostid}_dht_temperature ).state;
+      float sensor2 = (float)id( ${hostid}_dallas_temperature ).state;
+      return (float)(sensor1+sensor2)/2;
+    update_interval: 30s
+    unit_of_measurement: °C
+    icon: mdi:thermometer
+
+  - platform: ccs811
+    address: 0x5A
+    baseline: 0x11FD
+    eco2:
+      name: ${hostname} eCO2 Value
+      id: ${hostid}_eco2_value
+    tvoc:
+      name: ${hostname} Total Volatile Organic Compound
+      id: ${hostid}_total_volatile_organic_compound
+    temperature: ${hostid}_temperature
+    humidity: ${hostid}_dht_humidity
+    update_interval: 30s

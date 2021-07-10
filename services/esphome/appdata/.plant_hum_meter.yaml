@@ -1,0 +1,104 @@
+substitutions:
+  hostid: plant_hum_meter
+  hostname: Plant Hum Meter
+
+<<: !include settings/default_config.yaml
+wifi:
+  <<: !include settings/wifi.yaml
+  
+esphome:
+  <<: !include settings/core.yaml
+  platform: ESP32
+  #board: esp32dev
+  board: lolin_d32
+
+
+
+text_sensor:
+  - !include utils/wifi_textsensor.yaml
+  - !include utils/esphome_version_textsensor.yaml
+
+i2c:
+  sda: 25
+  scl: 26
+  scan: True
+  id: bus_a
+
+switch:
+  - !include utils/restart_switch.yaml
+  
+  - platform: gpio
+    pin: GPIO4
+    name: "Sensor Power"
+    id: spower
+    restore_mode: ALWAYS_ON
+    internal: true
+
+binary_sensor:
+  - !include utils/status_binarysensor.yaml
+  - platform: gpio
+    pin: 
+      number: GPIO35
+      mode: INPUT_PULLUP
+      inverted: True
+    name:  ${hostid} Wake Button
+
+sensor:
+  - !include utils/wifi_sensor.yaml
+  - !include utils/uptime_sensor.yaml
+
+## DHT platform makes it crash (probably WiFi interference)
+#  - platform: dht
+#    model: dht11
+#    pin:
+#      number: 16
+#      mode: input
+#    temperature:
+#      name: ${hostname} Temperature
+#    humidity:
+#      name:  ${hostname} Humidity
+#    update_interval: 60s
+#    setup_priority: -100
+    
+  - platform: adc
+    pin: 32
+    name:  ${hostid} Soil
+    update_interval: 60s
+    unit_of_measurement: '%'
+    filters:
+      - calibrate_linear:
+          # Map 0.0 (from sensor) to 0.0 (true value)
+          - 1.1 -> 0.0
+          - 0.0 -> 100.0
+    
+  - platform: adc
+    pin: 33
+    name:  ${hostid} Battery
+    attenuation: 11db
+    unit_of_measurement: 'V'
+    update_interval: 60s
+    filters:
+      - calibrate_linear:
+          # Map 0.0 (from sensor) to 0.0 (true value)
+          - 0.0 -> 0.0
+          - 2.06 -> 1.89
+      - lambda: return x * 2.0;
+        
+  - platform: adc
+    pin: 34
+    name:  ${hostid} Salt
+    update_interval: 60s
+    unit_of_measurement: '%'
+    filters:
+      - sliding_window_moving_average:
+          window_size: 15
+          send_every: 15
+      - calibrate_linear:
+          # Map 0.0 (from sensor) to 0.0 (true value)
+          - 0.0 -> 0.0
+          - 1.1 -> 100.0
+    
+  - platform: bh1750
+    name:  ${hostid} BH1750 Illuminance
+    address: 0x23
+    update_interval: 60s

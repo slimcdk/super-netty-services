@@ -1,0 +1,43 @@
+substitutions:
+  hostid: tv_sideboard
+  hostname: TV Sideboard
+  comment: Window sensor and roller blinds controller
+  node_platform: esp8266
+  node_board: d1_mini
+  
+
+packages:
+  core: !include common/core.yaml
+  basic_sensors: !include common/basic_sensors.yaml
+
+
+light:
+  - platform: fastled_clockless
+    name: ${hostname} Left
+    id: ${hostid}_left_light
+    chipset: NEOPIXEL
+    pin: GPIO0
+    num_leds: 15
+    effects:
+      !include common/addressable_light_effects.yaml
+      
+    # right light
+  - platform: fastled_clockless
+    name: ${hostname} Right
+    id: ${hostid}_right_light
+    chipset: NEOPIXEL
+    pin: GPIO4
+    num_leds: 15
+    effects:
+      !include common/addressable_light_effects.yaml
+
+    
+  - platform: partition
+    name: ${hostname}
+    segments:
+    - id: ${hostid}_left_light
+      from: 0
+      to: 15
+    - id: ${hostid}_right_light
+      from: 0
+      to: 15

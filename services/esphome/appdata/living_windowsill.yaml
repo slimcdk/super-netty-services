@@ -1,0 +1,21 @@
+substitutions:
+  hostid: living_windowsill
+  hostname: Living Windowsill
+  comment: Controls light under the windowsill in the living room
+  node_platform: esp8266
+  node_board: d1_mini
+  
+packages:
+  core: !include common/core.yaml
+  basic_sensors: !include common/basic_sensors.yaml
+
+
+light:
+  - platform: fastled_clockless
+    chipset: NEOPIXEL
+    pin: GPIO2
+    num_leds: 110
+    name: ${hostname}
+    effects:
+      !include common/addressable_light_effects.yaml
+      

@@ -1,0 +1,22 @@
+substitutions:
+  hostid: green_lamp
+  hostname: Green Lamp
+  comment: Hacked WiZ light bulb. Can control light temperatures and brightness
+  #node_platform: esp8266     # <- defined in device_base
+  #node_board: esp_wroom_02   # <- defined in device_base
+  
+
+packages:
+  core: !include common/core.yaml
+  basic_sensors: !include common/basic_sensors.yaml
+  device_base: !include devices/wiz60-2700-6500k.yaml
+
+
+esphome:
+  on_boot:
+    priority: 750
+    then:
+      - light.turn_on:
+          id: ${hostid}_light1
+          brightness: 100%
+          color_temperature: 2700 K # 2700-6500K

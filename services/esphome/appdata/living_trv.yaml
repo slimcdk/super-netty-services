@@ -1,0 +1,18 @@
+# https://esphome.io/components/display/st7789v.html
+substitutions:
+  hostid: living_trv
+  hostname: Living TRV
+  comment: Controls the TRV in the living room
+  node_platform: esp32
+  node_board: featheresp32
+  
+  internal_temp_sensor_id: "0x7201201B5A6F5528"
+  internal_temp_sensor_offset: "-10"
+  external_temp_sensor_id:  sensor.living_trv_temperature # sensor.living_ambient_temperature
+  display_direction: "180"
+  
+
+packages:
+  core: !include common/core.yaml
+  basic_sensors: !include common/basic_sensors.yaml
+  device_base: !include devices/slimc_trv.yaml

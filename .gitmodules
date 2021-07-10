@@ -1,6 +1,6 @@
 [submodule "secrets"]
 	path = secrets
 	url = https://github.com/slimcdk/super-netty-secrets.git
-[submodule "services/esphome/appdata/custom_components"]
-	path = services/esphome/appdata/custom_components
+[submodule "services/esphome/appdata/custom_components/.repos/ssieb_custom_components"]
+	path = services/esphome/appdata/custom_components/.repos/ssieb_custom_components
 	url = https://github.com/ssieb/custom_components

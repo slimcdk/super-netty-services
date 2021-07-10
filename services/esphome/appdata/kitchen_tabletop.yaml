@@ -1,0 +1,30 @@
+substitutions:
+  hostid: kitchen_tabletop
+  hostname: Kitchen Tabletop
+  comment: Shelly1 kitchen tabletop light
+  #node_platform: esp8266   # <- defined in device_base
+  #node_board: esp01_1m     # <- defined in device_base
+  
+  
+packages:
+  core: !include common/core.yaml
+  basic_sensors: !include common/basic_sensors.yaml
+  device_base: !include devices/shelly1.yaml
+
+
+esphome:
+  esp8266_restore_from_flash: true
+  on_boot:
+    priority: 750
+    then:
+      - light.toggle: ${hostid}_light1
+  on_shutdown:
+    then:
+      - light.toggle: ${hostid}_light1
+
+
+light:
+  - platform: binary
+    id: ${hostid}_light1
+    name: ${hostname}
+    output: ${hostid}_output_relay1

@@ -1,0 +1,64 @@
+substitutions:
+  hostid: bedroom_environment
+  hostname: Bedroom Environment
+  comment: Environment sensor for the bedroom
+  node_platform: esp8266
+  node_board: d1_mini
+  
+
+packages:
+  core: !include common/core.yaml
+  basic_sensors: !include common/basic_sensors.yaml
+  
+
+esphome:
+  on_boot:
+    then:
+      - fan.turn_on: 
+          id: ${hostid}_fanid
+          speed: 10
+
+
+i2c:
+  scl: D1
+  sda: D2
+  
+  
+sensor:
+  - platform: pulse_width
+    pin: D2
+    id: ${hostid}_speed
+    name: ${hostname} Speed
+
+  - platform: sht3xd
+    temperature:
+      name: ${hostname} Temperature
+      id: ${hostid}_temperature
+      filters:
+        - sliding_window_moving_average:
+            window_size: 10
+            send_every: 2
+    humidity:
+      name: ${hostname} Humidity
+      id: ${hostid}_humidity
+      filters:
+        - sliding_window_moving_average:
+            window_size: 10
+            send_every: 2
+    address: 0x45
+    update_interval: 30s
+    
+
+
+fan:
+  - platform: speed
+    id: ${hostid}_fanid
+    name: ${hostname}
+    output: ${hostid}_fan_speed
+    speed_count: 100
+
+output:
+ - platform: esp8266_pwm
+   pin: D3
+   id: ${hostid}_fan_speed
+   

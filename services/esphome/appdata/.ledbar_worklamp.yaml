@@ -1,0 +1,19 @@
+substitutions:
+  hostid: ledbar_worklamp
+  hostname: Work lamp
+  comment: TODO
+  node_platform: esp8266
+  node_board: esp01_1m
+  
+  
+packages:
+  core: !include common/core.yaml
+  basic_sensors: !include common/basic_sensors.yaml
+  device_base: !include devices/sonoff_basic.yaml
+
+
+esphome:
+  on_boot:
+    priority: 750
+    then:
+      - switch.turn_off: relay

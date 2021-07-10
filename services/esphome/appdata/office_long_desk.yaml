@@ -1,0 +1,49 @@
+substitutions:
+  hostid: office_long_desk
+  hostname: Office Long Desk
+  comment: Controls light behind the desk
+  node_platform: esp8266
+  node_board: d1_mini
+  
+
+packages:
+  core: !include common/core.yaml
+  basic_sensors: !include common/basic_sensors.yaml
+
+
+
+
+
+
+light:
+  - platform: neopixelbus
+    name: ${hostname} End
+    id: ${hostid}_end
+    method: BIT_BANG
+    pin: D3
+    num_leds: 36
+    effects:
+      !include common/addressable_light_effects.yaml
+      
+  - platform: neopixelbus
+    name: ${hostname} Back
+    id: ${hostid}_back
+    method: BIT_BANG
+    pin: D4
+    num_leds: 72
+    effects:
+      !include common/addressable_light_effects.yaml
+      
+  - platform: partition
+    name: ${hostname}
+    id: ${hostid}
+    segments:
+      - id: ${hostid}_end
+        from: 0
+        to: 36
+        reversed: true
+      - id: ${hostid}_back
+        from: 0
+        to: 72
+    effects:
+      !include common/addressable_light_effects.yaml

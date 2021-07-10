@@ -1,0 +1,34 @@
+# https://www.wizconnected.com/da-DK/forbruger/produkter/8718699787035/
+
+substitutions:
+  node_platform: esp8266
+  node_board: esp_wroom_02
+  
+
+esphome:
+  platform: esp8266
+  board: esp_wroom_02
+
+
+light:
+  - platform: cwww
+    name: ${hostname}
+    id: ${hostid}_light1
+    cold_white: ${hostid}_pwm_white
+    warm_white: ${hostid}_pwm_warm
+    cold_white_color_temperature: 6500 K
+    warm_white_color_temperature: 2700 K
+    constant_brightness: true
+
+
+output:
+  - platform: esp8266_pwm
+    pin: GPIO13
+    frequency: 1000 Hz
+    id: ${hostid}_pwm_white
+    
+  - platform: esp8266_pwm
+    pin: GPIO04
+    frequency: 1000 Hz
+    id: ${hostid}_pwm_warm
+

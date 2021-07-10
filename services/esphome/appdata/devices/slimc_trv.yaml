@@ -1,0 +1,258 @@
+substitutions:
+  node_platform: esp32
+  node_board: featheresp32
+
+
+
+esphome:
+  on_boot:
+    priority: 350
+    then:
+      - light.turn_on: ${hostid}_backlight
+      - climate.control:
+          id: ${hostid}_climate
+          mode: 'OFF'
+      - switch.turn_on: ${hostid}_open_valve
+  on_shutdown:
+    - switch.turn_off: ${hostid}_motor_power
+
+
+
+dallas:
+  - pin: GPIO15
+    update_interval: 10s
+
+
+
+spi:
+  clk_pin: GPIO18
+  mosi_pin: GPIO19
+
+
+
+globals:
+  - id: is_at_open_endstop
+    type: bool
+    initial_value: 'false'
+    restore_value: true
+  - id: is_at_closed_endstop
+    type: bool
+    initial_value: 'false'
+    restore_value: true
+    
+    
+    
+binary_sensor:
+  - platform: gpio
+    name: ${hostname} Button 0
+    id: ${hostid}_button_0
+    pin:
+      number: GPIO0
+      inverted: true
+  - platform: gpio
+    name: ${hostname} Button 1
+    id: ${hostid}_button_1
+    pin:
+      number: GPIO35
+      inverted: true
+
+    # Registrer when the motor stalls = endstop
+  - platform: template
+    id: ${hostid}_endstop
+    name: ${hostname} Endstop
+    lambda: "return (id(${hostid}_current_sensing_internal).state > 0.2);"
+    on_press:
+      then:
+        - lambda: |-
+            id(is_at_closed_endstop) = (bool)(id(${hostid}_close_valve).state);
+            id(is_at_open_endstop) = (bool)(id(${hostid}_open_valve).state);
+        - switch.turn_off: ${hostid}_motor_power
+    internal: true
+
+
+
+switch:
+    # Make the motor go one way
+  - platform: gpio
+    id: ${hostid}_open_valve
+    name: ${hostname} Open Valve
+    pin: 33
+    interlock: &interlock ["${hostid}_close_valve", "${hostid}_open_valve"]
+    interlock_wait_time: 500ms
+    internal: false
+    
+    # Make the motor go the other way
+  - platform: gpio
+    id: ${hostid}_close_valve
+    name: ${hostname} Close Valve
+    pin: 32
+    interlock: *interlock
+    interlock_wait_time: 500ms
+    internal: false
+    
+    # Disable power to H-bridge
+  - platform: template
+    id: ${hostid}_motor_power
+    name: ${hostname} Motor Enable
+    lambda: "return (id(${hostid}_close_valve).state || id(${hostid}_open_valve).state );"
+    turn_off_action:
+      - switch.turn_off: ${hostid}_close_valve
+      - switch.turn_off: ${hostid}_open_valve
+    internal: true
+    
+
+
+sensor:
+    # Sense the current used by the motor
+  - platform: adc
+    id: ${hostid}_current_sensing_internal
+    name: ${hostname} Current Sensing Internal
+    pin: 39
+    update_interval: 100ms
+    filters:
+      - sliding_window_moving_average:
+          window_size: 8
+          send_every: 1
+#    unit_of_measurement: mA
+    internal: true
+    
+    # Read the room temperature
+  - platform: dallas
+    id: internal_temperature_dallas
+    address: ${internal_temp_sensor_id}
+    filters:
+      - sliding_window_moving_average:
+          window_size: 3
+          send_every: 1
+      - lambda: "return x + (float)(${internal_temp_sensor_offset});"
+    internal: true
+
+    # Expose a less updated temperature reading to HA
+  - platform: template
+    id: ${hostid}_temperature
+    name: ${hostname} Temperature
+    lambda: "return (float)id(internal_temperature_dallas).state;"
+    unit_of_measurement: "°C"
+    update_interval: 30s
+
+    # Retrieve sensor data from Home Assistant
+  - platform: homeassistant
+    id: ha_temp_sensor
+    entity_id: ${external_temp_sensor_id}
+    internal: true
+
+    # Select HA temperature data over local if connection is present
+  - platform: template
+    id: climate_temperature_control
+    lambda: "return (id(${hostid}_status).state && id(ha_temp_sensor).state != NAN ? id(ha_temp_sensor).state : id(internal_temperature_dallas).state);"
+    update_interval: 2s
+    internal: true
+
+
+
+light:
+    # Control screen brightness
+  - platform: monochromatic
+    name: ${hostname} Backlight
+    id: ${hostid}_backlight
+    output: ${hostid}_screen_brightness
+
+
+
+output:
+    # PWM control output source for the screen brightness
+  - platform: ledc
+    pin: GPIO4
+    frequency: 19531 Hz
+    id: ${hostid}_screen_brightness
+
+
+
+climate:
+  - platform: bang_bang
+    name: ${hostname}
+    id: ${hostid}_climate
+    sensor: internal_temperature_dallas #climate_temperature_control
+    default_target_temperature_low: 21 °C
+    default_target_temperature_high: 23 °C
+    heat_action:
+      - switch.turn_on: ${hostid}_open_valve
+    cool_action:
+      - switch.turn_on: ${hostid}_close_valve
+    idle_action:
+      - switch.turn_on: ${hostid}_close_valve
+
+
+
+color:
+  - id: my_red
+    red: 100%
+    green: 0%
+    blue: 0%
+  - id: my_yellow
+    red: 100%
+    green: 100%
+    blue: 0%
+  - id: my_green
+    red: 0%
+    green: 100%
+    blue: 0%
+  - id: my_blue
+    red: 0%
+    green: 0%
+    blue: 100%
+  - id: my_gray
+    red: 50%
+    green: 50%
+    blue: 50%
+
+
+
+font:
+  - id: roboto_regular_18
+    file: "common/fonts/Roboto/Roboto-Regular.ttf"
+    size: 18
+  - id: roboto_regular_20
+    file: "common/fonts/Roboto/Roboto-Regular.ttf"
+    size: 20
+  - id: roboto_regular_24
+    file: "common/fonts/Roboto/Roboto-Regular.ttf"
+    size: 24
+  - id: roboto_regular_30
+    file: "common/fonts/Roboto/Roboto-Regular.ttf"
+    size: 30
+  - id: roboto_regular_48
+    file: "common/fonts/Roboto/Roboto-Regular.ttf"
+    size: 48
+
+
+
+display:
+  - platform: st7789v
+    backlight_pin: GPIO4
+    cs_pin: GPIO5
+    dc_pin: GPIO16
+    reset_pin: GPIO23
+    #rotation: !lambda "return int(${display_rotation})"
+    rotation: 180
+    lambda: |-
+      // Connected / Not connected status in the top right corner
+      it.print(140/2, 0, id(roboto_regular_18), (id(${hostid}_status).state?id(my_blue):id(my_red)), TextAlign::TOP_CENTER, (id(${hostid}_status).state?"Connected":"Not Connected") );
+      
+      // Heating mode display
+      const char *modes[4] = {"Off", "Warm-cool", "Cooling", "Heating"};
+      auto mode_text = modes[id(${hostid}_climate).mode];
+      it.print(140/2, 60, id(roboto_regular_24), TextAlign::CENTER, mode_text);
+      it.print(140/2, 85, id(roboto_regular_24), TextAlign::CENTER, (id(${hostid}_climate).away ? "(Away)" : "(Home)") );
+      
+      
+      // Temperature display
+      bool currently_heating = id(${hostid}_climate).target_temperature == id(${hostid}_climate).target_temperature_high;
+      
+      it.printf(5, 145, id(roboto_regular_20), TextAlign::LEFT, "%.1f", id(${hostid}_climate).target_temperature_low);
+      it.print(140/2, 145, id(roboto_regular_20), TextAlign::CENTER, currently_heating ? ">" : "<");
+      it.printf(135, 145, id(roboto_regular_20), TextAlign::RIGHT, "%.1f", id(${hostid}_climate).target_temperature_high);
+      
+      it.printf(140/2, 190, id(roboto_regular_48), TextAlign::CENTER, "%.1f C", id(${hostid}_climate).current_temperature);
+      it.printf(140/2, 225, id(roboto_regular_18), TextAlign::CENTER, "(%.1f C)", id(${hostid}_climate).target_temperature);
+      //it.printf(140/2, 225, id(roboto_regular_20), TextAlign::CENTER, "(%.1f C)", id(internal_temperature_dallas).state);

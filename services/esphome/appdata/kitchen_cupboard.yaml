@@ -1,0 +1,59 @@
+substitutions:
+  hostid: kitchen_cupboard
+  hostname: Kitchen Cupboard
+  comment: Sensor for temperatures
+  node_platform: esp32
+  node_board: wemos_d1_mini32
+  
+  
+packages:
+  core: !include common/core.yaml
+  basic_sensors: !include common/basic_sensors.yaml
+#  esp32_ble_tracking: !include common/esp32_ble_tracking.yaml
+
+
+dallas:
+  - pin: GPIO23
+    update_interval: 6s
+
+
+sensor:
+  - platform: dallas
+    address: 0xDC011937D0598528
+    id: ${hostid}_fridge_temp
+    name: ${hostname} Fridge Temp
+    filters:
+    - calibrate_linear:
+      - 0.7 -> 0
+      - 99.6 -> 99.8
+    - sliding_window_moving_average:
+        window_size: 10
+        send_every: 10
+
+  - platform: dallas
+    address: 0x8F0119382F344228
+    id: ${hostid}_freezer_temp
+    name: ${hostname} Freezer Temp
+    filters:
+    - calibrate_linear:
+      - 0.1 -> 0
+      - 99.7 -> 99.8
+    - sliding_window_moving_average:
+        window_size: 10
+        send_every: 2
+
+
+binary_sensor:
+  - platform: template
+    name: ${hostname} Fridge Door Open
+    id: ${hostid}_fridge_door_open
+    lambda: !lambda 'return id(${hostid}_fridge_temp).state > 10;'
+  - platform: template
+    name: ${hostname} Freezer Door Open
+    id: ${hostid}_freezer_door_open
+    lambda: !lambda 'return id(${hostid}_freezer_temp).state > 0;'
+  
+#deep_sleep:
+#  id: deep_sleep_1
+#  run_duration: 20s
+#  sleep_duration: 100s

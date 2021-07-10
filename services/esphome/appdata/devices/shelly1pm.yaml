@@ -1,0 +1,59 @@
+substitutions:
+  node_platform: esp8266
+  node_board: esp01_1m
+
+
+esphome:
+  platform: esp8266
+  board: esp01_1m
+
+
+output:
+  - platform: gpio
+    id: ${hostid}_output_relay1
+    pin: GPIO15
+#    inverted: true
+
+
+binary_sensor:
+  - platform: gpio
+    name: ${hostname} Mains Sense 1
+    id: ${hostid}_mains_sense1
+    device_class: power
+    pin:
+      number: GPIO4
+      inverted: true
+
+
+status_led:
+  pin:
+    number: GPIO0
+    inverted: True
+
+
+sensor:
+  - platform: hlw8012
+    cf_pin: GPIO05
+    cf1_pin: GPIO13 # not used because it is not available on the 1PM but it is needed to compile
+    sel_pin: GPIO14 # not used because it is not available on the 1PM but it is needed to compile
+    power:
+      name: ${hostname} Wattage
+      unit_of_measurement: W
+      id: ${hostid}_wattage1
+      icon: mdi:flash-circle
+      accuracy_decimals: 0
+      filters:
+      # Map from sensor -> measured value
+      - calibrate_linear:
+          - 0.0 -> 1.0
+          - 110.33186 -> 20.62
+          - 131.01909 -> 24.32
+          - 341.33920 -> 62.08
+          - 5561.41553 -> 1000.0
+          - 2975.51221 -> 535.7
+          - 9612.66309 -> 1720.0
+          - 14891.35352 -> 2679.0      
+      # Make everything below 2W appear as just 0W.
+      # Furthermore it corrects 1.0W for the power usage of the plug.
+      - lambda: if (x < (2 + 1)) return 0; else return (x - 1);
+    update_interval: 3s

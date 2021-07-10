@@ -1,0 +1,19 @@
+# https://esphome.io/components/display/st7789v.html
+substitutions:
+  hostid: office_trv
+  hostname: Office TRV
+  comment: Controls the TRV in the office room
+  node_platform: esp32
+  node_board: featheresp32
+
+  internal_temp_sensor_id: "0x5901201B5FE44828"
+  internal_temp_sensor_offset: "-20"
+  external_temp_sensor_id:  sensor.office_trv_temperature #sensor.living_ambient_temperature
+  display_direction: "180"
+
+
+
+packages:
+  core: !include common/core.yaml
+  basic_sensors: !include common/basic_sensors.yaml
+  device_base: !include devices/slimc_trv.yaml

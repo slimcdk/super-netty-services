@@ -1,0 +1,26 @@
+substitutions:
+  hostid: kitchen_coffee_light
+  hostname: Kitchen Coffee Light
+  comment: Controls light above coffee machine
+  node_platform: esp8266
+  node_board: d1_mini
+  
+
+packages:
+  core: !include common/core.yaml
+  basic_sensors: !include common/basic_sensors.yaml
+
+
+
+light:
+  - platform: neopixelbus
+    name: ${hostname}
+    id: ${hostid}
+    pin: GPIO03
+    num_leds: 17
+    variant: SK6812
+    type: GRBW
+    method: ESP8266_DMA
+    effects:
+      !include common/addressable_light_effects.yaml
+      

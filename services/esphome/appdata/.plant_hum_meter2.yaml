@@ -1,0 +1,51 @@
+substitutions:
+  hostid: plant_hum_meter
+  hostname: Plant Hum Meter
+
+<<: !include settings/default_config.yaml
+wifi:
+  <<: !include settings/wifi.yaml
+
+esphome:
+  <<: !include settings/core.yaml
+  platform: ESP32
+  board: esp32dev
+  #board: lolin_d32
+
+
+
+
+switch:
+  - !include utils/restart_switch.yaml
+  
+  
+binary_sensor:
+  - !include utils/status_binarysensor.yaml
+
+
+sensor:
+  - !include utils/wifi_sensor.yaml
+  - !include utils/uptime_sensor.yaml
+
+  - platform: dht
+    pin: 22
+    model: DHt11
+    temperature:
+      name: "plant_0_temperature"
+    humidity:
+      name: "plant_0_humidity"
+  - platform: adc
+    pin: 32
+    name: "plant_0_soil_moisture"
+    attenuation: 11db
+    unit_of_measurement: '%'
+    filters:
+      # 1.1v = in water
+      # 2.94v = dry
+      lambda: |-
+        return (2.95 - x) * 100.0 / (2.95 - 1.1);
+        
+        
+text_sensor:
+  - !include utils/wifi_textsensor.yaml
+  - !include utils/esphome_version_textsensor.yaml

@@ -1,0 +1,375 @@
+substitutions:
+  hostid: fuga_switch_office
+  hostname: FUGA Switch Office
+  comment: FUGA Switch in the Office
+  node_platform: esp8266
+  node_board: esp12e
+  
+
+packages:
+  core: !include common/core.yaml
+  basic_sensors: !include common/basic_sensors.yaml
+
+
+light:
+  - platform: fastled_clockless
+    id: ${hostid}_array
+    name: ${hostname} Array
+    chipset: WS2812B
+    pin: 3
+    num_leds: 4
+    rgb_order: GRB
+    effects:
+      !include common/addressable_light_effects.yaml
+
+  - platform: partition
+    name: ${hostname} LED 1
+    id: ${hostid}_led1
+    segments:
+      - id: ${hostid}_array
+        from: 0
+        to: 0
+    effects:
+      !include common/addressable_light_effects.yaml
+
+  - platform: partition
+    name: ${hostname} LED 2
+    id: ${hostid}_led2
+    segments:
+      - id: ${hostid}_array
+        from: 1
+        to: 1
+    effects:
+      !include common/addressable_light_effects.yaml
+      
+  - platform: partition
+    name: ${hostname} LED 3
+    id: ${hostid}_led3
+    segments:
+      - id: ${hostid}_array
+        from: 2
+        to: 2
+    effects:
+      !include common/addressable_light_effects.yaml
+      
+  - platform: partition
+    name: ${hostname} LED 4
+    id: ${hostid}_led4
+    segments:
+      - id: ${hostid}_array
+        from: 3
+        to: 3
+    effects:
+      !include common/addressable_light_effects.yaml
+
+
+binary_sensor:
+  - platform: gpio
+    id: ${hostid}_button_1
+    name: ${hostname} Button 1
+    pin:
+      number: GPIO5
+      mode: INPUT_PULLUP
+      inverted: True
+    on_click:
+      - light.toggle: ${hostid}_led1
+    
+  - platform: gpio
+    id: ${hostid}_button_2
+    name: ${hostname} Button 2
+    pin:
+      number: GPIO12
+      mode: INPUT_PULLUP
+      inverted: True
+    on_click:
+      - light.toggle: ${hostid}_led2
+      
+  - platform: gpio
+    id: ${hostid}_button_3
+    name: ${hostname} Button 3
+    pin:
+      number: GPIO4
+      mode: INPUT_PULLUP
+      inverted: True
+    on_click:
+      - light.toggle: ${hostid}_led3
+      
+  - platform: gpio
+    id: ${hostid}_button_4
+    name: ${hostname} Button 4
+    pin:
+      number: GPIO13
+      mode: INPUT_PULLUP
+      inverted: True
+    on_click:
+      - light.toggle: ${hostid}_led4
+    on_multi_click:
+    - timing:
+        - ON for at most 1s
+        - OFF for at most 0.5s
+        - ON for at most 1s
+        - OFF for at least 0.1s
+        - ON for at most 1s
+        - OFF for at most 0.5s
+        - ON for at most 1s
+        - OFF for at least 0.1s
+        - ON for at most 1s
+        - OFF for at most 0.5s
+        - ON for at most 1s
+        - OFF for at least 0.1s
+        - ON for at most 1s
+        - OFF for at most 0.5s
+        - ON for at most 1s
+        - OFF for at least 0.1s
+        - ON for at most 1s
+        - OFF for at most 0.5s
+        - ON for at most 1s
+        - OFF for at least 0.1s
+      then:
+        - switch.turn_on: ${hostid}_restart
+
+
+switch:
+  - platform: template
+    id: ${hostid}_play_single_biip
+    name: ${hostname} Play Single Biip
+    icon: mdi:bell-ring
+    turn_on_action:
+      - if:
+          condition:
+            - script.is_running: single_biip
+          then:
+            - script.stop: single_biip
+            - script.execute: single_biip
+          else:
+            - script.execute: single_biip    
+
+  - platform: template
+    id: ${hostid}_play_Double_biip
+    name: ${hostname} Play Double Biip
+    icon: mdi:bell-ring
+    turn_on_action:
+      - if:
+          condition:
+            - script.is_running: double_biip
+          then:
+            - script.stop: double_biip
+            - script.execute: double_biip
+          else:
+            - script.execute: double_biip    
+
+  - platform: template
+    id: ${hostid}_play_imperial_march
+    name: ${hostname} Play Imperial March
+    icon: mdi:bell-ring
+    turn_on_action:
+      - if:
+          condition:
+            - script.is_running: imperial_march
+          then:
+            - script.stop: imperial_march
+            - script.execute: imperial_march
+          else:
+            - script.execute: imperial_march    
+
+  - platform: template
+    id: ${hostid}_play_super_mario
+    name: ${hostname} Play Super Mario
+    icon: mdi:bell-ring
+    turn_on_action:
+      - if:
+          condition:
+            - script.is_running: super_mario
+          then:
+            - script.stop: super_mario
+            - script.execute: super_mario
+          else:
+            - script.execute: super_mario
+
+
+output:
+  - platform: esp8266_pwm
+    pin: GPIO14
+    id: buzzer
+
+
+
+script:
+  - id: single_biip
+    then:
+        - output.esp8266_pwm.set_frequency:
+            id: buzzer
+            frequency: 4000
+        - output.set_level:
+            id: buzzer
+            level: 50%
+        - delay: 350ms
+        - output.turn_off: buzzer
+
+  - id: double_biip
+    then:
+        - output.esp8266_pwm.set_frequency:
+            id: buzzer
+            frequency: 4000
+        - output.set_level:
+            id: buzzer
+            level: 50%
+        - delay: 250ms
+        - output.turn_off: buzzer
+        - delay: 20ms
+        - output.esp8266_pwm.set_frequency:
+            id: buzzer
+            frequency: 4000
+        - output.set_level:
+            id: buzzer
+            level: 50%
+        - delay: 250ms
+        - output.turn_off: buzzer
+
+  - id: super_mario
+    then:
+        - output.esp8266_pwm.set_frequency:
+            id: buzzer
+            frequency: 660 
+        - output.set_level:
+            id: buzzer
+            level: 50%
+        - delay: 100ms
+        - output.turn_off: buzzer
+        - delay: 150ms
+        - output.esp8266_pwm.set_frequency:
+            id: buzzer
+            frequency: 660 
+        - output.set_level:
+            id: buzzer
+            level: 50%
+        - delay: 100ms
+        - output.turn_off: buzzer
+        - delay: 300ms
+        - output.esp8266_pwm.set_frequency:
+            id: buzzer
+            frequency: 660
+        - output.set_level:
+            id: buzzer
+            level: 50%
+        - delay: 100ms
+        - output.turn_off: buzzer
+        - delay: 300ms        
+        - output.esp8266_pwm.set_frequency:
+            id: buzzer
+            frequency: 510
+        - output.set_level:
+            id: buzzer
+            level: 50%
+        - delay: 100ms
+        - output.turn_off: buzzer
+        - delay: 100ms
+        - output.esp8266_pwm.set_frequency:
+            id: buzzer
+            frequency: 660
+        - output.set_level:
+            id: buzzer
+            level: 50%
+        - delay: 100ms
+        - output.turn_off: buzzer
+        - delay: 300ms
+        - output.esp8266_pwm.set_frequency:
+            id: buzzer
+            frequency: 770
+        - output.set_level:
+            id: buzzer
+            level: 50%
+        - delay: 100ms
+        - output.turn_off: buzzer
+        - delay: 550ms
+        - output.esp8266_pwm.set_frequency:
+            id: buzzer
+            frequency: 380
+        - output.set_level:
+            id: buzzer
+            level: 50%
+        - delay: 100ms
+        - output.turn_off: buzzer
+
+  - id: imperial_march
+    then:
+        - output.esp8266_pwm.set_frequency:
+            id: buzzer
+            frequency: 440
+        - output.set_level:
+            id: buzzer
+            level: 50%
+        - delay: 500ms
+        - output.turn_off: buzzer
+        - delay: 20ms
+        - output.esp8266_pwm.set_frequency:
+            id: buzzer
+            frequency: 440
+        - output.set_level:
+            id: buzzer
+            level: 50%
+        - delay: 500ms
+        - output.turn_off: buzzer
+        - delay: 20ms
+        - output.esp8266_pwm.set_frequency:
+            id: buzzer
+            frequency: 440
+        - output.set_level:
+            id: buzzer
+            level: 50%
+        - delay: 500ms
+        - output.turn_off: buzzer
+        - delay: 20ms        
+        - output.esp8266_pwm.set_frequency:
+            id: buzzer
+            frequency: 349
+        - output.set_level:
+            id: buzzer
+            level: 50%
+        - delay: 350ms
+        - output.turn_off: buzzer
+        - delay: 20ms
+        - output.esp8266_pwm.set_frequency:
+            id: buzzer
+            frequency: 523
+        - output.set_level:
+            id: buzzer
+            level: 50%
+        - delay: 150ms
+        - output.turn_off: buzzer
+        - delay: 20ms
+        - output.esp8266_pwm.set_frequency:
+            id: buzzer
+            frequency: 440
+        - output.set_level:
+            id: buzzer
+            level: 50%
+        - delay: 500ms
+        - output.turn_off: buzzer
+        - delay: 20ms
+        - output.esp8266_pwm.set_frequency:
+            id: buzzer
+            frequency: 349
+        - output.set_level:
+            id: buzzer
+            level: 50%
+        - delay: 350ms
+        - output.turn_off: buzzer
+        - delay: 20ms
+        - output.esp8266_pwm.set_frequency:
+            id: buzzer
+            frequency: 523
+        - output.set_level:
+            id: buzzer
+            level: 50%
+        - delay: 150ms
+        - output.turn_off: buzzer
+        - delay: 20ms
+        - output.esp8266_pwm.set_frequency:
+            id: buzzer
+            frequency: 440
+        - output.set_level:
+            id: buzzer
+            level: 50%
+        - delay: 650ms
+        - output.turn_off: buzzer

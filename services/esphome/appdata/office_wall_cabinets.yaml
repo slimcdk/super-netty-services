@@ -1,0 +1,23 @@
+substitutions:
+  hostid: office_wall_cabinets
+  hostname: Office Wall Cabinets
+  comment: Lights controller
+  node_platform: esp8266
+  node_board: d1_mini
+  
+
+packages:
+  core: !include common/core.yaml
+  basic_sensors: !include common/basic_sensors.yaml
+
+
+light:
+  - platform: neopixelbus
+    type: GRBW
+    variant: SK6812
+    name: ${hostname}
+    id: ${hostid}
+    pin: GPIO3
+    num_leds: 73
+    effects:
+      !include common/addressable_light_effects.yaml

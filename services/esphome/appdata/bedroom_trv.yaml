@@ -1,0 +1,19 @@
+# https://esphome.io/components/display/st7789v.html
+substitutions:
+  hostid: bedroom_trv
+  hostname: Bedroom TRV
+  comment: Controls the TRV in the bedroom
+  node_platform: esp32
+  node_board: featheresp32
+  
+  internal_temp_sensor_id: "0x9401201B7BD8E528"
+  internal_temp_sensor_offset: '-10'
+  external_temp_sensor_id: sensor.bedroom_environment_temperature  #sensor.bedroom_envrionment_temperature
+  display_direction: "180"
+  
+
+packages:
+  core: !include common/core.yaml
+  basic_sensors: !include common/basic_sensors.yaml
+  #esp32_ble_tracking: !include common/esp32_ble_tracking.yaml
+  device_base: !include devices/slimc_trv.yaml

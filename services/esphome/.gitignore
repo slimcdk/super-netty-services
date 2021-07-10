@@ -1,9 +1,12 @@
 # Ignore everything
 *
 !.gitignore
-!*.yaml
 
 
-#!common/
-#!devices/
-#!custom/
+!appdata/
+!appdata/*.yaml
+
+!appdata/common/
+!appdata/common/*.yaml
+!appdata/devices/
+!appdata/devices/*.yaml

@@ -1,0 +1,33 @@
+
+###
+# MAC ADDRESSES:
+# GS10 - CC:21:19:D0:A7:AC
+# A50 - A8:34:6A:05:F3:E9
+###
+
+#globals:
+
+
+
+esp32_ble_tracker:
+
+
+binary_sensor:
+  - platform: ble_presence
+    mac_address: CC:21:19:D0:A7:AC
+    name: "Christians Galaxy S10"
+
+  - platform: ble_presence
+    mac_address: A8:34:6A:05:F3:E9
+    name: "Maikens Galaxy A50"
+
+
+
+sensor:
+  - platform: ble_rssi
+    mac_address: CC:21:19:D0:A7:AC
+    name: "Christians Galaxy S10"
+
+  - platform: ble_rssi
+    mac_address: A8:34:6A:05:F3:E9
+    name: "Maikens Galaxy A50"

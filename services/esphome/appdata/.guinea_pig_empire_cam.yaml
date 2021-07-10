@@ -1,0 +1,62 @@
+substitutions:
+  hostid: water_meter_cam
+  hostname: Water Meter Cam
+  comment: Camera viewing water meter 
+  node_platform: esp32
+  node_board: esp32dev
+  
+  
+packages:
+  core: !include common/core.yaml
+  basic_sensors: !include common/basic_sensors.yaml
+
+    
+deep_sleep:
+  id: main_deep_sleep
+  #run_duration: 2min
+  sleep_duration: 60min
+
+
+esp32_camera:
+  external_clock:
+    pin: GPIO0
+    frequency: 20MHz
+  i2c_pins:
+    sda: GPIO26
+    scl: GPIO27
+  data_pins: [GPIO5, GPIO18, GPIO19, GPIO21, GPIO36, GPIO39, GPIO34, GPIO35]
+  vsync_pin: GPIO25
+  href_pin: GPIO23
+  pixel_clock_pin: GPIO22
+  power_down_pin: GPIO32
+  name: ${hostname}
+  resolution: 640x480
+  jpeg_quality: 10
+  max_framerate: 1 fps
+  brightness: -2
+  contrast: 2
+  saturation: 2
+  vertical_flip: false
+  horizontal_mirror: false
+  
+
+output:
+  - platform: gpio
+    pin: GPIO4
+    id: gpio_4
+
+
+light:
+  - platform: binary
+    id: ${hostid}_flash
+    name: ${hostname} Flash
+    output: gpio_4
+
+
+switch:
+  - platform: template
+    id: ${hostid}_enter_deepsleep
+    name: ${hostname} Enter Deep Sleep
+    lambda: "return false;"
+    turn_on_action:
+      - deep_sleep.enter: main_deep_sleep

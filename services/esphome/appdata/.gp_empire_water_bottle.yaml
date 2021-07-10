@@ -1,0 +1,188 @@
+substitutions:
+  hostid: gp_empire_water_bottle
+  hostname: GP Empire Water Bottle
+  comment: Metering of Guinea Pig Water Bottles
+  node_platform: esp32
+  node_board: wemos_d1_mini32
+  
+packages:
+  core: !include common/core.yaml
+  basic_sensors: !include common/basic_sensors.yaml
+
+
+binary_sensor:
+  - platform: template
+    name: ${hostname} Top Bottle Seated
+    id: ${hostid}_top_bottle_seated
+    on_release:
+      - light.turn_off: ${hostid}_top_bottle_lightid
+    on_press:
+      - lambda: >-
+          bool light_was_on = id(last_top_bottle_light_state);
+          if (light_was_on) {
+            auto bottle_light = id(${hostid}_top_bottle_lightid)->turn_on();
+            bottle_light.perform();
+          }
+    lambda: !lambda 'return (id(${hostid}_top_bottle).raw_state > -200000);'
+
+  - platform: template
+    name: ${hostname} Bottom Bottle Seated
+    id: ${hostid}_bottom_bottle_seated
+    on_release:
+      - light.turn_off: ${hostid}_bottom_bottle_lightid
+    on_press:
+      - lambda: >-
+          bool light_was_on = id(last_bottom_bottle_light_state);
+          if (light_was_on) {
+            auto bottle_light = id(${hostid}_bottom_bottle_lightid)->turn_on();
+            bottle_light.perform();
+          }
+    lambda: !lambda 'return (id(${hostid}_bottom_bottle).raw_state > -200000);' 
+
+
+
+globals:
+  - id: last_top_bottle_light_state
+    type: bool
+    restore_value: yes
+    initial_value: 'true'
+    
+  - id: last_bottom_bottle_light_state
+    type: bool
+    restore_value: yes
+    initial_value: 'true'
+
+
+
+sensor:
+  - platform: hx711
+    name: ${hostname} Top Bottle
+    id: ${hostid}_top_bottle
+    dout_pin: GPIO19
+    clk_pin: GPIO18
+    gain: 128
+    update_interval: 1s
+    filters:
+    - sliding_window_moving_average:
+        window_size: 3
+        send_every: 15
+    - calibrate_polynomial:
+        degree: 5
+        datapoints:
+          - -192900 -> 0
+          - 7000    -> 200
+          - 222050  -> 400
+          - 414550  -> 600
+          - 607700  -> 800
+          - 769650  -> 1000
+    - lambda: return constrain(x, 0, 1000);
+    unit_of_measurement: 'ml'
+    
+  - platform: hx711
+    name: ${hostname} Bottom Bottle
+    id: ${hostid}_bottom_bottle
+    dout_pin: GPIO16
+    clk_pin: GPIO17
+    gain: 128
+    update_interval: 2s
+    filters:
+    - sliding_window_moving_average:
+        window_size: 3
+        send_every: 15
+    - calibrate_polynomial:
+        degree: 5
+        datapoints:
+          - -192900 -> 0
+          - 7000    -> 200
+          - 222050  -> 400
+          - 414550  -> 600
+          - 607700  -> 800
+          - 769650  -> 1000
+    - lambda: return constrain(x, 0, 1000);
+    unit_of_measurement: 'ml'
+    
+    
+light:
+  - platform: neopixelbus
+    method: BIT_BANG
+    pin: GPIO23
+    num_leds: 10
+    id: ${hostid}_top_bottle_lightid
+    name: ${hostname} Top Bottle
+    on_turn_on:
+      - globals.set:
+          id: last_top_bottle_light_state
+          value: 'true'
+    on_turn_off:
+      - globals.set:
+          id: last_top_bottle_light_state
+          value: 'false'
+          
+  - platform: neopixelbus
+    method: BIT_BANG
+    pin: GPIO21
+    num_leds: 10
+    id: ${hostid}_bottom_bottle_lightid
+    name: ${hostname} Bottom Bottle
+    on_turn_on:
+      - globals.set:
+          id: last_bottom_bottle_light_state
+          value: 'true'
+    on_turn_off:
+      - globals.set:
+          id: last_bottom_bottle_light_state
+          value: 'false'
+          
+  - platform: neopixelbus
+    method: BIT_BANG
+    pin: GPIO5
+    num_leds: 31
+    id: ${hostid}_bottom_light
+    name: ${hostname}
+    effects:
+      # Use default parameters:
+      - random:
+      # Customize parameters
+      - random:
+          name: "My Slow Random Effect"
+          transition_length: 30s
+          update_interval: 30s
+      - random:
+          name: "My Fast Random Effect"
+          transition_length: 4s
+          update_interval: 5s
+      - addressable_rainbow:
+          name: Rainbow Effect With Custom Values
+          speed: 10
+          width: 50
+      - addressable_color_wipe:
+          name: Color Wipe Effect With Custom Values
+          colors:
+            - red: 100%
+              green: 100%
+              blue: 100%
+              num_leds: 1
+            - red: 0%
+              green: 0%
+              blue: 0%
+              num_leds: 1
+          add_led_interval: 100ms
+          reverse: False
+      - addressable_twinkle:
+          name: Twinkle Effect With Custom Values
+          twinkle_probability: 5%
+          progress_interval: 4ms
+      - addressable_random_twinkle:
+          name: Random Twinkle Effect With Custom Values
+          twinkle_probability: 5%
+          progress_interval: 32ms
+      - addressable_fireworks:
+          name: Fireworks Effect With Custom Values
+          update_interval: 32ms
+          spark_probability: 10%
+          use_random_color: false
+          fade_out_rate: 120
+      - addressable_flicker:
+          name: Flicker Effect With Custom Values
+          update_interval: 16ms
+          intensity: 5%

@@ -1,0 +1,24 @@
+substitutions:
+  node_platform: esp8266
+  node_board: esp01_1m
+
+
+esphome:
+  platform: esp8266
+  board: esp01_1m
+
+
+output:
+  - platform: gpio
+    pin: GPIO4
+    id: ${hostid}_output_relay1
+
+
+binary_sensor:
+  - platform: gpio
+    name: ${hostname} Mains Sense 1
+    id: ${hostid}_mains_sense1
+    device_class: power
+    pin:
+      number: GPIO5
+      inverted: true

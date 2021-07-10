@@ -1,0 +1,30 @@
+substitutions:
+  hostid: sonoff_s26_plug
+  hostname: Sonoff S26 Plug
+  comment: Sonoff S26 power plug
+  #node_platform: esp8266     # <- defined in device_base
+  #node_board: esp01_1m       # <- defined in device_base
+
+  
+
+packages:
+  core: !include common/core.yaml
+  basic_sensors: !include common/basic_sensors.yaml
+  device_base: !include devices/sonoff_s26.yaml
+
+
+switch:
+  - platform: output
+    name: ${hostname}
+    id: ${hostid}_switchid
+    output: ${hostid}_output_relay1
+
+
+
+binary_sensor:
+  - platform: template
+    name: ${hostname} Fan Button
+    id: ${hostid}_fan_button
+    lambda: "return id(${hostid}_button1).state;"
+    on_press:
+      - switch.toggle: ${hostid}_switchid

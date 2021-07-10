@@ -1,0 +1,35 @@
+substitutions:
+  hostid: prusa_mk3s_power
+  hostname: Prusa MK3S Power
+  comment: Shelly1PM that controls power for the Prusa MK3S
+  #node_platform: esp8266     # <- defined in device_base
+  #node_board: esp01_1m       # <- defined in device_base
+
+
+packages:
+  core: !include common/core.yaml
+  basic_sensors: !include common/basic_sensors.yaml
+  device_base: !include devices/shelly1pm.yaml
+
+
+esphome:
+  on_boot:
+    priority: 750
+    then:
+      - switch.turn_on: ${hostid}_switch1
+
+
+switch:
+  - platform: output
+    name: ${hostname}
+    id: ${hostid}_switch1
+    output: ${hostid}_output_relay1
+
+
+binary_sensor:
+  - platform: template
+    id: ${hostid}_fan_button
+    lambda: "return id(${hostid}_mains_sense1).state;"
+    on_press:
+      - switch.toggle: ${hostid}_switch1
+    internal: true
