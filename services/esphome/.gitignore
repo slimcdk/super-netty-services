@@ -10,3 +10,5 @@
 !appdata/common/*.yaml
 !appdata/devices/
 !appdata/devices/*.yaml
+!appdata/custom_components/
+!appdata/custom_components/*
