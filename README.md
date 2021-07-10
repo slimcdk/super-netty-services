@@ -1,4 +1,4 @@
-# SuperNetty Home Server (mostly) complete configuration
+# SuperNetty Home Server configuration
 
 
 ## Services
