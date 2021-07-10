@@ -1,0 +1,10 @@
+# Ignore everything
+*
+!.gitignore
+
+
+# Except these files and directories
+!publish-vpn-connection.sh
+
+# In any of these directories
+!*/

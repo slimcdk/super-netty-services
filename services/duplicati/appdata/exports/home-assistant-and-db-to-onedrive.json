@@ -1,0 +1,77 @@
+{
+  "CreatedByVersion": "2.0.5.1",
+  "Schedule": {
+    "ID": 4,
+    "Tags": [
+      "ID=4"
+    ],
+    "Time": "2020-08-28T00:00:00Z",
+    "Repeat": "1D",
+    "LastRun": "0001-01-01T00:00:00Z",
+    "Rule": "AllowedWeekDays=Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday",
+    "AllowedDays": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri",
+      "sat",
+      "sun"
+    ]
+  },
+  "Backup": {
+    "ID": "4",
+    "Name": "home-assistant-and-db-to-onedrive",
+    "Description": "",
+    "Tags": [],
+    "TargetURL": "onedrivev2:///HomeServer/backups/home-assistant-and-db",
+    "DBPath": "/config/RLUPZPJMBA.sqlite",
+    "Sources": [
+      "/source/services/homeassistant/",
+      "/source/services/databases/homeassistant/",
+      "/source/docker-compose.yaml",
+      "/source/secrets/"
+    ],
+    "Settings": [
+      {
+        "Filter": "",
+        "Name": "encryption-module",
+        "Value": "",
+        "Argument": null
+      },
+      {
+        "Filter": "",
+        "Name": "compression-module",
+        "Value": "zip",
+        "Argument": null
+      },
+      {
+        "Filter": "",
+        "Name": "dblock-size",
+        "Value": "50mb",
+        "Argument": null
+      },
+      {
+        "Filter": "",
+        "Name": "--no-encryption",
+        "Value": "true",
+        "Argument": null
+      },
+      {
+        "Filter": "",
+        "Name": "retention-policy",
+        "Value": "1W:1D,4W:1W,12M:1M",
+        "Argument": null
+      }
+    ],
+    "Filters": [],
+    "Metadata": {},
+    "IsTemporary": false
+  },
+  "DisplayNames": {
+    "/source/services/homeassistant/": "homeassistant",
+    "/source/services/databases/homeassistant/": "homeassistant",
+    "/source/docker-compose.yaml": "docker-compose.yaml",
+    "/source/secrets/": "secrets"
+  }
+}

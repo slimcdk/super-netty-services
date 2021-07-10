@@ -619,7 +619,6 @@ services:
     extends:
       file: docker-compose-base.yml
       service: base-setting
-#    command: bash -c "apt-get update; apt-get -y install mosquitto-clients; /usr/bin/start_vpn.sh; /usr/bin/entry.sh; /run/publish-vpn-connection.sh &"  # using MQTT to expose the public IP of the VPN
     cap_add:
       - NET_ADMIN
       - SYS_MODULE

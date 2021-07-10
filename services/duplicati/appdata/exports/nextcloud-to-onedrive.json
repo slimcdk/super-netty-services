@@ -1,0 +1,77 @@
+{
+  "CreatedByVersion": "2.0.5.1",
+  "Schedule": {
+    "ID": 9,
+    "Tags": [
+      "ID=9"
+    ],
+    "Time": "2020-08-30T01:00:00Z",
+    "Repeat": "2W",
+    "LastRun": "0001-01-01T00:00:00Z",
+    "Rule": "AllowedWeekDays=Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday",
+    "AllowedDays": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri",
+      "sat",
+      "sun"
+    ]
+  },
+  "Backup": {
+    "ID": "9",
+    "Name": "nextcloud-and-db-to-onedrive",
+    "Description": "",
+    "Tags": [],
+    "TargetURL": "onedrivev2:///HomeServer/backups/nextcloud",
+    "DBPath": "/config/KONNBINCOY.sqlite",
+    "Sources": [
+      "/source/services/nextcloud/",
+      "/source/services/databases/nextcloud/",
+      "/source/secrets/",
+      "/source/docker-compose.yaml"
+    ],
+    "Settings": [
+      {
+        "Filter": "",
+        "Name": "encryption-module",
+        "Value": "",
+        "Argument": null
+      },
+      {
+        "Filter": "",
+        "Name": "compression-module",
+        "Value": "zip",
+        "Argument": null
+      },
+      {
+        "Filter": "",
+        "Name": "dblock-size",
+        "Value": "50mb",
+        "Argument": null
+      },
+      {
+        "Filter": "",
+        "Name": "--no-encryption",
+        "Value": "true",
+        "Argument": null
+      },
+      {
+        "Filter": "",
+        "Name": "retention-policy",
+        "Value": "1W:1D,4W:1W,12M:1M",
+        "Argument": null
+      }
+    ],
+    "Filters": [],
+    "Metadata": {},
+    "IsTemporary": false
+  },
+  "DisplayNames": {
+    "/source/services/nextcloud/": "nextcloud",
+    "/source/services/databases/nextcloud/": "nextcloud",
+    "/source/secrets/": "secrets",
+    "/source/docker-compose.yaml": "docker-compose.yaml"
+  }
+}

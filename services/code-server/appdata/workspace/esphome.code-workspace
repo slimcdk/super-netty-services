@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": "/mnt/containers/services/esphome/appdata",
+			"name": "ESPHome"
+		},
+		{
+			"path": "../../mnt/containers/secrets",
+			"name": "Secrets"
+		}
+	],
+	"settings": {
+                "files.exclude": {
+                       "*": false
+                },
+	}
+}

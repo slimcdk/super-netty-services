@@ -1,0 +1,75 @@
+{
+  "CreatedByVersion": "2.0.5.1",
+  "Schedule": {
+    "ID": 8,
+    "Tags": [
+      "ID=8"
+    ],
+    "Time": "2020-09-03T03:00:00Z",
+    "Repeat": "1W",
+    "LastRun": "0001-01-01T00:00:00Z",
+    "Rule": "AllowedWeekDays=Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday",
+    "AllowedDays": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri",
+      "sat",
+      "sun"
+    ]
+  },
+  "Backup": {
+    "ID": "8",
+    "Name": "grocy-to-onedrive",
+    "Description": "",
+    "Tags": [],
+    "TargetURL": "onedrivev2:///HomeServer/backups/grocy",
+    "DBPath": "/config/CDGJTRVVPB.sqlite",
+    "Sources": [
+      "/source/services/grocy/",
+      "/source/secrets/",
+      "/source/docker-compose.yaml"
+    ],
+    "Settings": [
+      {
+        "Filter": "",
+        "Name": "encryption-module",
+        "Value": "",
+        "Argument": null
+      },
+      {
+        "Filter": "",
+        "Name": "compression-module",
+        "Value": "zip",
+        "Argument": null
+      },
+      {
+        "Filter": "",
+        "Name": "dblock-size",
+        "Value": "50mb",
+        "Argument": null
+      },
+      {
+        "Filter": "",
+        "Name": "--no-encryption",
+        "Value": "true",
+        "Argument": null
+      },
+      {
+        "Filter": "",
+        "Name": "retention-policy",
+        "Value": "1W:1D,4W:1W,12M:1M",
+        "Argument": null
+      }
+    ],
+    "Filters": [],
+    "Metadata": {},
+    "IsTemporary": false
+  },
+  "DisplayNames": {
+    "/source/services/grocy/": "grocy",
+    "/source/secrets/": "secrets",
+    "/source/docker-compose.yaml": "docker-compose.yaml"
+  }
+}

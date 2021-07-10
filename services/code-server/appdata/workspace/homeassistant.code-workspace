@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": "/mnt/containers/services/homeassistant/appdata",
+			"name": "Home Assistant"
+		},
+		{
+			"path": "../../mnt/containers/secrets",
+			"name": "Secrets"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"*.yaml": "home-assistant"
+		}
+	}
+}

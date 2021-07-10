@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": "/mnt/containers",
+			"name": "Root"
+		},
+		{
+			"path": "../../mnt/containers/secrets",
+			"name": "Secrets"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"*.yaml": "home-assistant"
+		}
+	}
+}

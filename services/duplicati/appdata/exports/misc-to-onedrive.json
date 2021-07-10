@@ -1,0 +1,94 @@
+{
+  "CreatedByVersion": "2.0.5.1",
+  "Schedule": {
+    "ID": 11,
+    "Tags": [
+      "ID=11"
+    ],
+    "Time": "2020-09-02T08:00:00Z",
+    "Repeat": "1W",
+    "LastRun": "2020-08-27T16:15:03Z",
+    "Rule": "AllowedWeekDays=Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday",
+    "AllowedDays": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri",
+      "sat",
+      "sun"
+    ]
+  },
+  "Backup": {
+    "ID": "11",
+    "Name": "misc-to-onedrive",
+    "Description": "",
+    "Tags": [],
+    "TargetURL": "onedrivev2:///HomeServer/backups/misc",
+    "DBPath": "/config/CZPQNOLBKA.sqlite",
+    "Sources": [
+      "/source/services/code-server/",
+      "/source/services/unraid-api/",
+      "/source/services/proxy/",
+      "/source/services/mosquitto/",
+      "/source/services/esphome/"
+    ],
+    "Settings": [
+      {
+        "Filter": "",
+        "Name": "encryption-module",
+        "Value": "",
+        "Argument": null
+      },
+      {
+        "Filter": "",
+        "Name": "compression-module",
+        "Value": "zip",
+        "Argument": null
+      },
+      {
+        "Filter": "",
+        "Name": "dblock-size",
+        "Value": "50mb",
+        "Argument": null
+      },
+      {
+        "Filter": "",
+        "Name": "--no-encryption",
+        "Value": "true",
+        "Argument": null
+      },
+      {
+        "Filter": "",
+        "Name": "retention-policy",
+        "Value": "1W:1D,4W:1W,12M:1M",
+        "Argument": null
+      }
+    ],
+    "Filters": [],
+    "Metadata": {
+      "LastBackupDate": "20200827T161513Z",
+      "BackupListCount": "1",
+      "TotalQuotaSpace": "1131723882496",
+      "FreeQuotaSpace": "170076718407",
+      "AssignedQuotaSpace": "-1",
+      "TargetFilesSize": "215474486",
+      "TargetFilesCount": "11",
+      "TargetSizeString": "205,49 MB",
+      "SourceFilesSize": "782353884",
+      "SourceFilesCount": "8855",
+      "SourceSizeString": "746,11 MB",
+      "LastBackupStarted": "20200827T161503Z",
+      "LastBackupFinished": "20200827T162231Z",
+      "LastBackupDuration": "00:07:28.4252820"
+    },
+    "IsTemporary": false
+  },
+  "DisplayNames": {
+    "/source/services/code-server/": "code-server",
+    "/source/services/unraid-api/": "unraid-api",
+    "/source/services/proxy/": "proxy",
+    "/source/services/mosquitto/": "mosquitto",
+    "/source/services/esphome/": "esphome"
+  }
+}

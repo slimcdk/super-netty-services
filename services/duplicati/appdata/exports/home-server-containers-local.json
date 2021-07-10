@@ -1,0 +1,88 @@
+{
+  "CreatedByVersion": "2.0.5.1",
+  "Schedule": {
+    "ID": 2,
+    "Tags": [
+      "ID=2"
+    ],
+    "Time": "2020-08-28T02:00:00Z",
+    "Repeat": "2D",
+    "LastRun": "2020-08-26T02:00:00Z",
+    "Rule": "AllowedWeekDays=Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday",
+    "AllowedDays": [
+      "mon",
+      "tue",
+      "wed",
+      "thu",
+      "fri",
+      "sat",
+      "sun"
+    ]
+  },
+  "Backup": {
+    "ID": "2",
+    "Name": "home-server-containers-local",
+    "Description": "",
+    "Tags": [],
+    "TargetURL": "file:///backups/",
+    "DBPath": "/config/IROTJHIVTO.sqlite",
+    "Sources": [
+      "/source/"
+    ],
+    "Settings": [
+      {
+        "Filter": "",
+        "Name": "encryption-module",
+        "Value": "",
+        "Argument": null
+      },
+      {
+        "Filter": "",
+        "Name": "compression-module",
+        "Value": "zip",
+        "Argument": null
+      },
+      {
+        "Filter": "",
+        "Name": "dblock-size",
+        "Value": "50mb",
+        "Argument": null
+      },
+      {
+        "Filter": "",
+        "Name": "--no-encryption",
+        "Value": "true",
+        "Argument": null
+      },
+      {
+        "Filter": "",
+        "Name": "retention-policy",
+        "Value": "1W:1D,4W:1W,12M:1M",
+        "Argument": null
+      }
+    ],
+    "Filters": [],
+    "Metadata": {
+      "LastErrorDate": "20200818T055316Z",
+      "LastErrorMessage": "Found 86 remote files that are not recorded in local storage, please run repair",
+      "LastBackupDate": "20200826T020004Z",
+      "BackupListCount": "4",
+      "TotalQuotaSpace": "3998844289024",
+      "FreeQuotaSpace": "1938541727744",
+      "AssignedQuotaSpace": "-1",
+      "TargetFilesSize": "5422296127",
+      "TargetFilesCount": "214",
+      "TargetSizeString": "5.05 GB",
+      "SourceFilesSize": "11894627452",
+      "SourceFilesCount": "69949",
+      "SourceSizeString": "11.08 GB",
+      "LastBackupStarted": "20200826T020001Z",
+      "LastBackupFinished": "20200826T053511Z",
+      "LastBackupDuration": "03:35:10.0174860"
+    },
+    "IsTemporary": false
+  },
+  "DisplayNames": {
+    "/source/": "source"
+  }
+}

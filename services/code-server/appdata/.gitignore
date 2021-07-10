@@ -1,0 +1,10 @@
+# Ignore everything
+*
+
+# Except these files
+!.gitignore
+!*.code-workspace
+
+
+# In any of these directories
+!workspace/

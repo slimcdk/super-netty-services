@@ -1,0 +1,9 @@
+# Ignore everything
+*
+!.gitignore
+!*.yaml
+
+
+#!common/
+#!devices/
+#!custom/

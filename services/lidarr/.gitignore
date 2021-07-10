@@ -1,0 +1,10 @@
+# Ignore everything
+*
+!.gitignore
+
+
+# Except these files and directories
+
+
+# In any of these directories
+!*/

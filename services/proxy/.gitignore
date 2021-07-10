@@ -1,0 +1,15 @@
+
+*
+
+!.gitignore
+
+!proxy-confs/
+!proxy-confs/*
+
+!config/
+config/*
+
+!config/dns-conf/
+config/dns-conf/*
+
+!config/dns-conf/google.json

@@ -10,5 +10,5 @@
 !update-system.sh
 !.env
 
-#!services/
-#!services/*
+!services/
+!services/*
