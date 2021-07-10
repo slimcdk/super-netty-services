@@ -3,13 +3,11 @@
 
 !.gitignore
 
-!proxy-confs/
-!proxy-confs/*
+!appdata/
+!appdata/*
 
-!config/
-config/*
+!appdata/proxy-confs/
+!appdata/proxy-confs/*
 
-!config/dns-conf/
-config/dns-conf/*
-
-!config/dns-conf/google.json
+!appdata/config/dns-conf/
+!appdata/config/dns-conf/google.json
