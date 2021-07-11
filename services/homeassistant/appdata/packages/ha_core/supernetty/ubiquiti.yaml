@@ -16,7 +16,7 @@ sensor:
     host: 192.168.1.10
     port: 8443
     username: !secret UNIFI_GATEWAY_HA_USER
-    password: !secret UNIFI_GATEWAY_PASS
+    password: !secret UNIFI_GATEWAY_HA_PASS
     monitored_conditions:
       - www
       - lan

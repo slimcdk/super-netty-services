@@ -1,7 +1,7 @@
 
 octoprint:
   - host: 192.168.1.139
-    api_key: !secret PRUSA_MK3S_OCTOPRINT_API_KEY
+    api_key: !secret OCTOPRINT_PRUSA_MK3S_API_KEY
     name: Prusa MK3S
     number_of_tools: 1
     bed: true
@@ -38,7 +38,7 @@ binary_sensor:
 
 panel_iframe:
   octoprint:
-    title: 50 OctoPrint
+    title: OctoPrint
     url: http://192.168.1.139:80
     icon: mdi:printer-3d
 
@@ -47,7 +47,7 @@ sensor:
   - platform: template
     sensors:
       estimated_time_end_of_print:
-        entity_id: binary_sensor.prusa_mk3s_printing, sensor.prusa_mk3s_time_remaining
+        unique_id: binary_sensor.prusa_mk3s_printing, sensor.prusa_mk3s_time_remaining
         value_template: >-
           {% if states('binary_sensor.prusa_mk3s_printing') == 'on' %}
             {{ (as_timestamp(now())|int + states('sensor.prusa_mk3s_time_remaining')|int) | timestamp_local }}

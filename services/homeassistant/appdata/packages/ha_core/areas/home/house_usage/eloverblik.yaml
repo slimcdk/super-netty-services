@@ -5,7 +5,7 @@ sensor:
       preceding_day_energy_usage:
         unit_of_measurement: "kWh"
         friendly_name: Eloverblik Energy
-        entity_id: group.eloverblik_energy
+        unique_id: group.eloverblik_energy
         value_template: >-
           {% set hour = now().hour %}
           {% set sensor = ['sensor.eloverblik_energy', hour, hour+1] | join('_') %}

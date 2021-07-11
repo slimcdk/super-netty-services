@@ -154,9 +154,8 @@ services:
     volumes:
       - ${PWD}/services/grocy/appdata:/config:rw
     ports:
-      - 70:80
-      - 71:443
-      - 6781:6781
+      - 9192:80
+
 
 
 
@@ -179,7 +178,7 @@ services:
   ## Home Assistant Core
   ### https://hub.docker.com/r/homeassistant/home-assistant
   homeassistant:
-    image: homeassistant/home-assistant:latest
+    image: homeassistant/home-assistant:latest #2021.4.0
     container_name: homeassistant
     network_mode: host
     privileged: true
@@ -230,11 +229,11 @@ services:
       file: docker-compose-base.yml
       service: base-setting
     environment:
-      - MYSQL_ROOT_PASSWORD=${ADMIN_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${ADMIN_PASS}
       - MYSQL_ROOT_USER=${ADMIN_USER}
-      - MYSQL_DATABASE=${HA_DATABASE}
-      - MYSQL_USER=${HA_DB_USER}
-      - MYSQL_PASSWORD=${HA_DB_PASS}
+      - MYSQL_DATABASE=${HA_DATABASE_NAME}
+      - MYSQL_USER=${HA_DATABASE_USER}
+      - MYSQL_PASSWORD=${HA_DATABASE_PASS}
     volumes:
       - ${PWD}/services/homeassistant/database:/config:rw
     ports:
@@ -428,7 +427,7 @@ services:
       file: docker-compose-base.yml
       service: base-setting
     environment:
-      - WEBUI_PORT=8181
+      - WEBUI_PORT=8090
     volumes:
       - ${PWD}/services/qbittorrent/appdata:/config:rw
       - ${MEDIA_ROOT}/downloads/incomplete:/media/downloads/incomplete:rw
@@ -491,7 +490,7 @@ services:
 #      service: base-setting
 #    environment:
 #      - SEAFILE_ADMIN_EMAIL=${ADMIN_EMAIL}
-#      - SEAFILE_ADMIN_PASSWORD=${ADMIN_PASSWORD}
+#      - SEAFILE_ADMIN_PASS=${ADMIN_PASS}
 #      - SEAFILE_SERVER_HOSTNAME=${SF_EXTERNAL_DOMAIN}
 #    volumes:
 #      - ${PWD}/services/seafile/appdata:/shared:rw
@@ -508,7 +507,7 @@ services:
 #    image: linuxserver/mariadb:latest
 #    container_name: seafile_db
 #    environment:
-#      - MYSQL_ROOT_PASSWORD=${ADMIN_PASSWORD}
+#      - MYSQL_ROOT_PASSWORD=${ADMIN_PASS}
 #      - MYSQL_ROOT_USER=${ADMIN_USER}
 #      - MYSQL_DATABASE=${SF_DATABASE}
 #      - MYSQL_USER=${SF_USER}
@@ -638,7 +637,7 @@ services:
       - 7878:7878   # radarr
       - 6767:6767   # bazarr
       - 8686:8686   # lidarr
-      - 8181:8181   # qbittorrent
+      - 8090:8090   # qbittorrent
       - 6881:6881   # qbittorrent
       - 8787:8787   # readarr
     volumes:
@@ -661,7 +660,7 @@ services:
       - WATCHTOWER_INCLUDE_RESTARTING=true
 #      - WATCHTOWER_POLL_INTERVAL=43200
       - WATCHTOWER_HTTP_API_METRICS=true
-      - WATCHTOWER_HTTP_API_TOKEN=${ADMIN_PASSWORD}
+      - WATCHTOWER_HTTP_API_TOKEN=${ADMIN_PASS}
 #      - WATCHTOWER_SCHEDULE="0 0 4 * * *"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock

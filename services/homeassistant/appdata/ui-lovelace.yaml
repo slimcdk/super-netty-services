@@ -4,8 +4,10 @@ custom_header:
 title: SuperNetty
 
 views:
-  - !include views/tabs/interactions.yaml
-  - !include views/tabs/monitoring.yaml
+  - !include views/tabs/quick_interactions.yaml
+  - !include views/tabs/food_planning.yaml
+  - !include views/tabs/planning.yaml
   - !include views/tabs/movies.yaml
-  - !include views/tabs/system.yaml
   - !include views/tabs/climate.yaml
+  - !include views/tabs/monitoring.yaml
+  - !include views/tabs/system.yaml

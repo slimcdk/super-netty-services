@@ -17,13 +17,13 @@ panel_iframe:
 #  scan_interval:
 #    minutes: 7
 
-speedtestdotnet:
-  scan_interval:
-    minutes: 7
-  monitored_conditions:
-    - ping
-    - download
-    - upload
+#speedtestdotnet:
+#  scan_interval:
+#    minutes: 7
+#  monitored_conditions:
+#    - ping
+#    - download
+#    - upload
 
 fastdotcom:
   scan_interval:
@@ -75,26 +75,20 @@ binary_sensor:
             {%- endif -%}
 
 
+template:
+  sensor:
+    - name: 'Cloudflare DNS Ping'
+      state: >-
+        {{ state_attr('binary_sensor.cloudflare_dns', 'round_trip_time_avg') | round(2) }}
+      unit_of_measurement: "ms"
+
+    - name: 'Google DNS Ping'
+      state: >-
+        {{ state_attr('binary_sensor.google_dns', 'round_trip_time_avg') | round(2) }}
+      unit_of_measurement: "ms"
+
+
 sensor:
-  - platform: template
-    sensors:
-      cloudflare_dns_ping:
-        friendly_name: 'Cloudflare'
-        entity_id:
-          - binary_sensor.cloudflare_dns
-        value_template: >-
-          {{ state_attr('binary_sensor.cloudflare_dns', 'round_trip_time_avg') | round(2) }}
-        unit_of_measurement: "ms"
-
-      google_dns_ping:
-        friendly_name: 'Google'
-        entity_id:
-          - binary_sensor.google_dns
-        value_template: >-
-          {{ state_attr('binary_sensor.google_dns', 'round_trip_time_avg') | round(2) }}
-        unit_of_measurement: "ms"
-
-        
   - platform: rest
     name: ifconfig.co data
     resource: https://ifconfig.co/json

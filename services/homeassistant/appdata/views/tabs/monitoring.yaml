@@ -3,8 +3,5 @@ path: monitoring
 icon: mdi:monitor-eye
 cards:
   - !include ../cards/monitoring/prusa_mk3s.yaml
-  - !include ../cards/monitoring/environments/kitchen_cupboard_temps.yaml
   - !include ../cards/monitoring/electricity_usage.yaml
-  - !include ../cards/monitoring/environments/bathroom_environment.yaml
-  - !include ../cards/monitoring/environments/office_environment.yaml
-  - !include ../cards/monitoring/environments/bedroom_environment.yaml
+  - !include ../cards/monitoring/environments/kitchen_cupboard_temps.yaml

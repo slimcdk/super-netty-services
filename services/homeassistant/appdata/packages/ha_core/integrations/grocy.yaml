@@ -1,0 +1,5 @@
+panel_iframe:
+  grocy:
+    title: Mad (grocy)
+    url: http://192.168.1.10:9192
+    icon: mdi:chip

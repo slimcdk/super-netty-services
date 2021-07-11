@@ -1,0 +1,31 @@
+path: main
+title: Hjem
+icon: mdi:home-assistant
+cards:
+  - !include ../cards/clock.yaml
+  - !include ../cards/monitoring/weather.yaml
+  - !include ../cards/lights/all.yaml
+  - !include ../cards/portable_devices.yaml
+  - !include ../cards/persons/overview.yaml
+  - !include ../cards/monitoring/uv_index.yaml
+  - !include ../cards/birthdays.yaml
+
+  - type: horizontal-stack
+    cards:
+      # - !include ../cards/covers/quick_menu.yaml
+      - type: custom:button-text-card
+        icon: mdi:blinds
+        title: Gardiner
+        tap_action:
+          action: fire-dom-event
+          browser_mod:
+            command: popup
+            title: Gardiner
+            card: !include ../cards/covers/popup.yaml
+
+      - type: custom:button-text-card
+        icon: mdi:home-thermometer
+        title: Indeklima
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace/climate

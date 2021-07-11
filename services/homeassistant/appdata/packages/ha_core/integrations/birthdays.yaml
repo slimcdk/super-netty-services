@@ -1,27 +1,26 @@
 
 anniversaries:
   sensors:
-    ## Christians familie
     - name: Christian fødselsdag
-      date: !secret christian_birthday
+      date: !secret BIRTHDAY_CHRISTIAN
       id_prefix: "birthday_"
     - name: Sandra fødselsdag
-      date: !secret sandra_birthday
+      date: !secret BIRTHDAY_SANDRA
       id_prefix: "birthday_"
     - name: Hans fødselsdag
-      date: !secret hans_birthday
+      date: !secret BIRTHDAY_HANS
       id_prefix: "birthday_"
     - name: Lene fødselsdag
-      date: !secret lene_birthday
+      date: !secret BIRTHDAY_LENE
       id_prefix: "birthday_"
     - name: Lisa fødselsdag
-      date: !secret lisa_birthday
+      date: !secret BIRTHDAY_LISA
       id_prefix: "birthday_"
     - name: Anna fødselsdag
-      date: !secret anna_birthday
+      date: !secret BIRTHDAY_ANNA
       id_prefix: "birthday_"
     - name: Bente fødselsdag
-      date: !secret bente_birthday
+      date: !secret BIRTHDAY_BENTE
       id_prefix: "birthday_"
     - name: Chilli fødselsdag
       date: "2016-05-03"
@@ -29,31 +28,27 @@ anniversaries:
     - name: Bjork fødselsdag
       date: "2012-05-28"
       id_prefix: "birthday_"
-
-    ## Maikens familie
     - name: Maiken fødselsdag
-      date: !secret maiken_birthday
+      date: !secret BIRTHDAY_MAIKEN
       id_prefix: "birthday_"
     - name: Marlene fødselsdag
-      date: !secret marlene_birthday
+      date: !secret BIRTHDAY_MARLENE
       id_prefix: "birthday_"
     - name: Freddie fødselsdag
-      date: !secret freddie_birthday
+      date: !secret BIRTHDAY_FREDDIE
       id_prefix: "birthday_"
     - name: Joachim fødselsdag
-      date: !secret joachim_birthday
+      date: !secret BIRTHDAY_JOACHIM
       id_prefix: "birthday_"
     - name: Daniel fødselsdag
-      date: !secret daniel_birthday
+      date: !secret BIRTHDAY_DANIEL
       id_prefix: "birthday_"
 #    - name: Helga fødselsdag
-#      date: !secret helga_birthday
+#      date: !secret BIRTHDAY_HELGA
 #      id_prefix: "birthday_"
     - name: Ziggy fødselsdag
       date: "2011-01-01"
       id_prefix: "birthday_"
-
-    ## De små
     - name: Watson fødselsdag
       date: "2018-08-21"
       id_prefix: "birthday_"
@@ -84,9 +79,9 @@ anniversaries:
 sensor:
   - platform: template
     sensors:
-      next_birthday:
+      birthday_next:
         # Update once a day
-        entity_id: sensor.date
+        unique_id: sensor.date
         friendly_name_template: >-
           {% set ns = namespace(entity_id="", prev=1000) -%}
           {% for birthday in states.group.birthdays.attributes.entity_id -%}
@@ -140,7 +135,7 @@ automation:
       at: 00:01:00
     action:
     - service: homeassistant.update_entity
-      entity_id: sensor.next_birthday
+      entity_id: sensor.birthday_next
 
 
 group:

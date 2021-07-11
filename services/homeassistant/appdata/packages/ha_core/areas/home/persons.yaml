@@ -104,7 +104,7 @@ sensor:
       christian_location_geocoded:
         # Reformat the location into 'Address Number, Region'
         friendly_name: Christian geocoded location
-        entity_id: person.christian
+        unique_id: person.christian
         value_template: >-
           {% set sensor = 'sensor.sm_g973f_geocoded_location' %}
           {% set t = state_attr(sensor, 'Thoroughfare') | string %}
@@ -115,7 +115,7 @@ sensor:
       christian_location_zone:
         # Display current zone or travel time to home
         friendly_name: christian location state
-        entity_id: person.christian
+        unique_id: person.christian
         value_template: >-
           {% set lat = state_attr('person.christian', 'latitude') %}
           {% set lng = state_attr('person.christian', 'longitude') %}
@@ -130,13 +130,13 @@ sensor:
       christian_location_last_updated:
         # Retrieve the last_updated attribute for person.christian
         friendly_name: christian last update
-        entity_id: person.christian
+        unique_id: person.christian
         value_template: '{{ states.person.christian.last_updated }}'
 
       maiken_location_geocoded:
         # Reformat the location into 'Address Number, Region'
         friendly_name: Maiken geocoded location
-        entity_id: person.maiken
+        unique_id: person.maiken
         value_template: >-
           {% set sensor = 'sensor.sm_a505fn_geocoded_location' %}
           {% set t = state_attr(sensor, 'Thoroughfare') | string %}
@@ -147,7 +147,7 @@ sensor:
       maiken_location_zone:
         # Display current zone or travel time to home
         friendly_name: Maiken location state
-        entity_id: person.maiken
+        unique_id: person.maiken
         value_template: >-
           {% set lat = state_attr('person.maiken', 'latitude') %}
           {% set lng = state_attr('person.maiken', 'longitude') %}
@@ -162,7 +162,7 @@ sensor:
       maiken_location_last_updated:
         # Retrieve the last_updated attribute for person.maiken
         friendly_name: maiken last updated
-        entity_id: person.maiken
+        unique_id: person.maiken
         value_template: '{{ states.person.maiken.last_updated }}'
 
 

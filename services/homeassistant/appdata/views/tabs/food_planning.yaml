@@ -1,0 +1,27 @@
+title: Mad
+path: food_planning
+icon: mdi:food
+cards:
+  - type: button
+    name: Grocy
+    icon: mdi:food
+    tap_action:
+      action: navigate
+      navigation_path: '/grocy'
+
+  - type: shopping-list
+    title: Indkøbsliste
+
+
+  # - type: custom:grocy-chores-card
+  #   title: My awesome Lovelace config
+  #   resources:
+  #     - url: /local/grocy-chores-card.js
+  #       type: js
+  #   views:
+  #     title: My view
+  #     cards:
+  #       - type: custom:grocy-chores-card
+  #         entity:
+  #           - sensor.grocy_chores
+  #           - sensor.grocy_tasks

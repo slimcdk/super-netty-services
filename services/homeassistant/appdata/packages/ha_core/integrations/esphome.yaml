@@ -7,7 +7,7 @@ panel_iframe:
     require_admin: true
 
   esphome_vscode:
-    title: VS Code ESPHome
+    title: ESPHome VSCode
     url: http://192.168.1.10:4000/?workspace=/config/workspace/esphome.code-workspace
     icon: mdi:file-edit
     require_admin: true

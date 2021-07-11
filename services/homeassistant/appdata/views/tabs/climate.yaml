@@ -1,6 +1,6 @@
 title: Klima
 path: climate
-icon: mdi:thermostat
+icon: mdi:home-thermometer
 cards:
   - type: thermostat
     name: Kontor-radiator
@@ -13,3 +13,8 @@ cards:
   - type: thermostat
     name: Soveværelses-radiator
     entity: climate.bedroom_trv
+
+
+  - !include ../cards/monitoring/environments/bathroom_environment.yaml
+  - !include ../cards/monitoring/environments/office_environment.yaml
+  - !include ../cards/monitoring/environments/bedroom_environment.yaml

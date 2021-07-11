@@ -8,7 +8,7 @@ homeassistant:
 
 
 #TBD: plex_assistant:
-#TBD:   url: http://192.168.1.10:32400
+#TBD:   url: !secret PLEX_INTERNAL_DOMAIN_HOST
 #TBD:   token: !secret PLEX_XTOKEN
 #TBD:   language: 'en'
 #TBD:   tts_errors: true
@@ -17,14 +17,14 @@ homeassistant:
 sensor:
   - platform: qbittorrent
     name: qBittorrent (Home Server)
-    url: http://192.168.1.10:8080
+    url: !secret QBIT_INTERNAL_DOMAIN_HOST
     username: !secret QBIT_USER
     password: !secret QBIT_PASS
 
   - platform: radarr
     api_key: !secret RADARR_API_KEY
-    host: 192.168.1.10
-    port: 7878
+    host: !secret RADARR_INTERNAL_DOMAIN_BARE
+    port: !secret RADARR_INTERNAL_DOMAIN_PORT
     monitored_conditions:
       - movies
       - upcoming
@@ -34,8 +34,8 @@ sensor:
 
   - platform: radarr_upcoming_media
     api_key: !secret RADARR_API_KEY
-    host: 192.168.1.10
-    port: 7878
+    host: !secret RADARR_INTERNAL_DOMAIN_BARE
+    port: !secret RADARR_INTERNAL_DOMAIN_PORT
     days: 14
     ssl: false
     theaters: false
@@ -43,29 +43,29 @@ sensor:
 
   - platform: sonarr_upcoming_media
     api_key: !secret SONARR_API_KEY
-    host: 192.168.1.10
-    port: 8989
+    host: !secret SONARR_INTERNAL_DOMAIN_BARE
+    port: !secret SONARR_INTERNAL_DOMAIN_PORT
     days: 7
     ssl: false
     max: 10
 
-  - platform: tautulli
-    api_key: !secret TAUTULLI_API_KEY
-    host: 192.168.1.10
+#  - platform: tautulli
+#    api_key: !secret TAUTULLI_API_KEY
+#    host: !secret TAUTULLI_INTERNAL_DOMAIN_BARE
 
   - platform: plex_recently_added
     name: Recently Added Movies
     token: !secret PLEX_XTOKEN
-    host: 192.168.1.10
-    port: 32400
+    host: !secret PLEX_INTERNAL_DOMAIN_BARE
+    port: !secret PLEX_INTERNAL_DOMAIN_PORT
     section_types:
       - movie
 
   - platform: plex_recently_added
     name: Recently Added TV
     token: !secret PLEX_XTOKEN
-    host: 192.168.1.10
-    port: 32400
+    host: !secret PLEX_INTERNAL_DOMAIN_BARE
+    port: !secret PLEX_INTERNAL_DOMAIN_PORT
     section_types:
       - show
 
@@ -117,9 +117,9 @@ script:
     sequence: 
       - service: python_script.get_entertainment_media
         data:
-          radarr_host: !secret RADARR_INTERNAL_DOMAIN
+          radarr_host: !secret RADARR_INTERNAL_DOMAIN_PORT
           radarr_api_key: !secret RADARR_API_KEY
-          sonarr_host: !secret SONARR_INTERNAL_DOMAIN
+          sonarr_host: !secret SONARR_INTERNAL_DOMAIN_PORT
           sonarr_api_key: !secret SONARR_API_KEY
 
   play_plex_on_tv:
@@ -248,18 +248,22 @@ automation:
 
 panel_iframe:
   radarr:
-    title: Radarr (Film)
+    title: M Film (Radarr)
     url: !secret RADARR_EXTERNAL_DOMAIN
     icon: mdi:filmstrip-box
 
   sonarr:
-    title: Sonarr (Serier)
+    title: M Serier (Sonarr)
     url: !secret SONARR_EXTERNAL_DOMAIN
     icon: mdi:filmstrip-box
 
   lidarr:
-    title: Lidarr (Musik)
+    title: M Musik (Lidarr)
     url: !secret LIDARR_EXTERNAL_DOMAIN
     icon: mdi:shopping-music
 
-
+  bazarr:
+    title: M Undertekster (Bazarr)
+    url: !secret BAZARR_EXTERNAL_DOMAIN
+    icon: mdi:subtitles
+    require_admin: true

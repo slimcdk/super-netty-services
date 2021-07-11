@@ -1,5 +1,5 @@
-type: button
-name: Gardiner
+type: custom:button-text-card
+title: Gardiner
 icon: mdi:blinds
 tap_action:
   action: fire-dom-event
