@@ -155,9 +155,9 @@ group:
       - sensor.birthday_freddie_fodselsdag
       - sensor.birthday_joachim_fodselsdag
       - sensor.birthday_daniel_fodselsdag
-      - sensor.birthday_helga_fodselsdag
+      # - sensor.birthday_helga_fodselsdag
       - sensor.birthday_ziggy_fodselsdag
       - sensor.birthday_watson_fodselsdag
       - sensor.birthday_bondi_fodselsdag
-      - sensor.birthday_bastian_fodselsdag
+      # - sensor.birthday_bastian_fodselsdag
       - sensor.birthday_feodor_fodselsdag
