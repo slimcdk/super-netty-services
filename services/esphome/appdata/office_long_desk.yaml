@@ -11,8 +11,11 @@ packages:
   basic_sensors: !include common/basic_sensors.yaml
 
 
-
-
+esphome:
+  on_boot:
+    - light.turn_on:
+        id: ${hostid}
+        effect: "Rainbow"
 
 
 light:

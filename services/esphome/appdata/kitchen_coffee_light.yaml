@@ -11,6 +11,15 @@ packages:
   basic_sensors: !include common/basic_sensors.yaml
 
 
+esphome:
+  on_boot:
+    - light.turn_on:
+        id: ${hostid}
+        effect: "None"
+        red: 0.0
+        green: 0.0
+        blue: 0.0
+        white: 1.0
 
 light:
   - platform: neopixelbus

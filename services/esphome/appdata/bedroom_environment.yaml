@@ -16,7 +16,7 @@ esphome:
     then:
       - fan.turn_on: 
           id: ${hostid}_fanid
-          speed: 10
+          speed: 15
 
 
 i2c:

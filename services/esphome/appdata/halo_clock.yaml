@@ -45,3 +45,5 @@ light:
         to: 64
     effects:
       !include common/addressable_light_effects.yaml # https://github.com/slimcdk/home-server/blob/master/services/esphome/common/addressable_light_effects.yaml
+
+
