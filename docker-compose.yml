@@ -11,16 +11,61 @@ secrets:
     file: ./secrets/pwfile
 
 
+
 services:
 
   # A
 
+  authelia:
+    image: authelia/authelia
+    container_name: authelia
+    extends:
+      file: docker-compose-base.yml
+      service: base-setting
+    volumes:
+      -  ${PWD}/services/authelia/appdata:/config
+#    environment:
+#      - AUTHELIA_JWT_SECRET_FILE=/config/secrets/jwt
+#      - AUTHELIA_DUO_API_SECRET_KEY_FILE=/config/secrets/duo
+#      - AUTHELIA_SESSION_SECRET_FILE=/config/secrets/session
+#      - AUTHELIA_SESSION_REDIS_PASSWORD_FILE=/config/secrets/redis
+#      - AUTHELIA_STORAGE_MYSQL_PASSWORD_FILE=/config/secrets/mysql
+#      - AUTHELIA_NOTIFIER_SMTP_PASSWORD_FILE=/config/secrets/smtp
+#      - AUTHELIA_AUTHENTICATION_BACKEND_LDAP_PASSWORD_FILE=/config/secrets/ldap
+    ports:
+      - 9091:9091
+    depends_on:
+      - authelia_db
+
+
+  ## MariaDB - MySQL database for Home Assistant
+  ### https://hub.docker.com/r/ghcr.io/linuxserver/mariadb
+  authelia_db:
+    image: ghcr.io/linuxserver/mariadb:latest
+    container_name:  authelia_db
+    extends:
+      file: docker-compose-base.yml
+      service: base-setting
+    environment:
+      - MYSQL_ROOT_PASSWORD=${ADMIN_PASS}
+      - MYSQL_ROOT_USER=${ADMIN_USER}
+      - MYSQL_DATABASE=${AUTHELIA_DATABASE_NAME}
+      - MYSQL_USER=${AUTHELIA_DATABASE_USER}
+      - MYSQL_PASSWORD=${AUTHELIA_DATABASE_PASS}
+    volumes:
+      - ${PWD}/services/authelia/database:/config:rw
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "--silent"]
+    # ports:
+    #   - 3306:3306
+
+
   # B
 
   ## Bazarr
-  ### https://hub.docker.com/r/linuxserver/bazarr
+  ### https://hub.docker.com/r/ghcr.io/linuxserver/bazarr
   bazarr:
-    image: linuxserver/bazarr:latest
+    image: ghcr.io/linuxserver/bazarr:latest
     container_name: bazarr
     network_mode: service:rathole
     extends:
@@ -30,7 +75,7 @@ services:
       - ${PWD}/services/bazarr/appdata:/config:rw
       - ${MEDIA_ROOT}:/media:rw
     depends_on:
-      - jackett
+      - prowlarr
       - rathole
       - qbittorrent
 
@@ -40,9 +85,9 @@ services:
  
 
   ## VSCode editor in the browser
-  ### https://hub.docker.com/r/linuxserver/code-server
+  ### https://hub.docker.com/r/ghcr.io/linuxserver/code-server
   code_server:
-    image: linuxserver/code-server:latest
+    image: ghcr.io/linuxserver/code-server:latest
     container_name: code_server
     privileged: true
     extends:
@@ -80,9 +125,9 @@ services:
   # D
 
   ## Duplicati 2.0
-  ### https://hub.docker.com/r/linuxserver/duplicati
+  ### https://hub.docker.com/r/ghcr.io/linuxserver/duplicati
   duplicati:
-    image: linuxserver/duplicati:latest
+    image: ghcr.io/linuxserver/duplicati:latest
     container_name: duplicati
     extends:
       file: docker-compose-base.yml
@@ -144,9 +189,9 @@ services:
 
   # G
   ## Grocy
-  ### https://hub.docker.com/r/linuxserver/grocy
+  ### https://hub.docker.com/r/ghcr.io/linuxserver/grocy
   grocy:
-    image: linuxserver/grocy:latest
+    image: ghcr.io/linuxserver/grocy:latest
     container_name: grocy
     extends:
       file: docker-compose-base.yml
@@ -202,28 +247,23 @@ services:
       retries: 6
     devices:
       - /dev/ttyACM0:/dev/ttyACM0
-    command: bash -c "pip3 install --upgrade pip; pip3 install pymysql; /init"  #  needed for MariaDB https://www.home-assistant.io/integrations/recorder/#mariadb-and-mysql
+    command: /bin/bash -c "pip3 install --upgrade pip; pip3 install pymysql; /init"  #  needed for MariaDB https://www.home-assistant.io/integrations/recorder/#mariadb-and-mysql
     depends_on:
       - homeassistant_db
       - mosquitto
       - plex
       - netdata
       - unifi_controller
-      - rathole
-      - jackett
-      - bazarr
       - radarr
       - sonarr
-      - lidarr
       - qbittorrent
       - grocy
-      - proxy
 
 
   ## MariaDB - MySQL database for Home Assistant
-  ### https://hub.docker.com/r/linuxserver/mariadb
+  ### https://hub.docker.com/r/ghcr.io/linuxserver/mariadb
   homeassistant_db:
-    image: linuxserver/mariadb:latest
+    image: ghcr.io/linuxserver/mariadb:latest
     container_name: homeassistant_db
     extends:
       file: docker-compose-base.yml
@@ -238,7 +278,8 @@ services:
       - ${PWD}/services/homeassistant/database:/config:rw
     ports:
       - 3306:3306
-
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "--silent"]
 
   # I
 
@@ -247,20 +288,20 @@ services:
   # J
 
   ## Jackett
-  ### https://hub.docker.com/r/linuxserver/jackett
-  jackett:
-    image: linuxserver/jackett:latest
-    container_name: jackett
-    network_mode: service:rathole
-    extends:
-      file: docker-compose-base.yml
-      service: base-setting
-    environment:
-      - AUTO_UPDATE=true
-    volumes:
-      - ${PWD}/services/jackett/appdata:/config:rw
-    depends_on:
-      - rathole
+  ### https://hub.docker.com/r/ghcr.io/linuxserver/jackett
+  # jackett:
+  #   image: ghcr.io/linuxserver/jackett:latest
+  #   container_name: jackett
+  #   network_mode: service:rathole
+  #   extends:
+  #     file: docker-compose-base.yml
+  #     service: base-setting
+  #   environment:
+  #     - AUTO_UPDATE=true
+  #   volumes:
+  #     - ${PWD}/services/jackett/appdata:/config:rw
+  #   depends_on:
+  #     - rathole
 
 
 
@@ -271,9 +312,9 @@ services:
   # L
 
   ## Lidarr
-  ### https://hub.docker.com/r/linuxserver/lidarr
+  ### https://hub.docker.com/r/ghcr.io/linuxserver/lidarr
   lidarr:
-    image: linuxserver/lidarr:latest
+    image: ghcr.io/linuxserver/lidarr:latest
     container_name: lidarr
     network_mode: service:rathole
     extends:
@@ -284,7 +325,7 @@ services:
       - ${MEDIA_ROOT}:/media:rw
     depends_on:
       - rathole
-      - jackett
+      - prowlarr
       - qbittorrent
 
 
@@ -310,20 +351,19 @@ services:
   ## MQTT broker
   ### https://hub.docker.com/r/
   mosquitto:
-    image: cmccambridge/mosquitto-unraid:latest
+    image: eclipse-mosquitto:latest
     container_name: mosquitto
-    secrets:
-      - mqtt-pwfile
     extends:
       file: docker-compose-base.yml
       service: base-setting
+    secrets:
+      - mqtt-pwfile
     volumes:
       - ${PWD}/services/mosquitto/appdata/conf:/mosquitto/config:rw
       - ${PWD}/services/mosquitto/appdata/logs:/mosquitto/log:rw
       - ${PWD}/services/mosquitto/appdata/data:/mosquitto/data:rw
     ports:
       - 1883:1883
-      - 8883:8883
       - 9001:9001
 
 
@@ -368,9 +408,9 @@ services:
   # P
 
   ## Nginx Reverse Proxy
-  ### https://hub.docker.com/r/linuxserver/swag
+  ### https://hub.docker.com/r/ghcr.io/linuxserver/swag
   proxy:
-    image: linuxserver/swag:latest
+    image: ghcr.io/linuxserver/swag:latest
     container_name: proxy
     secrets:
       - dns-service-account  # dynamic link used ':./services/proxy/conf/dns-conf$ ln -s /run/secrets/dns-service-account google.json'
@@ -396,11 +436,25 @@ services:
       - 80:80
       - 443:443
 
+  ## Prowlarr
+  ### https://fleet.ghcr.io/linuxserver.io/image?name=ghcr.io/linuxserver/prowlarr
+  prowlarr:
+    image: ghcr.io/linuxserver/prowlarr:develop
+    container_name: prowlarr
+    network_mode: service:rathole
+    extends:
+      file: docker-compose-base.yml
+      service: base-setting
+    volumes:
+      - ${PWD}/services/prowlarr/appdata:/config:rw
+    depends_on:
+      - rathole
+
 
   ## PLEX
-  ### https://hub.docker.com/r/linuxserver/plex
+  ### https://hub.docker.com/r/ghcr.io/linuxserver/plex
   plex:
-    image: linuxserver/plex:latest
+    image: ghcr.io/linuxserver/plex:latest
     container_name: plex
     network_mode: host
     privileged: true
@@ -418,9 +472,9 @@ services:
   # Q
 
   ## qBittorrent
-  ### https://hub.docker.com/r/linuxserver/qbittorrent
+  ### https://hub.docker.com/r/ghcr.io/linuxserver/qbittorrent
   qbittorrent:
-    image: linuxserver/qbittorrent:latest
+    image: ghcr.io/linuxserver/qbittorrent:latest
     container_name: qbittorrent
     network_mode: service:rathole
     extends:
@@ -440,6 +494,30 @@ services:
   # R
 
  
+  ## RUST server
+  ### https://github.com/Didstopia/rust-server
+  rust-server:
+    image: didstopia/rust-server:latest
+    container_name: rust-server
+    extends:
+      file: docker-compose-base.yml
+      service: base-setting
+    environment:
+      - RUST_SERVER_NAME=SuperNetty RUST Server
+      - RUST_SERVER_STARTUP_ARGUMENTS=-batchmode -load -nographics +server.secure 0 +server.encryption 0 +server.eac 0
+      - RUST_SERVER_WORLDSIZE=3500
+      - RUST_SERVER_MAXPLAYERS=10
+      - RUST_START_MODE=2
+      - RUST_OXIDE_ENABLED=1
+      - RUST_OXIDE_UPDATE_ON_BOOT=1
+    volumes:
+      - ${PWD}/services/rust-server/appdata:/steamcmd/rust:rw
+    ports:
+      - 28016:28016
+      - 28082:28082
+      - 28015:28015/udp
+
+
   ## Readarr
   ### https://hub.docker.com/r/hotio/readarr
   readarr:
@@ -453,16 +531,16 @@ services:
       - ${PWD}/services/readarr/appdata:/config:rw
       - ${MEDIA_ROOT}:/media:rw
     depends_on:
-      - jackett
+      - prowlarr
       - rathole
       - qbittorrent
 
 
 
   ## Radarr
-  ### https://hub.docker.com/r/linuxserver/radarr
+  ### https://hub.docker.com/r/ghcr.io/linuxserver/radarr
   radarr:
-    image: linuxserver/radarr:latest
+    image: ghcr.io/linuxserver/radarr:latest
     container_name: radarr
     network_mode: service:rathole
     extends:
@@ -472,7 +550,7 @@ services:
       - ${PWD}/services/radarr/appdata:/config:rw
       - ${MEDIA_ROOT}:/media:rw
     depends_on:
-      - jackett
+      - prowlarr
       - rathole
       - qbittorrent
 
@@ -482,70 +560,59 @@ services:
 
   ## Seafile
   ### https://manual.seafile.com/docker/deploy%20seafile%20with%20docker/
-#  seafile:
-#    image: seafileltd/seafile-mc:latest
-#    container_name: seafile
-#    extends:
-#      file: docker-compose-base.yml
-#      service: base-setting
-#    environment:
-#      - SEAFILE_ADMIN_EMAIL=${ADMIN_EMAIL}
-#      - SEAFILE_ADMIN_PASS=${ADMIN_PASS}
-#      - SEAFILE_SERVER_HOSTNAME=${SF_EXTERNAL_DOMAIN}
-#    volumes:
+  ### /shared/seafile/seafile-data and hub can NOT be mounted separately... 
+  seafile:
+    image: seafileltd/seafile-mc:8.0.6
+    container_name: seafile
+    extends:
+      file: docker-compose-base.yml
+      service: base-setting
+    environment:
+      - SEAFILE_SERVER_LETSENCRYPT=false
+      - SEAFILE_ADMIN_EMAIL=${ADMIN_EMAIL}
+      - SEAFILE_ADMIN_PASSWORD=${ADMIN_PASS}
+      - DB_HOST=seafile_database
+      - DB_ROOT_PASSWD=${ADMIN_PASS}
+    volumes:
+      - ${SEAFILE_DATA_DIR}:/shared:rw
 #      - ${PWD}/services/seafile/appdata:/shared:rw
-#      - ${SEAFILE_DATA_DIR}:/data:rw
-#    ports:
-#      - 5443:443
-#      - 580:80
-#    depends_on:
-#      - seafile_db
-#      - seafile_memcached
-#      - seafile_elasticsearch
-#
-#  seafile_db:
-#    image: linuxserver/mariadb:latest
-#    container_name: seafile_db
-#    environment:
-#      - MYSQL_ROOT_PASSWORD=${ADMIN_PASS}
-#      - MYSQL_ROOT_USER=${ADMIN_USER}
-#      - MYSQL_DATABASE=${SF_DATABASE}
-#      - MYSQL_USER=${SF_USER}
-#      - MYSQL_PASSWORD=${SF_PASS}
-#    volumes:
-#      - ${PWD}/services/seafile/database:/config:rw
-#
-#  seafile_memcached:
-#    image: memcached:1.5.6
-#    container_name: seafile_memcached
-#    entrypoint: memcached -m 256
-#    extends:
-#      file: docker-compose-base.yml
-#      service: base-setting
-#
-#  seafile_elasticsearch:
-#    image: seafileltd/elasticsearch-with-ik:5.6.16
-#    container_name: seafile_elasticsearch
-#    extends:
-#      file: docker-compose-base.yml
-#      service: base-setting
-#    environment:
-#      - discovery.type=single-node
-#      - bootstrap.memory_lock=true
-#      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
-#    ulimits:
-#      memlock:
-#        soft: -1
-#        hard: -1
-#    mem_limit: 2g
-##    volumes:
-##      - /opt/seafile-elasticsearch/data:/usr/share/elasticsearch/data  # Requested, specifies the path to Elasticsearch data persistent store.
+    ports:
+      - 180:80
+    depends_on:
+      - seafile_memcached
+      - seafile_database
+    command: /bin/bash -c "sleep 20 && /sbin/my_init -- /scripts/start.py" ## make sure database is up and initialized
+
+
+  seafile_database:
+    image: ghcr.io/linuxserver/mariadb:latest
+    container_name: seafile_database
+    extends:
+      file: docker-compose-base.yml
+      service: base-setting
+    environment:
+      - MYSQL_ROOT_PASSWORD=${ADMIN_PASS}
+    volumes:
+      - ${PWD}/services/seafile/database:/config:rw
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "--silent"]
+
+
+  seafile_memcached:
+    image: memcached:1.5.6
+    container_name: seafile_memcached
+    entrypoint: memcached -m 256
+    extends:
+      file: docker-compose-base.yml
+      service: base-setting
+
+
 
 
   ## Sonarr
-  ### https://hub.docker.com/r/linuxserver/sonarr
+  ### https://hub.docker.com/r/ghcr.io/linuxserver/sonarr
   sonarr:
-    image: linuxserver/sonarr:latest
+    image: ghcr.io/linuxserver/sonarr:latest
     container_name: sonarr
     network_mode: service:rathole
     extends:
@@ -555,7 +622,7 @@ services:
       - ${PWD}/services/sonarr/appdata:/config:rw
       - ${MEDIA_ROOT}:/media:rw
     depends_on:
-      - jackett
+      - prowlarr
       - rathole
       - qbittorrent
     restart: unless-stopped
@@ -568,9 +635,9 @@ services:
   # U
 
   ## UniFi Controller
-  ### https://hub.docker.com/r/linuxserver/unifi-controller
+  ### https://hub.docker.com/r/ghcr.io/linuxserver/unifi-controller
   unifi_controller:
-    image: linuxserver/unifi-controller:latest
+    image: ghcr.io/linuxserver/unifi-controller:latest
     extends:
       file: docker-compose-base.yml
       service: base-setting
@@ -590,7 +657,7 @@ services:
   ## Unraid API
   ### https://github.com/ElectricBrainUK/UnraidAPI
   unraid_api:
-    image: electricbrainuk/unraidapi:anyport
+    image: electricbrainuk/unraidapi:latest
     container_name: unraid_api
     extends:
       file: docker-compose-base.yml
@@ -598,10 +665,9 @@ services:
     volumes:
       - ${PWD}/services/unraid-api/appdata/conf:/app/config:rw
     environment:
-      - NUXT_PORT=81
       - KeyStorage=config
     ports:
-      - 81:81
+      - 81:80
     depends_on:
       - mosquitto
 
@@ -640,6 +706,7 @@ services:
       - 8090:8090   # qbittorrent
       - 6881:6881   # qbittorrent
       - 8787:8787   # readarr
+      - 9696:9696   # prowlarr
     volumes:
       - ${PWD}/services/rathole/appdata/log/nordvpn:/var/log/nordvpn:rw
 
@@ -670,9 +737,9 @@ services:
 
 
   ## WireGuard
-  ### https://docs.linuxserver.io/images/docker-wireguard
+  ### https://docs.ghcr.io/linuxserver.io/images/docker-wireguard
 #  wireguard:
-#    image: linuxserver/wireguard
+#    image: ghcr.io/linuxserver/wireguard
 #    container_name: wireguard
 #    extends:
 #      file: docker-compose-base.yml
