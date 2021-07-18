@@ -9,7 +9,8 @@ secrets:
     file: ./secrets/dns-service-account.json
   mqtt-pwfile:
     file: ./secrets/pwfile
-
+  unraidapi-mqttkeys:
+    file: ./secrets/mqttKeys
 
 
 services:
@@ -662,14 +663,21 @@ services:
     extends:
       file: docker-compose-base.yml
       service: base-setting
+    secrets:
+      - unraidapi-mqttkeys
     volumes:
       - ${PWD}/services/unraid-api/appdata/conf:/app/config:rw
     environment:
       - KeyStorage=config
+      - PORT=3005
+      - MQTTBroker=mosquitto
+      - MQTTPort=1883
+      - MQTTUser=unraid-api
+      - MQTTPass=${MQTT_ADMIN_PASS}
+      - MQTTBaseTopic=homeassistant
     ports:
-      - 81:80
-    depends_on:
-      - mosquitto
+      - 3005:3005
+
 
 
 

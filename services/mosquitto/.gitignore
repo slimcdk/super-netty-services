@@ -1,3 +1,9 @@
 
 /*
 !.gitignore
+
+!appdata
+appdata/*
+!appdata/conf
+appdata/conf/*
+!appdata/conf/mosquitto.conf

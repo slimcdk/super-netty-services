@@ -15,7 +15,6 @@ http:
     - 172.18.0.0/24
     - 192.168.1.0/24
 
-
 lovelace:
   mode: yaml
   resources: !include www/resources.yaml
@@ -30,18 +29,9 @@ recorder:
 downloader:
   download_dir: '/config/www/downloads/'
 
-mqtt:
-  broker: 192.168.1.10
-  port: 1883
-  discovery: true
-  discovery_prefix: homeassistant
-
 
 system_log:
 logger:
-#  default: warning
-#  logs:
-#    homeassistant.components.python_script: debug
 
 
 
@@ -62,7 +52,6 @@ updater:
 zeroconf:
 wake_on_lan:
 python_script:
-#local_ip:
 browser:
 browser_mod:
 media_extractor:

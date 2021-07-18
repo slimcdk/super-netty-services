@@ -8,3 +8,5 @@
 
 # In any of these directories
 !*/
+
+!mqttKeys

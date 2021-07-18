@@ -3,7 +3,7 @@ tts:
     language: da
     
   - platform: google_cloud
-    key_file: ./packages/ha_core/integrations/google/SERVICE_ACCOUNT.json
+    key_file: packages/integrations/google/SERVICE_ACCOUNT.json
     language: da-DK
     gender: female
     voice: da-DK-Standard-A
