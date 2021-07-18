@@ -56,12 +56,12 @@ google_assistant:
         - Stue-radiator
         - Alle radiatorerne
 
-    light.shelly_shdm_1_f3c6f3:
-      name: Sputnik
-      expose: true
-      room: Stue
-      aliases:
-        - Spotlys
+#    light.shelly_shdm_1_f3c6f3:
+#      name: Sputnik
+#      expose: true
+#      room: Stue
+#      aliases:
+#        - Spotlys
 
     light.green_lamp:
       name: Grøn lampe

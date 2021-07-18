@@ -2,17 +2,54 @@ title: Klima
 path: climate
 icon: mdi:home-thermometer
 cards:
-  - type: thermostat
-    name: Kontor-radiator
-    entity: climate.office_trv
-  
-  - type: thermostat
-    name: Stue-radiator
-    entity: climate.living_trv
 
-  - type: thermostat
-    name: Soveværelses-radiator
-    entity: climate.bedroom_trv
+  - type: entities
+    entities:
+      - type: custom:climate-mode-entity-row
+        entity: climate.office_trv
+        name: Kontor-radiator
+        modes:
+          - hvac_mode: "off"
+            icon: "mdi:snowflake"
+            color: "#B3E5FC"
+          - preset_mode: "eco"
+            icon: "mdi:moon-waxing-crescent"
+            color: "#9575CD"
+          - preset_mode: "comfort"
+            icon: "mdi:weather-sunny"
+            color: "#FFC107"
+
+      - type: custom:climate-mode-entity-row
+        entity: climate.living_trv
+        name: Stue-radiator
+        modes:
+          - hvac_mode: "off"
+            icon: "mdi:snowflake"
+            color: "#B3E5FC"
+          - preset_mode: "eco"
+            icon: "mdi:moon-waxing-crescent"
+            color: "#9575CD"
+          - preset_mode: "comfort"
+            icon: "mdi:weather-sunny"
+            color: "#FFC107"
+
+      - type: custom:climate-mode-entity-row
+        entity: climate.bedroom_trv
+        name: Soveværelses-radiator
+        modes:
+          - hvac_mode: "off"
+            icon: "mdi:snowflake"
+            color: "#B3E5FC"
+          - preset_mode: "eco"
+            icon: "mdi:moon-waxing-crescent"
+            color: "#9575CD"
+          - preset_mode: "comfort"
+            icon: "mdi:weather-sunny"
+            color: "#FFC107"
+
+  - type: custom:mini-climate
+    entity: climate.office_trv
+    secondary_info: hvac-action
 
 
   - !include ../cards/monitoring/environments/bathroom_environment.yaml

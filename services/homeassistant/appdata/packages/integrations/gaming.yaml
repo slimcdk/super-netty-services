@@ -1,0 +1,6 @@
+sensor:
+  - platform: steam_online
+    api_key: !secret STEAM_API_KEY
+    accounts:
+      - !secret STEAM_CHRISTIAN_ACCOUNT_ID
+      - !secret STEAM_MAIKEN_ACCOUNT_ID

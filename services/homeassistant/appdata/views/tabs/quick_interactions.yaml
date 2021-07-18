@@ -4,6 +4,7 @@ icon: mdi:home-assistant
 cards:
   - !include ../cards/clock.yaml
   - !include ../cards/monitoring/weather.yaml
+  # - type: custom:sun-card
   - !include ../cards/lights/all.yaml
   - !include ../cards/portable_devices.yaml
   - !include ../cards/persons/overview.yaml
@@ -13,9 +14,9 @@ cards:
   - type: horizontal-stack
     cards:
       # - !include ../cards/covers/quick_menu.yaml
-      - type: custom:button-text-card
+      - type: button
         icon: mdi:blinds
-        title: Gardiner
+        name: Gardiner
         tap_action:
           action: fire-dom-event
           browser_mod:

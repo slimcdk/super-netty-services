@@ -10,4 +10,5 @@ views:
   - !include views/tabs/movies.yaml
   - !include views/tabs/climate.yaml
   - !include views/tabs/monitoring.yaml
+  - !include views/tabs/car.yaml
   - !include views/tabs/system.yaml

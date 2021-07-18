@@ -2,12 +2,42 @@ title: Mad
 path: food_planning
 icon: mdi:food
 cards:
-  - type: button
-    name: Grocy
-    icon: mdi:food
-    tap_action:
-      action: navigate
-      navigation_path: '/grocy'
+
+  - type: entities
+    title: Madsider
+    entities:
+      - type: custom:button-text-card
+        icon: mdi:food
+        entity: sensor.home_server_docker_grocy_state
+        title: Grocy
+        subtitle: '[[[ return "Service er " + (entity.state=="running" ? "oppe" : "nede") + " ("+entity.state+")"; ]]]'
+        font_color: '[[[ return (entity.state != "running"); ]]]' # page has to be refreshed for this to change
+        icon_size: 48
+        large: true
+        tap_action:
+          action: navigate
+          navigation_path: /grocy
+
+      - type: custom:button-text-card
+        icon: mdi:chef-hat # /local/images/icons/alletiders-kogebog.png
+        title: Alletiders Kogebog
+        subtitle: Åben ekstern side
+        icon_size: 48
+        large: true
+        tap_action:
+          action: url
+          url_path: https://www.dk-kogebogen.dk/opskrifter/index.php
+
+      - type: custom:button-text-card
+        icon: mdi:google
+        title: Google
+        subtitle: Åben ekstern side
+        icon_size: 48
+        large: true
+        tap_action:
+          action: url
+          url_path: https://www.google.dk/
+
 
   - type: shopping-list
     title: Indkøbsliste

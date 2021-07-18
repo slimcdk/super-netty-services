@@ -1,0 +1,13 @@
+type: custom:plex-meets-homeassistant
+token: mnBpd95pjtd3DETk-NrN
+ip: 192.168.1.10
+port: 32400
+libraryName: Film
+sort: addedAt:desc
+showExtras: false
+
+entity: 
+  cast: media_player.lg_stue_tv
+  plexPlayer: mnBpd95pjtd3DETk-NrN
+
+maxCount: 6

@@ -1,0 +1,54 @@
+type: entities
+title: Downloaders
+
+entities:
+
+  - type: custom:button-text-card
+    icon: mdi:movie-search
+    entity: sensor.home_server_docker_radarr_state
+    title: Film
+    subtitle: '[[[ return "Service er " + (entity.state=="running" ? "oppe" : "nede") + " ("+entity.state+")"; ]]]'
+    font_color: '[[[ return (entity.state != "running"); ]]]' # page has to be refreshed for this to change
+    icon_size: 48
+    large: true
+    tap_action:
+      action: navigate
+      navigation_path: /radarr
+
+  - type: custom:button-text-card
+    icon: mdi:television-classic
+    entity: sensor.home_server_docker_sonarr_state
+    title: TV-serier
+    subtitle: '[[[ return "Service er " + (entity.state=="running" ? "oppe" : "nede") + " ("+entity.state+")"; ]]]'
+    font_color: '[[[ return entity.state != "running"; ]]]' # page has to be refreshed for this to change
+    icon_size: 48
+    large: true
+    tap_action:
+      action: navigate
+      navigation_path: /sonarr
+
+  - type: custom:button-text-card
+    icon: mdi:folder-music
+    entity: sensor.home_server_docker_lidarr_state
+    title: Musik
+    subtitle: '[[[ return "Service er " + (entity.state=="running" ? "oppe" : "nede") + " ("+entity.state+")"; ]]]'
+    font_color: '[[[ return entity.state != "running"; ]]]' # page has to be refreshed for this to change
+    icon_size: 48
+    large: true
+    tap_action:
+      action: navigate
+      navigation_path: /lidarr
+
+  - type: custom:button-text-card
+    icon: mdi:subtitles
+    entity: sensor.home_server_docker_bazarr_state
+    title: Undertekster
+    subtitle: '[[[ return "Service er " + (entity.state=="running" ? "oppe" : "nede") + " ("+entity.state+")"; ]]]'
+    font_color: '[[[ return entity.state != "running"; ]]]' # page has to be refreshed for this to change
+    icon_size: 48
+    large: true
+    tap_action:
+      action: navigate
+      navigation_path: /bazarr
+
+

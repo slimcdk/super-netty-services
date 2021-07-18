@@ -1,0 +1,76 @@
+scene:
+  - name: Filmtid
+    entities:
+      light.tv_ambilight:
+        state: on
+        effect: HDMI
+      light.living_windowsill:
+        state: on
+  #      brightness: 100
+        rgb_color: [100,0,0]
+      light.tv_sideboard: off
+      light.shelly_shdm_1_f3cb42:
+        state: on
+        brightness: 15
+
+
+  - name: Ingen hjemme
+    entities:
+      light.entrance_ceiling_light_output: off
+      light.kitchen_ceiling_light_output: off
+      light.living_ceiling_light_output: off
+      switch.work_lamp_relay: off
+      light.livingroom_floorlamp: off
+      light.bedroom_ceiling: off
+      light.cozy_lamp_light: off
+
+
+  - name: Max lys
+    entities:
+    
+      light.kitchen_ceiling_light_output: on
+      light.living_ceiling_light_output: on
+      switch.work_lamp_relay: on
+      light.bathroom_cl: on
+      light.livingroom_floorlamp:
+        state: on
+        brightness: 255
+      light.bedroom_ceiling:
+        state: on
+        brightness: 255
+      light.cozy_lamp_light:
+        state: on
+        brightness: 200
+
+
+  - name: Sengetid
+    entities:
+
+      # living
+      light.floorlamp: off
+      light.windowsill: off
+      light.guinea_pig_empire: off
+      
+
+      # office 
+      light.orange_lamp: off
+      light.office_long_desk: off
+      cover.office_window:
+        state: closed
+        current_position: 0
+
+
+      # bedroom
+      light.bedroom_ceiling: off
+
+
+  - name: Sluk alt
+    entities:
+      light.entrance_ceiling_light_output: off
+      light.kitchen_ceiling_light_output: off
+      light.living_ceiling_light_output: off
+      switch.work_lamp_relay: off
+      light.livingroom_floorlamp: off
+      light.bedroom_ceiling: off
+      light.bathroom_cl: off
+      light.cozy_lamp_light: off

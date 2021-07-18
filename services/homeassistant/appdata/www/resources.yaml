@@ -37,6 +37,8 @@
   type: module
 - url:  /hacsfiles/mini-climate-card/mini-climate-card-bundle.js
   type: module
+- url:  /hacsfiles/lovelace-climate-mode-entity-row/climate-mode-entity-row.js
+  type: module
 - url:  /hacsfiles/lovelace-clock-card/clock-card.js
   type: module
 
@@ -81,14 +83,16 @@
   type: module
 - url:  /hacsfiles/lovelace-multiple-entity-row/multiple-entity-row.js
   type: module
-
+- url:  /hacsfiles/mini-media-player/mini-media-player-bundle.js
+  type: module
 
 ## N
 ## O
 ## P
 - url:  /hacsfiles/lovelace-posten-card/posten-card.js
   type: module
-  
+- url:  /hacsfiles/PlexMeetsHomeAssistant/plex-meets-homeassistant.js
+  type: module
 
 ## Q
 ## R
@@ -115,6 +119,10 @@
   type: module
 #- url:  /hacsfiles/surveillance-card/surveillance-card.js
 #  type: module
+- url:  /hacsfiles/home-assistant-sun-card/home-assistant-sun-card.js
+  type: module
+
+
 
 ## T
 - url:  /hacsfiles/text-element/text-element.js

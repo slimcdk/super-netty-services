@@ -1,0 +1,5 @@
+type: custom:mini-media-player
+entity: media_player.lg_stue_tv
+name: Stue TV
+info: scroll
+artwork: material

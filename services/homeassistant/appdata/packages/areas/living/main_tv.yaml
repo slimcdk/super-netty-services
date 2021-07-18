@@ -9,12 +9,14 @@ webostv:
     sources:
       - Live TV
       - DRTV
-      - TV 2 Play
+      - TV 2 PLAY
       - YouTube
       - Plex
       - Netflix
       - HBO Nordic
       - Viaplay
+      - Amazon Prime Video
+      - PS4
 
 
 media_player:

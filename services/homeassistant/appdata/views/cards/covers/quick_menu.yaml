@@ -1,10 +1,10 @@
-type: custom:button-text-card
-title: Gardiner
+type: button #custom:button-text-card
+name: Gardiner
 icon: mdi:blinds
 tap_action:
   action: fire-dom-event
   browser_mod:
     command: popup
-    title: Gardiner
+    #title: Gardiner
     #large: true
     card: !include popup.yaml

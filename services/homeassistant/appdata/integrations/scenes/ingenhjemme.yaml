@@ -1,9 +1,0 @@
-- name: Ingen hjemme
-  entities:
-    light.entrance_ceiling_light_output: off
-    light.kitchen_ceiling_light_output: off
-    light.living_ceiling_light_output: off
-    switch.work_lamp_relay: off
-    light.livingroom_floorlamp: off
-    light.bedroom_ceiling: off
-    light.cozy_lamp_light: off

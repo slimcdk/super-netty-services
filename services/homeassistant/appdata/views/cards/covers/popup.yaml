@@ -27,9 +27,12 @@ cards:
                 command: popup
                 title: Tider
                 card: !include automated_times_popup.yaml
+
+
           - entity: switch.office_window_calibrate_position
             name: Nulstil
             toggle: true
+
       - type: custom:slider-entity-row 
         entity: cover.office_window_cover
         hide_state: true

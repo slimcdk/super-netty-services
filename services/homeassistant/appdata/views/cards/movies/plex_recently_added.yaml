@@ -1,5 +1,6 @@
 type: custom:upcoming-media-card
 title: Nyligt tilføjede film
 clock: 24
+max: 3
 date: ddmm
 entity: sensor.recently_added_movies
