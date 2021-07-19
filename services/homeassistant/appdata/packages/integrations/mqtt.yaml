@@ -1,7 +1,7 @@
 mqtt:
   broker: 192.168.1.10
   port: 1883
-  # username: homeassistant
-  # password: !secret MQTT_ADMIN_PASS
+  username: homeassistant
+  password: !secret MQTT_ADMIN_PASS
   discovery: true
   discovery_prefix: homeassistant
